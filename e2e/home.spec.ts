@@ -7,5 +7,4 @@ test.describe("Home Page", () => {
       page.getByRole("heading", { name: "Frontend Starter Kit" }),
     ).toBeVisible();
   });
-
 });
