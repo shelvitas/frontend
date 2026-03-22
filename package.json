@@ -1,6 +1,7 @@
 {
-  "name": "frontend-starter-kit",
+  "name": "frontend",
   "version": "0.1.0",
+  "description": "Frontend service for Shelves App",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

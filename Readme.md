@@ -1,4 +1,4 @@
-# 🚀 frontend-starter-kit
+# 🚀 frontend
 
 A **batteries-included** starter kit for building production-ready frontend applications with Next.js. Opinionated, modern, and ready to ship.
 
@@ -33,7 +33,7 @@ A **batteries-included** starter kit for building production-ready frontend appl
 ## 📁 Project Structure
 
 ```
-frontend-starter-kit/
+frontend/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                 # GitHub Actions CI/CD pipeline
@@ -95,8 +95,8 @@ frontend-starter-kit/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/projekt-xlr8/frontend-starter-kit.git
-cd frontend-starter-kit
+git clone https://github.com/projekt-xlr8/frontend.git
+cd frontend
 
 # 2. Use the correct Node version
 nvm use
@@ -297,8 +297,8 @@ docker compose up
 ### Production Build
 
 ```bash
-docker build -t frontend-starter-kit .
-docker run -p 3000:3000 frontend-starter-kit
+docker build -t frontend .
+docker run -p 3000:3000 frontend
 ```
 
 ---
