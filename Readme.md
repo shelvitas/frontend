@@ -40,18 +40,16 @@ frontend-starter-kit/
 ├── .husky/
 │   └── pre-commit                 # Pre-commit hook
 ├── app/
-│   ├── (app)/                     # Authenticated app pages
-│   │   └── dashboard/
-│   ├── (auth)/                    # Auth pages (login, signup, etc.)
-│   │   └── login/
 │   ├── (public)/                  # Public-facing pages
 │   │   └── page.tsx
 │   ├── api/
 │   │   └── og/
 │   │       └── route.tsx          # OpenGraph image generation
 │   ├── error.tsx                  # Global error boundary
-│   ├── not-found.tsx              # Custom 404 page
+│   ├── globals.css                # Global styles
 │   ├── layout.tsx                 # Root layout
+│   ├── not-found.tsx              # Custom 404 page
+│   ├── providers.tsx              # App-wide providers (QueryClient, etc.)
 │   └── sitemap.ts                 # Auto-generated sitemap
 ├── components/
 │   └── ui/                        # shadcn/ui components
@@ -64,6 +62,7 @@ frontend-starter-kit/
 ├── lib/
 │   ├── env.ts                     # @t3-oss/env-nextjs config
 │   └── utils.ts
+├── public/                        # Static assets
 ├── store/                         # Zustand stores
 ├── tests/                         # Vitest unit/integration tests
 ├── .node-version                  # Pinned Node.js version
@@ -74,6 +73,7 @@ frontend-starter-kit/
 ├── Dockerfile
 ├── next.config.ts
 ├── playwright.config.ts
+├── postcss.config.js
 ├── sentry.client.config.ts
 ├── sentry.edge.config.ts
 ├── sentry.server.config.ts
@@ -179,10 +179,11 @@ pnpm format:fix  # Apply formatting
 
 Every commit automatically runs the following checks via Husky:
 
-1. ✅ **TypeScript build check** — ensures there are no type errors
-2. 🔍 **ESLint** — lints staged files and auto-fixes issues
-3. 🎨 **Prettier** — formats staged files
-4. 🧪 **Tests** — runs the full test suite (Vitest)
+1. ✅ **TypeScript type check** — ensures there are no type errors (`tsc --noEmit`)
+2. 🔍 **ESLint** — lints and auto-fixes issues (`pnpm lint:fix`)
+3. 🎨 **Prettier** — formats files (`pnpm format:fix`)
+4. 🧪 **Tests** — runs the full test suite (`pnpm test`)
+5. 🏗️ **Build** — ensures the production build succeeds (`pnpm build`)
 
 > If any step fails, the commit is blocked until the issues are resolved.
 
@@ -253,11 +254,11 @@ export type User = z.infer<typeof UserSchema>;
 
 The app uses Next.js [Route Groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups) to separate concerns:
 
-| Route Group | Purpose                                       |
-| ----------- | --------------------------------------------- |
-| `(public)`  | Marketing, landing pages — no auth required   |
-| `(auth)`    | Login, signup, password reset flows           |
-| `(app)`     | Protected app pages — requires authentication |
+| Route Group | Purpose                                     |
+| ----------- | ------------------------------------------- |
+| `(public)`  | Marketing, landing pages — no auth required |
+
+> Add more route groups (e.g., `(auth)`, `(app)`) as your application grows.
 
 ---
 
