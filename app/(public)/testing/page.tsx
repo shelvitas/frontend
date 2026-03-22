@@ -20,7 +20,11 @@ async function fetchBooks(): Promise<Book[]> {
 }
 
 const TestingPage = () => {
-  const { data: books, isLoading, error } = useQuery({
+  const {
+    data: books,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["books"],
     queryFn: fetchBooks,
   });
@@ -33,7 +37,9 @@ const TestingPage = () => {
         <div className="mt-8 space-y-4">
           <h2 className="text-2xl font-semibold">Books</h2>
 
-          {isLoading && <p className="text-muted-foreground">Loading books...</p>}
+          {isLoading && (
+            <p className="text-muted-foreground">Loading books...</p>
+          )}
           {error && <p className="text-red-500">Error loading books.</p>}
 
           {books && books.length > 0 && (
