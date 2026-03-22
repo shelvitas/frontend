@@ -62,7 +62,9 @@ test.describe("Sign Up Page", () => {
       page.getByRole("heading", { name: "Create your account" }),
     ).toBeVisible();
     await expect(page.getByPlaceholder("Email")).toBeVisible();
-    await expect(page.getByPlaceholder("Password", { exact: true })).toBeVisible();
+    await expect(
+      page.getByPlaceholder("Password", { exact: true }),
+    ).toBeVisible();
     await expect(page.getByPlaceholder("Confirm password")).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Create account" }),
