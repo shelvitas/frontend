@@ -23,9 +23,7 @@ const CompleteProfilePage = () => {
     try {
       await registerProfile(username, displayName);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to create profile",
-      );
+      setError(err instanceof Error ? err.message : "Failed to create profile");
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +43,10 @@ const CompleteProfilePage = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1.5">
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="username" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <label
+            htmlFor="username"
+            className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
+          >
             Username
           </label>
           <Input
@@ -71,7 +72,10 @@ const CompleteProfilePage = () => {
 
         <div className="space-y-1.5">
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="displayName" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <label
+            htmlFor="displayName"
+            className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
+          >
             Display name
           </label>
           <Input

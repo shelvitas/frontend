@@ -59,7 +59,7 @@ const SignInPage = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
-          className="bg-secondary/50 border-secondary"
+          className="border-secondary bg-secondary/50"
         />
         <Input
           type="password"
@@ -69,7 +69,7 @@ const SignInPage = () => {
           required
           autoComplete="current-password"
           minLength={8}
-          className="bg-secondary/50 border-secondary"
+          className="border-secondary bg-secondary/50"
         />
 
         {error && <p className="text-sm text-red-500">{error}</p>}

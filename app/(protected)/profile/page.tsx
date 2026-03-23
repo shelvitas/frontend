@@ -55,10 +55,12 @@ const ProfilePage = () => {
         <Navbar />
         <main className="flex flex-1 items-center justify-center">
           <div className="text-center">
-            <p className="text-sm text-muted-foreground">
-              Loading profile...
-            </p>
-            <Button variant="ghost" className="mt-4 text-xs text-muted-foreground" onClick={handleSignOut}>
+            <p className="text-sm text-muted-foreground">Loading profile...</p>
+            <Button
+              variant="ghost"
+              className="mt-4 text-xs text-muted-foreground"
+              onClick={handleSignOut}
+            >
               Sign out
             </Button>
           </div>
@@ -89,9 +91,7 @@ const ProfilePage = () => {
           )}
           <div className="flex-1">
             <h1 className="text-2xl font-bold">{profile.displayName}</h1>
-            <p className="text-sm text-muted-foreground">
-              @{profile.username}
-            </p>
+            <p className="text-sm text-muted-foreground">@{profile.username}</p>
             {profile.bio && (
               <p className="mt-2 text-sm text-foreground/80">{profile.bio}</p>
             )}
@@ -122,10 +122,7 @@ const ProfilePage = () => {
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <InfoBlock label="Email" value={user.email || ""} />
-            <InfoBlock
-              label="Visibility"
-              value={profile.profileVisibility}
-            />
+            <InfoBlock label="Visibility" value={profile.profileVisibility} />
             <InfoBlock
               label="Provider"
               value={user.app_metadata?.provider || "email"}
