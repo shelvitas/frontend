@@ -1,20 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { createClient } from "@/lib/supabase/client";
-import { api } from "@/lib/api";
+import { useAuthStore } from "@/store/auth";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 const AuthCallbackPage = () => {
-  const router = useRouter();
   const [status, setStatus] = useState("Completing sign in...");
+  const setAuth = useAuthStore((s) => s.setAuth);
 
   useEffect(() => {
     const handleCallback = async () => {
       const supabase = createClient();
-
-      // Supabase client automatically picks up tokens from the URL fragment
       const {
         data: { session },
         error,
@@ -22,27 +22,36 @@ const AuthCallbackPage = () => {
 
       if (error || !session) {
         setStatus("Authentication failed. Redirecting...");
-        router.push("/sign-in?error=auth_callback_failed");
+        window.location.href = "/sign-in?error=auth_callback_failed";
         return;
       }
 
+      // Store session in zustand so api helper can use it
+      setAuth(session.user, session);
+
       // Check if user has an app profile
       try {
-        await api.get("/v1/auth/me");
-        // Profile exists — go to feed
-        router.push("/profile");
+        const res = await fetch(`${API_URL}/v1/auth/me`, {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        });
+
+        if (res.ok) {
+          window.location.href = "/profile";
+        } else {
+          window.location.href = "/complete-profile";
+        }
       } catch {
-        // No profile — new user needs to complete registration
-        router.push("/complete-profile");
+        window.location.href = "/complete-profile";
       }
     };
 
     handleCallback();
-  }, [router]);
+  }, [setAuth]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <p className="text-muted-foreground">{status}</p>
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4">
+      <Image src="/logo.svg" alt="Shelves" width={48} height={48} className="animate-pulse" />
+      <p className="text-sm text-muted-foreground">{status}</p>
     </main>
   );
 };

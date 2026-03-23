@@ -5,14 +5,6 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { useAuth } from "@/lib/hooks/use-auth";
 
@@ -38,76 +30,78 @@ const SignInPage = () => {
   };
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-        <CardDescription>Sign in to your Shelves account</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <OAuthButtons />
-
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-2 text-muted-foreground">
-              or continue with email
-            </span>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
-          </div>
-          <div className="space-y-2">
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              minLength={8}
-            />
-          </div>
-
-          {error && <p className="text-sm text-red-500">{error}</p>}
-
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Signing in..." : "Sign in"}
-          </Button>
-        </form>
-
-        <div className="text-center">
-          <Link
-            href="/forgot-password"
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            Forgot your password?
-          </Link>
-        </div>
-      </CardContent>
-      <CardFooter className="justify-center">
-        <p className="text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/sign-up"
-            className="font-medium text-foreground hover:underline"
-          >
-            Sign up
-          </Link>
+    <div className="space-y-6">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Sign in to your Shelves account
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+
+      <OAuthButtons />
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-secondary" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            or continue with email
+          </span>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <Input
+          type="email"
+          placeholder="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+          className="bg-secondary/50 border-secondary"
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="current-password"
+          minLength={8}
+          className="bg-secondary/50 border-secondary"
+        />
+
+        {error && <p className="text-sm text-red-500">{error}</p>}
+
+        <Button
+          type="submit"
+          className="w-full bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+          disabled={isLoading}
+        >
+          {isLoading ? "Signing in..." : "Sign in"}
+        </Button>
+      </form>
+
+      <div className="text-center">
+        <Link
+          href="/forgot-password"
+          className="text-xs text-muted-foreground hover:text-foreground"
+        >
+          Forgot your password?
+        </Link>
+      </div>
+
+      <p className="text-center text-sm text-muted-foreground">
+        Don&apos;t have an account?{" "}
+        <Link
+          href="/sign-up"
+          className="font-medium text-shelves-green hover:underline"
+        >
+          Sign up
+        </Link>
+      </p>
+    </div>
   );
 };
 

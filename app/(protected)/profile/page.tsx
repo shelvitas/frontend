@@ -2,12 +2,27 @@
 
 import { useCallback } from "react";
 import Image from "next/image";
+import { LogOut } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
 import { useAuthStore } from "@/store/auth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+
+const StatBlock = ({ label, value }: { label: string; value: string }) => (
+  <div>
+    <p className="text-xl font-bold">{value}</p>
+    <p className="text-xs text-muted-foreground">{label}</p>
+  </div>
+);
+
+const InfoBlock = ({ label, value }: { label: string; value: string }) => (
+  <div>
+    <p className="text-xs font-medium text-muted-foreground">{label}</p>
+    <p className="text-sm capitalize">{value}</p>
+  </div>
+);
 
 const ProfilePage = () => {
   const { user, profile, isLoading } = useAuthStore();
@@ -18,33 +33,32 @@ const ProfilePage = () => {
     window.location.href = "/";
   }, []);
 
-  // AuthProvider is still loading
   if (isLoading) {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <main className="flex flex-1 items-center justify-center">
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-sm text-muted-foreground">Loading...</p>
         </main>
       </div>
     );
   }
 
-  // Not authenticated — redirect
   if (!user) {
     window.location.href = "/sign-in";
     return null;
   }
 
-  // Authenticated but no profile yet (API might still be loading)
   if (!profile) {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <main className="flex flex-1 items-center justify-center">
           <div className="text-center">
-            <p className="text-muted-foreground">Loading profile...</p>
-            <Button variant="outline" className="mt-4" onClick={handleSignOut}>
+            <p className="text-sm text-muted-foreground">
+              Loading profile...
+            </p>
+            <Button variant="ghost" className="mt-4 text-xs text-muted-foreground" onClick={handleSignOut}>
               Sign out
             </Button>
           </div>
@@ -56,74 +70,96 @@ const ProfilePage = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
+
       <main className="container max-w-2xl flex-1 py-10">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Profile</h1>
-          <Button variant="outline" onClick={handleSignOut}>
+        {/* Profile header */}
+        <div className="flex items-start gap-5">
+          {profile.avatarUrl ? (
+            <Image
+              src={profile.avatarUrl}
+              alt={profile.displayName}
+              width={80}
+              height={80}
+              className="h-20 w-20 rounded-full"
+            />
+          ) : (
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-secondary text-3xl font-bold">
+              {profile.displayName.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold">{profile.displayName}</h1>
+            <p className="text-sm text-muted-foreground">
+              @{profile.username}
+            </p>
+            {profile.bio && (
+              <p className="mt-2 text-sm text-foreground/80">{profile.bio}</p>
+            )}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 text-xs"
+            onClick={handleSignOut}
+          >
+            <LogOut className="h-3 w-3" />
             Sign out
           </Button>
         </div>
 
-        <Card className="mt-6">
-          <CardHeader>
-            <div className="flex items-center gap-4">
-              {profile.avatarUrl ? (
-                <Image
-                  src={profile.avatarUrl}
-                  alt={profile.displayName}
-                  width={64}
-                  height={64}
-                  className="h-16 w-16 rounded-full"
-                />
-              ) : (
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-2xl font-bold">
-                  {profile.displayName.charAt(0).toUpperCase()}
-                </div>
-              )}
-              <div>
-                <CardTitle className="text-xl">{profile.displayName}</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  @{profile.username}
-                </p>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {profile.bio && (
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Bio</p>
-                <p>{profile.bio}</p>
-              </div>
-            )}
+        {/* Stats placeholder — 0 books for now */}
+        <div className="mt-8 grid grid-cols-4 gap-4 text-center">
+          <StatBlock label="Books" value="0" />
+          <StatBlock label="This year" value="0" />
+          <StatBlock label="Lists" value="0" />
+          <StatBlock label="Following" value="0" />
+        </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Email
-                </p>
-                <p className="text-sm">{user.email}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Visibility
-                </p>
-                <p className="text-sm capitalize">
-                  {profile.profileVisibility}
-                </p>
-              </div>
-            </div>
+        {/* Info section */}
+        <div className="mt-8 space-y-4">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            Account
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            <InfoBlock label="Email" value={user.email || ""} />
+            <InfoBlock
+              label="Visibility"
+              value={profile.profileVisibility}
+            />
+            <InfoBlock
+              label="Provider"
+              value={user.app_metadata?.provider || "email"}
+            />
+            <InfoBlock
+              label="Member since"
+              value={new Date(user.created_at).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })}
+            />
+          </div>
+        </div>
 
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                Provider
-              </p>
-              <p className="text-sm capitalize">
-                {user.app_metadata?.provider || "email"}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Favourite books placeholder */}
+        <div className="mt-8 space-y-4">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            Favourite books
+          </h2>
+          <div className="grid grid-cols-4 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={`fav-${i + 1}`}
+                className="aspect-[2/3] rounded-sm border border-dashed border-secondary bg-secondary/20"
+              />
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Add your 4 favourite books to show on your profile.
+          </p>
+        </div>
       </main>
+
+      <Footer />
     </div>
   );
 };

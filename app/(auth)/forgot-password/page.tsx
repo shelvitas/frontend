@@ -2,16 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Mail, ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useAuth } from "@/lib/hooks/use-auth";
 
 const ForgotPasswordPage = () => {
@@ -40,64 +34,69 @@ const ForgotPasswordPage = () => {
 
   if (success) {
     return (
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Check your email</CardTitle>
-          <CardDescription>
-            We&apos;ve sent a password reset link to{" "}
-            <span className="font-medium text-foreground">{email}</span>
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="text-center">
-          <Link
-            href="/sign-in"
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            Back to sign in
-          </Link>
-        </CardContent>
-      </Card>
+      <div className="space-y-4 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-shelves-green/10">
+          <Mail className="h-6 w-6 text-shelves-green" />
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight">Check your email</h1>
+        <p className="text-sm text-muted-foreground">
+          We&apos;ve sent a password reset link to{" "}
+          <span className="font-medium text-foreground">{email}</span>
+        </p>
+        <Link
+          href="/sign-in"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-3 w-3" />
+          Back to sign in
+        </Link>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">
+    <div className="space-y-6">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold tracking-tight">
           Reset your password
-        </CardTitle>
-        <CardDescription>
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Enter your email and we&apos;ll send you a reset link
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
+        </p>
+      </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <Input
+          type="email"
+          placeholder="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+          className="border-secondary bg-secondary/50"
+        />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Sending..." : "Send reset link"}
-          </Button>
-        </form>
+        {error && <p className="text-sm text-red-500">{error}</p>}
 
-        <div className="text-center">
-          <Link
-            href="/sign-in"
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            Back to sign in
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+        <Button
+          type="submit"
+          className="w-full bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+          disabled={isLoading}
+        >
+          {isLoading ? "Sending..." : "Send reset link"}
+        </Button>
+      </form>
+
+      <div className="text-center">
+        <Link
+          href="/sign-in"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-3 w-3" />
+          Back to sign in
+        </Link>
+      </div>
+    </div>
   );
 };
 

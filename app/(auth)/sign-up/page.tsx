@@ -2,17 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { useAuth } from "@/lib/hooks/use-auth";
 
@@ -48,93 +41,98 @@ const SignUpPage = () => {
 
   if (success) {
     return (
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Check your email</CardTitle>
-          <CardDescription>
-            We&apos;ve sent a confirmation link to{" "}
-            <span className="font-medium text-foreground">{email}</span>
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="text-center">
-          <p className="text-sm text-muted-foreground">
-            Click the link in the email to verify your account, then you&apos;ll
-            be able to set up your profile.
-          </p>
-        </CardContent>
-      </Card>
+      <div className="space-y-4 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-shelves-green/10">
+          <Mail className="h-6 w-6 text-shelves-green" />
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight">Check your email</h1>
+        <p className="text-sm text-muted-foreground">
+          We&apos;ve sent a confirmation link to{" "}
+          <span className="font-medium text-foreground">{email}</span>
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Click the link to verify your account, then set up your profile.
+        </p>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">
+    <div className="space-y-6">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold tracking-tight">
           Create your account
-        </CardTitle>
-        <CardDescription>Start tracking your reading journey</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <OAuthButtons />
-
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-2 text-muted-foreground">
-              or continue with email
-            </span>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="new-password"
-            minLength={8}
-          />
-          <Input
-            type="password"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            autoComplete="new-password"
-            minLength={8}
-          />
-
-          {error && <p className="text-sm text-red-500">{error}</p>}
-
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Creating account..." : "Create account"}
-          </Button>
-        </form>
-      </CardContent>
-      <CardFooter className="justify-center">
-        <p className="text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link
-            href="/sign-in"
-            className="font-medium text-foreground hover:underline"
-          >
-            Sign in
-          </Link>
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Start tracking your reading journey
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+
+      <OAuthButtons />
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-secondary" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            or continue with email
+          </span>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <Input
+          type="email"
+          placeholder="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+          className="border-secondary bg-secondary/50"
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="new-password"
+          minLength={8}
+          className="border-secondary bg-secondary/50"
+        />
+        <Input
+          type="password"
+          placeholder="Confirm password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          autoComplete="new-password"
+          minLength={8}
+          className="border-secondary bg-secondary/50"
+        />
+
+        {error && <p className="text-sm text-red-500">{error}</p>}
+
+        <Button
+          type="submit"
+          className="w-full bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+          disabled={isLoading}
+        >
+          {isLoading ? "Creating account..." : "Create account"}
+        </Button>
+      </form>
+
+      <p className="text-center text-sm text-muted-foreground">
+        Already have an account?{" "}
+        <Link
+          href="/sign-in"
+          className="font-medium text-shelves-green hover:underline"
+        >
+          Sign in
+        </Link>
+      </p>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 
 const GlobalError = ({
@@ -16,12 +17,18 @@ const GlobalError = ({
   }, [error]);
 
   return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4">
-      <h2 className="text-2xl font-bold">Something went wrong!</h2>
-      <p className="text-muted-foreground">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-3">
+      <p className="text-5xl font-bold text-muted-foreground/30">Oops</p>
+      <h2 className="text-xl font-bold">Something went wrong</h2>
+      <p className="text-sm text-muted-foreground">
         An unexpected error occurred. Please try again.
       </p>
-      <Button onClick={reset}>Try again</Button>
+      <Button
+        onClick={reset}
+        className="mt-2 bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+      >
+        Try again
+      </Button>
     </div>
   );
 };

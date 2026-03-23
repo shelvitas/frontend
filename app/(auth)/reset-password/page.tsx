@@ -1,22 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useAuth } from "@/lib/hooks/use-auth";
 
 const ResetPasswordPage = () => {
   const { updatePassword } = useAuth();
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +26,7 @@ const ResetPasswordPage = () => {
 
     try {
       await updatePassword(password);
-      router.push("/feed");
+      window.location.href = "/profile";
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to update password",
@@ -46,40 +37,47 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Set new password</CardTitle>
-        <CardDescription>Enter your new password below</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            type="password"
-            placeholder="New password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="new-password"
-            minLength={8}
-          />
-          <Input
-            type="password"
-            placeholder="Confirm new password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            autoComplete="new-password"
-            minLength={8}
-          />
+    <div className="space-y-6">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold tracking-tight">Set new password</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Enter your new password below
+        </p>
+      </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <Input
+          type="password"
+          placeholder="New password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="new-password"
+          minLength={8}
+          className="border-secondary bg-secondary/50"
+        />
+        <Input
+          type="password"
+          placeholder="Confirm new password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          autoComplete="new-password"
+          minLength={8}
+          className="border-secondary bg-secondary/50"
+        />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Updating..." : "Update password"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        {error && <p className="text-sm text-red-500">{error}</p>}
+
+        <Button
+          type="submit"
+          className="w-full bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+          disabled={isLoading}
+        >
+          {isLoading ? "Updating..." : "Update password"}
+        </Button>
+      </form>
+    </div>
   );
 };
 

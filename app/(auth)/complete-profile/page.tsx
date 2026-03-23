@@ -4,13 +4,6 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useAuth } from "@/lib/hooks/use-auth";
 
 const CompleteProfilePage = () => {
@@ -30,74 +23,81 @@ const CompleteProfilePage = () => {
     try {
       await registerProfile(username, displayName);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create profile");
+      setError(
+        err instanceof Error ? err.message : "Failed to create profile",
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">
+    <div className="space-y-6">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold tracking-tight">
           Set up your profile
-        </CardTitle>
-        <CardDescription>
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Choose a username and display name to get started
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1">
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="username" className="text-sm font-medium">
-              Username
-            </label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="e.g. booklover42"
-              value={username}
-              onChange={(e) =>
-                setUsername(
-                  e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""),
-                )
-              }
-              required
-              minLength={3}
-              maxLength={30}
-              autoComplete="username"
-            />
-            <p className="text-xs text-muted-foreground">
-              Letters, numbers, hyphens, and underscores only
-            </p>
-          </div>
+        </p>
+      </div>
 
-          <div className="space-y-1">
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="displayName" className="text-sm font-medium">
-              Display name
-            </label>
-            <Input
-              id="displayName"
-              type="text"
-              placeholder="Your name"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              required
-              maxLength={100}
-              autoComplete="name"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1.5">
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="username" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Username
+          </label>
+          <Input
+            id="username"
+            type="text"
+            placeholder="e.g. booklover42"
+            value={username}
+            onChange={(e) =>
+              setUsername(
+                e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""),
+              )
+            }
+            required
+            minLength={3}
+            maxLength={30}
+            autoComplete="username"
+            className="border-secondary bg-secondary/50"
+          />
+          <p className="text-xs text-muted-foreground">
+            Letters, numbers, hyphens, and underscores only
+          </p>
+        </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
+        <div className="space-y-1.5">
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="displayName" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Display name
+          </label>
+          <Input
+            id="displayName"
+            type="text"
+            placeholder="Your name"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            required
+            maxLength={100}
+            autoComplete="name"
+            className="border-secondary bg-secondary/50"
+          />
+        </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Creating profile..." : "Continue"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        {error && <p className="text-sm text-red-500">{error}</p>}
+
+        <Button
+          type="submit"
+          className="w-full bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+          disabled={isLoading}
+        >
+          {isLoading ? "Creating profile..." : "Continue"}
+        </Button>
+      </form>
+    </div>
   );
 };
 
