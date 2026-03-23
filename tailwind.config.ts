@@ -11,9 +11,12 @@ const config: Config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
-        "2xl": "1400px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1200px",
       },
     },
     extend: {
@@ -51,11 +54,29 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        shelves: {
+          green: "hsl(var(--shelves-green))",
+          orange: "hsl(var(--shelves-orange))",
+          blue: "hsl(var(--shelves-blue))",
+          body: "#14181c",
+          header: "#0d1117",
+          surface: "#1c2028",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: [
+          "Inter",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "sans-serif",
+        ],
       },
       keyframes: {
         "accordion-down": {

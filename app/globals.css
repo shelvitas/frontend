@@ -4,26 +4,32 @@
 
 @layer base {
   :root {
-    --background: 210 15% 9.4%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --radius: 0.5rem;
+    /* Letterboxd-inspired dark theme for books */
+    --background: 216 18% 11%; /* #14181c */
+    --foreground: 0 0% 93%; /* #ededed */
+    --card: 216 18% 13%; /* #181c20 */
+    --card-foreground: 0 0% 93%;
+    --popover: 216 18% 13%;
+    --popover-foreground: 0 0% 93%;
+    --primary: 145 100% 44%; /* #00e054 - Shelves green */
+    --primary-foreground: 216 18% 11%;
+    --secondary: 216 12% 20%; /* #2c3440 */
+    --secondary-foreground: 0 0% 93%;
+    --muted: 216 12% 20%;
+    --muted-foreground: 216 8% 56%; /* #89929b */
+    --accent: 216 12% 24%; /* #334455 region */
+    --accent-foreground: 0 0% 93%;
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 93%;
+    --border: 216 12% 20%;
+    --input: 216 12% 20%;
+    --ring: 145 100% 44%;
+    --radius: 0.25rem;
+
+    /* Brand colors */
+    --shelves-green: 145 100% 44%; /* #00e054 */
+    --shelves-orange: 30 100% 50%; /* #ff8001 */
+    --shelves-blue: 197 89% 60%; /* #40bcf4 */
   }
 }
 
@@ -32,6 +38,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  a {
+    @apply transition-colors;
   }
 }

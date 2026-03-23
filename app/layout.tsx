@@ -7,18 +7,18 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Frontend Starter Kit",
-    template: "%s | Frontend Starter Kit",
+    default: "Shelves — Track books you've read. Discover what to read next.",
+    template: "%s | Shelves",
   },
   description:
-    "A batteries-included starter kit for building production-ready frontend applications with Next.js.",
+    "Shelves is a social book tracking and discovery platform. Log the books you've read, save those you want to read, and discover what your friends are reading.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   ),
   openGraph: {
-    title: "Frontend Starter Kit",
+    title: "Shelves",
     description:
-      "A batteries-included starter kit for building production-ready frontend applications with Next.js.",
+      "A social book tracking and discovery platform. The Letterboxd for books.",
     type: "website",
   },
 };
