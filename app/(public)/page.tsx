@@ -98,13 +98,38 @@ const HERO_ROW_4 = [
 ];
 
 const POPULAR_BOOKS = [
-  { id: 1, title: "It Ends with Us", author: "Colleen Hoover", gid: "KmbkCgAAQBAJ" },
-  { id: 2, title: "Where the Crawdads Sing", author: "Delia Owens", gid: "jVB1DwAAQBAJ" },
+  {
+    id: 1,
+    title: "It Ends with Us",
+    author: "Colleen Hoover",
+    gid: "KmbkCgAAQBAJ",
+  },
+  {
+    id: 2,
+    title: "Where the Crawdads Sing",
+    author: "Delia Owens",
+    gid: "jVB1DwAAQBAJ",
+  },
   { id: 3, title: "Atomic Habits", author: "James Clear", gid: "fFCjDQAAQBAJ" },
   { id: 4, title: "Gone Girl", author: "Gillian Flynn", gid: "hxL2qWMAgv8C" },
-  { id: 5, title: "The Book Thief", author: "Markus Zusak", gid: "uvFVRiAIVpYC" },
-  { id: 6, title: "The Fault in Our Stars", author: "John Green", gid: "Qk8n0olOX5MC" },
-  { id: 7, title: "Daisy Jones & The Six", author: "Taylor Jenkins Reid", gid: "VJZWEAAAQBAJ" },
+  {
+    id: 5,
+    title: "The Book Thief",
+    author: "Markus Zusak",
+    gid: "uvFVRiAIVpYC",
+  },
+  {
+    id: 6,
+    title: "The Fault in Our Stars",
+    author: "John Green",
+    gid: "Qk8n0olOX5MC",
+  },
+  {
+    id: 7,
+    title: "Daisy Jones & The Six",
+    author: "Taylor Jenkins Reid",
+    gid: "VJZWEAAAQBAJ",
+  },
   { id: 8, title: "Becoming", author: "Michelle Obama", gid: "rMGoDwAAQBAJ" },
 ];
 
@@ -144,21 +169,39 @@ const POPULAR_LISTS = [
     title: "Books that made me ugly cry",
     listAuthor: "devastated_reader",
     count: 24,
-    gids: ["KmbkCgAAQBAJ", "Qk8n0olOX5MC", "szMU9omwV0wC", "x3tgDwAAQBAJ", "jVB1DwAAQBAJ"],
+    gids: [
+      "KmbkCgAAQBAJ",
+      "Qk8n0olOX5MC",
+      "szMU9omwV0wC",
+      "x3tgDwAAQBAJ",
+      "jVB1DwAAQBAJ",
+    ],
   },
   {
     id: 2,
     title: "Thrillers you'll finish in one night",
     listAuthor: "pageturner",
     count: 36,
-    gids: ["hxL2qWMAgv8C", "a6NnDwAAQBAJ", "fUA_DQAAQBAJ", "jVB1DwAAQBAJ", "njVpDQAAQBAJ"],
+    gids: [
+      "hxL2qWMAgv8C",
+      "a6NnDwAAQBAJ",
+      "fUA_DQAAQBAJ",
+      "jVB1DwAAQBAJ",
+      "njVpDQAAQBAJ",
+    ],
   },
   {
     id: 3,
     title: "Books everyone should read once",
     listAuthor: "classicsnerd",
     count: 50,
-    gids: ["iXn5U2IzVH0C", "1L-jEAAAQBAJ", "uvFVRiAIVpYC", "o79lk6nTsRgC", "iAblDwAAQBAJ"],
+    gids: [
+      "iXn5U2IzVH0C",
+      "1L-jEAAAQBAJ",
+      "uvFVRiAIVpYC",
+      "o79lk6nTsRgC",
+      "iAblDwAAQBAJ",
+    ],
   },
 ];
 
