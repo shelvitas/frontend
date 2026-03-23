@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -16,32 +18,148 @@ import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 
-/* ─── Data ─── */
+/* ─── Google Books cover helper — reliable, high-quality, correct covers ─── */
 
-const BACKDROP_COLORS = [
-  "bg-amber-800",
-  "bg-emerald-900",
-  "bg-sky-900",
-  "bg-rose-900",
-  "bg-violet-900",
-  "bg-orange-900",
-  "bg-teal-900",
-  "bg-pink-900",
-  "bg-indigo-900",
-  "bg-yellow-900",
-  "bg-cyan-900",
-  "bg-lime-900",
+const cover = (googleId: string) =>
+  `https://books.google.com/books/content?id=${googleId}&printsec=frontcover&img=1&zoom=2`;
+
+/* ─── Book data using Google Books IDs for reliable high-quality covers ─── */
+
+// Row 1: Fiction & romance bestsellers
+const HERO_ROW_1 = [
+  "uvFVRiAIVpYC", // The Book Thief
+  "KmbkCgAAQBAJ", // It Ends with Us
+  "iAblDwAAQBAJ", // Dune
+  "hxL2qWMAgv8C", // Gone Girl
+  "rMGoDwAAQBAJ", // Becoming
+  "fFCjDQAAQBAJ", // Atomic Habits
+  "VJZWEAAAQBAJ", // Daisy Jones & The Six
+  "o79lk6nTsRgC", // The Handmaid's Tale
+  "jVB1DwAAQBAJ", // Where the Crawdads Sing
+  "njVpDQAAQBAJ", // Seven Husbands of Evelyn Hugo
+  "Qk8n0olOX5MC", // The Fault in Our Stars
+  "TJZWEAAAQBAJ", // Verity
+  "a6NnDwAAQBAJ", // The Silent Patient
+  "8U2oAAAAQBAJ", // Steve Jobs
 ];
 
-const COVER_COLORS = [
-  "bg-amber-800/60",
-  "bg-emerald-800/60",
-  "bg-sky-800/60",
-  "bg-rose-800/60",
-  "bg-violet-800/60",
-  "bg-orange-800/60",
-  "bg-teal-800/60",
-  "bg-pink-800/60",
+// Row 2: Classics, Murakami, Dostoevsky, philosophy
+const HERO_ROW_2 = [
+  "iXn5U2IzVH0C", // The Great Gatsby
+  "1L-jEAAAQBAJ", // 1984
+  "Fse0EAAAQBAJ", // The Hobbit (Illustrated)
+  "ydULEQAAQBAJ", // Pride and Prejudice
+  "ayJpGQeyxgkC", // To Kill a Mockingbird
+  "3PabEAAAQBAJ", // Brave New World
+  "mZunDwAAQBAJ", // The Catcher in the Rye
+  "L6AtuutQHpwC", // Kafka on the Shore — Murakami
+  "kd1XlWVAIWQC", // Norwegian Wood — Murakami
+  "zlVhEAAAQBAJ", // 1Q84 — Murakami
+  "0HZrq-4zA5QC", // Crime and Punishment
+  "BZvXZ1au0VcC", // Brothers Karamazov
+  "IAVT6awraTAC", // Rebecca — du Maurier
+  "S4_PyiyJixQC", // The Secret History
+];
+
+// Row 3: Non-fiction, self-help, biographies
+const HERO_ROW_3 = [
+  "1EiJAwAAQBAJ", // Sapiens
+  "JZwpDwAAQBAJ", // Educated
+  "ypguDwAAQBAJ", // The Tattooist of Auschwitz
+  "63fYDwAAQBAJ", // The Midnight Library
+  "GwAWS6C33O4C", // The Night Circus
+  "x3tgDwAAQBAJ", // Normal People
+  "szMU9omwV0wC", // The Song of Achilles
+  "T2CA83gbtM8C", // The Goldfinch
+  "fUA_DQAAQBAJ", // Little Fires Everywhere
+  "b2CZEAAAQBAJ", // A Man Called Ove
+  "6_mzEAAAQBAJ", // Elon Musk
+  "dyikEAAAQBAJ", // Circe
+  "LbOfEAAAQBAJ", // Pachinko
+  "KUMIEAAAQBAJ", // The Kite Runner
+];
+
+// Row 4: Greatest hits mix
+const HERO_ROW_4 = [
+  "IAVT6awraTAC", // Rebecca
+  "uvFVRiAIVpYC", // The Book Thief
+  "hxL2qWMAgv8C", // Gone Girl
+  "iXn5U2IzVH0C", // The Great Gatsby
+  "jVB1DwAAQBAJ", // Where the Crawdads Sing
+  "iAblDwAAQBAJ", // Dune
+  "fFCjDQAAQBAJ", // Atomic Habits
+  "VJZWEAAAQBAJ", // Daisy Jones & The Six
+  "1L-jEAAAQBAJ", // 1984
+  "KmbkCgAAQBAJ", // It Ends with Us
+  "8U2oAAAAQBAJ", // Steve Jobs
+  "o79lk6nTsRgC", // The Handmaid's Tale
+  "njVpDQAAQBAJ", // Seven Husbands of Evelyn Hugo
+  "rMGoDwAAQBAJ", // Becoming
+];
+
+const POPULAR_BOOKS = [
+  { id: 1, title: "It Ends with Us", author: "Colleen Hoover", gid: "KmbkCgAAQBAJ" },
+  { id: 2, title: "Where the Crawdads Sing", author: "Delia Owens", gid: "jVB1DwAAQBAJ" },
+  { id: 3, title: "Atomic Habits", author: "James Clear", gid: "fFCjDQAAQBAJ" },
+  { id: 4, title: "Gone Girl", author: "Gillian Flynn", gid: "hxL2qWMAgv8C" },
+  { id: 5, title: "The Book Thief", author: "Markus Zusak", gid: "uvFVRiAIVpYC" },
+  { id: 6, title: "The Fault in Our Stars", author: "John Green", gid: "Qk8n0olOX5MC" },
+  { id: 7, title: "Daisy Jones & The Six", author: "Taylor Jenkins Reid", gid: "VJZWEAAAQBAJ" },
+  { id: 8, title: "Becoming", author: "Michelle Obama", gid: "rMGoDwAAQBAJ" },
+];
+
+const RECENT_REVIEWS = [
+  {
+    id: 1,
+    bookTitle: "It Ends with Us",
+    author: "Colleen Hoover",
+    gid: "KmbkCgAAQBAJ",
+    reviewer: "booktokqueen",
+    rating: 5,
+    text: "I could not put this down. The twist destroyed me. Colleen Hoover understands heartbreak on a level that feels almost unfair.",
+  },
+  {
+    id: 2,
+    bookTitle: "Gone Girl",
+    author: "Gillian Flynn",
+    gid: "hxL2qWMAgv8C",
+    reviewer: "thrilleraddict",
+    rating: 4.5,
+    text: "The most unreliable narrator ever written. Every chapter pulled the rug out from under me. Finished it at 3am. Masterful.",
+  },
+  {
+    id: 3,
+    bookTitle: "Atomic Habits",
+    author: "James Clear",
+    gid: "fFCjDQAAQBAJ",
+    reviewer: "selfimprover",
+    rating: 4,
+    text: "Changed how I think about daily routines. The 1% better every day framework is simple but genuinely life-changing. A must-read.",
+  },
+];
+
+const POPULAR_LISTS = [
+  {
+    id: 1,
+    title: "Books that made me ugly cry",
+    listAuthor: "devastated_reader",
+    count: 24,
+    gids: ["KmbkCgAAQBAJ", "Qk8n0olOX5MC", "szMU9omwV0wC", "x3tgDwAAQBAJ", "jVB1DwAAQBAJ"],
+  },
+  {
+    id: 2,
+    title: "Thrillers you'll finish in one night",
+    listAuthor: "pageturner",
+    count: 36,
+    gids: ["hxL2qWMAgv8C", "a6NnDwAAQBAJ", "fUA_DQAAQBAJ", "jVB1DwAAQBAJ", "njVpDQAAQBAJ"],
+  },
+  {
+    id: 3,
+    title: "Books everyone should read once",
+    listAuthor: "classicsnerd",
+    count: 50,
+    gids: ["iXn5U2IzVH0C", "1L-jEAAAQBAJ", "uvFVRiAIVpYC", "o79lk6nTsRgC", "iAblDwAAQBAJ"],
+  },
 ];
 
 /* ─── Sub-components ─── */
@@ -88,58 +206,136 @@ const SectionHeader = ({
   </div>
 );
 
-const BookCoverPlaceholder = ({ index }: { index: number }) => (
+const HeroRow = ({
+  gids,
+  direction,
+}: {
+  gids: string[];
+  direction: "left" | "right";
+}) => (
   <div
-    className={`${COVER_COLORS[index % COVER_COLORS.length]} group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-sm border border-white/5 shadow-sm transition-all hover:-translate-y-1 hover:border-white/20 hover:shadow-md`}
+    className={`flex gap-2 ${direction === "left" ? "animate-scroll-left" : "animate-scroll-right"}`}
   >
-    <div className="absolute inset-0 flex items-end p-2 opacity-0 transition-opacity group-hover:opacity-100">
-      <div className="w-full rounded-sm bg-black/70 px-2 py-1">
-        <div className="h-2 w-3/4 rounded bg-foreground/30" />
-        <div className="mt-1 h-1.5 w-1/2 rounded bg-foreground/20" />
+    {[...gids, ...gids].map((gid, idx) => (
+      <div
+        key={`hero-${gid}-${idx < gids.length ? "a" : "b"}`}
+        className="w-[105px] flex-shrink-0 overflow-hidden rounded-sm bg-secondary"
+      >
+        <img
+          src={cover(gid)}
+          alt=""
+          className="aspect-[2/3] w-full object-cover"
+          loading="lazy"
+        />
       </div>
+    ))}
+  </div>
+);
+
+const BookCover = ({
+  title,
+  author,
+  gid,
+}: {
+  title: string;
+  author: string;
+  gid: string;
+}) => (
+  <div className="group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-sm border border-white/5 shadow-sm transition-all hover:-translate-y-1 hover:border-white/20 hover:shadow-md">
+    <img
+      src={cover(gid)}
+      alt={title}
+      className="h-full w-full object-cover"
+      loading="lazy"
+    />
+    <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-transparent to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
+      <p className="truncate text-xs font-semibold text-white">{title}</p>
+      <p className="truncate text-[10px] text-white/70">{author}</p>
     </div>
   </div>
 );
 
-const ReviewCardPlaceholder = () => (
-  <div className="border-b border-border/40 pb-4">
+const ReviewCard = ({
+  bookTitle,
+  author,
+  reviewer,
+  rating,
+  text,
+  gid,
+}: {
+  bookTitle: string;
+  author: string;
+  reviewer: string;
+  rating: number;
+  text: string;
+  gid: string;
+}) => (
+  <div className="space-y-3">
     <div className="flex gap-3">
-      <div className="h-24 w-16 flex-shrink-0 rounded-sm bg-secondary" />
-      <div className="flex-1 space-y-2">
-        <div className="h-3 w-3/4 rounded bg-secondary" />
-        <div className="h-2 w-1/2 rounded bg-secondary/60" />
-        <div className="flex gap-0.5">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={`star-${i + 1}`}
-              className={`h-3 w-3 ${i < 4 ? "fill-shelves-green text-shelves-green" : "text-secondary"}`}
-            />
-          ))}
+      <img
+        src={cover(gid)}
+        alt={bookTitle}
+        className="h-24 w-16 flex-shrink-0 rounded-sm object-cover"
+        loading="lazy"
+      />
+      <div className="flex-1 space-y-1">
+        <p className="text-sm font-semibold">{bookTitle}</p>
+        <p className="text-xs text-muted-foreground">{author}</p>
+        <div className="flex items-center gap-1">
+          <div className="flex gap-0.5">
+            {Array.from({ length: 5 }).map((_, i) => {
+              let starClass = "text-secondary";
+              if (i < Math.floor(rating)) {
+                starClass = "fill-shelves-green text-shelves-green";
+              } else if (i < rating) {
+                starClass = "fill-shelves-green/50 text-shelves-green";
+              }
+              return (
+                <Star
+                  key={`${bookTitle}-star-${i + 1}`}
+                  className={`h-3 w-3 ${starClass}`}
+                />
+              );
+            })}
+          </div>
+          <span className="text-xs text-muted-foreground">by @{reviewer}</span>
         </div>
-        <div className="space-y-1 pt-1">
-          <div className="h-2 w-full rounded bg-secondary/30" />
-          <div className="h-2 w-5/6 rounded bg-secondary/30" />
-          <div className="h-2 w-2/3 rounded bg-secondary/30" />
-        </div>
+        <p className="text-xs leading-relaxed text-muted-foreground">{text}</p>
       </div>
     </div>
   </div>
 );
 
-const ListCardPlaceholder = () => (
+const ListCard = ({
+  title,
+  listAuthor,
+  count,
+  gids,
+}: {
+  title: string;
+  listAuthor: string;
+  count: number;
+  gids: string[];
+}) => (
   <div className="group cursor-pointer">
-    {/* Stacked covers — Letterboxd-style offset */}
-    <div className="relative mb-2 h-32">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div
-          key={`listcover-${i + 1}`}
-          className={`${COVER_COLORS[i % COVER_COLORS.length]} absolute top-0 aspect-[2/3] h-full rounded-sm border border-white/10 shadow-sm`}
-          style={{ left: `${i * 20}%`, zIndex: 5 - i }}
+    <div className="relative mb-3 h-32">
+      {gids.map((gid, i) => (
+        <img
+          key={`${title}-cover-${gid}`}
+          src={cover(gid)}
+          alt=""
+          className="absolute top-0 h-full w-auto rounded-sm border border-white/10 object-cover shadow-sm transition-transform group-hover:translate-x-0.5"
+          style={{ left: `${i * 18}%`, zIndex: 5 - i }}
+          loading="lazy"
         />
       ))}
     </div>
-    <div className="h-3 w-3/4 rounded bg-secondary" />
-    <div className="mt-1 h-2 w-1/2 rounded bg-secondary/50" />
+    <p className="text-sm font-semibold transition-colors group-hover:text-shelves-blue">
+      {title}
+    </p>
+    <p className="text-xs text-muted-foreground">
+      @{listAuthor} &middot; {count} books
+    </p>
   </div>
 );
 
@@ -149,18 +345,40 @@ const HomePage = () => (
   <div className="flex min-h-screen flex-col">
     <Navbar />
 
-    {/* Hero — Letterboxd-style with backdrop poster grid */}
+    {/* Hero — multi-row animated book covers */}
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <div className="grid h-full grid-cols-6 gap-1 opacity-[0.15] sm:grid-cols-8 md:grid-cols-12">
-          {BACKDROP_COLORS.map((color, i) => (
-            <div key={`bg-${i + 1}`} className={`${color} aspect-[2/3]`} />
-          ))}
+      <div
+        className="absolute inset-0 z-0 flex flex-col justify-center gap-2 opacity-40"
+        style={{
+          perspective: "1200px",
+        }}
+      >
+        <div
+          className="flex flex-col justify-center gap-2"
+          style={{
+            transform:
+              "rotateX(30deg) rotateY(5deg) rotateZ(-15deg) scale(2.0)",
+            transformOrigin: "center center",
+          }}
+        >
+          <div className="overflow-hidden">
+            <HeroRow gids={HERO_ROW_1} direction="left" />
+          </div>
+          <div className="overflow-hidden">
+            <HeroRow gids={HERO_ROW_2} direction="right" />
+          </div>
+          <div className="overflow-hidden">
+            <HeroRow gids={HERO_ROW_3} direction="left" />
+          </div>
+          <div className="overflow-hidden">
+            <HeroRow gids={HERO_ROW_4} direction="right" />
+          </div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/85 to-background" />
       </div>
+      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-background/20 via-background/60 to-background" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background/80 via-transparent to-background/80" />
 
-      <div className="container relative z-10 flex flex-col items-center py-20 text-center md:py-28">
+      <div className="container relative z-10 flex flex-col items-center py-28 text-center md:py-40">
         <Image
           src="/logo.svg"
           alt="Shelves"
@@ -188,8 +406,8 @@ const HomePage = () => (
       </div>
     </section>
 
-    {/* "Shelves lets you..." — PRD core habit loop features */}
-    <section className="">
+    {/* "Shelves lets you..." */}
+    <section>
       <div className="container py-12">
         <h2 className="text-center text-xs font-semibold uppercase tracking-widest text-shelves-green">
           Shelves lets you...
@@ -230,7 +448,7 @@ const HomePage = () => (
     </section>
 
     {/* Popular this week */}
-    <section className="">
+    <section>
       <div className="container py-12">
         <SectionHeader
           label="Popular this week"
@@ -238,15 +456,20 @@ const HomePage = () => (
           linkText="More"
         />
         <div className="mt-6 grid grid-cols-4 gap-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <BookCoverPlaceholder key={`popular-${i + 1}`} index={i} />
+          {POPULAR_BOOKS.map((book) => (
+            <BookCover
+              key={book.id}
+              title={book.title}
+              author={book.author}
+              gid={book.gid}
+            />
           ))}
         </div>
       </div>
     </section>
 
     {/* Just reviewed */}
-    <section className="">
+    <section>
       <div className="container py-12">
         <SectionHeader
           label="Just reviewed..."
@@ -254,15 +477,23 @@ const HomePage = () => (
           linkText="More"
         />
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <ReviewCardPlaceholder key={`review-${i + 1}`} />
+          {RECENT_REVIEWS.map((r) => (
+            <ReviewCard
+              key={r.id}
+              bookTitle={r.bookTitle}
+              author={r.author}
+              reviewer={r.reviewer}
+              rating={r.rating}
+              text={r.text}
+              gid={r.gid}
+            />
           ))}
         </div>
       </div>
     </section>
 
     {/* Popular lists */}
-    <section className="">
+    <section>
       <div className="container py-12">
         <SectionHeader
           label="Popular lists"
@@ -270,15 +501,21 @@ const HomePage = () => (
           linkText="More"
         />
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <ListCardPlaceholder key={`list-${i + 1}`} />
+          {POPULAR_LISTS.map((l) => (
+            <ListCard
+              key={l.id}
+              title={l.title}
+              listAuthor={l.listAuthor}
+              count={l.count}
+              gids={l.gids}
+            />
           ))}
         </div>
       </div>
     </section>
 
-    {/* Why Shelves — PRD differentiators */}
-    <section className="">
+    {/* Built for books */}
+    <section>
       <div className="container py-12">
         <h2 className="text-center text-xs font-semibold uppercase tracking-widest text-muted-foreground">
           Built for books, not retrofitted
@@ -309,7 +546,7 @@ const HomePage = () => (
     </section>
 
     {/* Bottom CTA */}
-    <section className="">
+    <section>
       <div className="container flex flex-col items-center py-16 text-center">
         <h2 className="text-2xl font-bold md:text-3xl">
           The Letterboxd for books.
