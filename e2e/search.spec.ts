@@ -22,9 +22,9 @@ test.describe("Search Page", () => {
 
     // If we're on the search page (authenticated or layout passes through)
     if (page.url().includes("/search")) {
-      await expect(
-        page.getByPlaceholder(/search by title/i),
-      ).toBeVisible({ timeout: 5000 });
+      await expect(page.getByPlaceholder(/search by title/i)).toBeVisible({
+        timeout: 5000,
+      });
     }
   });
 });
