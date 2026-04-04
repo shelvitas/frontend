@@ -17,7 +17,10 @@ export const RatingHistogram = ({
 
   // Group half-stars into full stars for display (e.g. 4.5+5.0 → "5")
   const bars = [5, 4, 3, 2, 1].map((star) => {
-    const low = histogram[`${star - 0.5}.0`] ?? histogram[`${(star - 0.5).toFixed(1)}`] ?? 0;
+    const low =
+      histogram[`${star - 0.5}.0`] ??
+      histogram[`${(star - 0.5).toFixed(1)}`] ??
+      0;
     const high = histogram[`${star}.0`] ?? histogram[`${star.toFixed(1)}`] ?? 0;
     return { star, count: low + high };
   });

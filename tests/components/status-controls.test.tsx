@@ -18,14 +18,21 @@ const { StatusControls } = await import("@/components/book/status-controls");
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useAuthStore.setState({ user: null, session: null, profile: null, isLoading: false });
+  useAuthStore.setState({
+    user: null,
+    session: null,
+    profile: null,
+    isLoading: false,
+  });
 });
 
 describe("StatusControls", () => {
   it("should show Want to Read button when not authenticated", () => {
     render(<StatusControls bookId="book-1" initialStatus={null} />);
 
-    expect(screen.getByRole("button", { name: /Want to Read/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Want to Read/i }),
+    ).toBeInTheDocument();
   });
 
   it("should show all 4 status buttons when authenticated", () => {
@@ -33,8 +40,12 @@ describe("StatusControls", () => {
 
     render(<StatusControls bookId="book-1" initialStatus={null} />);
 
-    expect(screen.getByRole("button", { name: /Want to Read/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Reading/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Want to Read/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Reading/i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^Read$/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /DNF/i })).toBeInTheDocument();
   });

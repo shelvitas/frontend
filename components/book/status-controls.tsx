@@ -8,7 +8,11 @@ import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { UserBookStatus } from "@/lib/types";
 
-type ReadingStatus = "want_to_read" | "currently_reading" | "read" | "did_not_finish";
+type ReadingStatus =
+  | "want_to_read"
+  | "currently_reading"
+  | "read"
+  | "did_not_finish";
 
 interface StatusControlsProps {
   bookId: string;
@@ -16,13 +20,24 @@ interface StatusControlsProps {
 }
 
 const statusConfig = {
-  want_to_read: { label: "Want to Read", icon: BookMarked, color: "text-shelvitas-blue" },
-  currently_reading: { label: "Reading", icon: BookOpen, color: "text-shelvitas-green" },
+  want_to_read: {
+    label: "Want to Read",
+    icon: BookMarked,
+    color: "text-shelvitas-blue",
+  },
+  currently_reading: {
+    label: "Reading",
+    icon: BookOpen,
+    color: "text-shelvitas-green",
+  },
   read: { label: "Read", icon: BookCheck, color: "text-shelvitas-green" },
   did_not_finish: { label: "DNF", icon: BookX, color: "text-shelvitas-orange" },
 } as const;
 
-export const StatusControls = ({ bookId, initialStatus }: StatusControlsProps) => {
+export const StatusControls = ({
+  bookId,
+  initialStatus,
+}: StatusControlsProps) => {
   const session = useAuthStore((s) => s.session);
   const [activeStatus, setActiveStatus] = useState<ReadingStatus | null>(
     initialStatus?.status ?? null,
@@ -66,7 +81,12 @@ export const StatusControls = ({ bookId, initialStatus }: StatusControlsProps) =
     }
   };
 
-  const statuses: ReadingStatus[] = ["want_to_read", "currently_reading", "read", "did_not_finish"];
+  const statuses: ReadingStatus[] = [
+    "want_to_read",
+    "currently_reading",
+    "read",
+    "did_not_finish",
+  ];
 
   return (
     <div className="flex gap-2">
@@ -81,7 +101,7 @@ export const StatusControls = ({ bookId, initialStatus }: StatusControlsProps) =
             variant={isActive ? "default" : "outline"}
             size="sm"
             className={`flex-1 gap-1.5 text-xs ${
-              isActive ? `${config.color} bg-secondary border-secondary` : ""
+              isActive ? `${config.color} border-secondary bg-secondary` : ""
             }`}
             onClick={() => handleStatusChange(status)}
             disabled={isLoading}

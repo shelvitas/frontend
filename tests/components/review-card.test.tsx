@@ -44,9 +44,7 @@ describe("ReviewCard", () => {
   });
 
   it("should show spoiler warning instead of body", () => {
-    render(
-      <ReviewCard review={{ ...baseReview, containsSpoilers: true }} />,
-    );
+    render(<ReviewCard review={{ ...baseReview, containsSpoilers: true }} />);
 
     expect(
       screen.getByText("This review contains spoilers."),

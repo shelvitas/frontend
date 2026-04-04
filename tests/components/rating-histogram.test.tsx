@@ -43,11 +43,7 @@ describe("RatingHistogram", () => {
 
   it("should render dash when no rating", () => {
     render(
-      <RatingHistogram
-        histogram={{}}
-        avgRating={null}
-        ratingsCount={0}
-      />,
+      <RatingHistogram histogram={{}} avgRating={null} ratingsCount={0} />,
     );
 
     expect(screen.getByText("—")).toBeInTheDocument();

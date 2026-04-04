@@ -38,8 +38,7 @@ export async function generateMetadata({
 
   const authorNames = book.authors.map((a) => a.name).join(", ");
   const description =
-    book.description?.slice(0, 160) ||
-    `${book.title} by ${authorNames}`;
+    book.description?.slice(0, 160) || `${book.title} by ${authorNames}`;
 
   return {
     title: `${book.title} by ${authorNames}`,
@@ -53,11 +52,7 @@ export async function generateMetadata({
   };
 }
 
-const BookPage = async ({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) => {
+const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const book = await getBookPage(id);
 
@@ -76,7 +71,9 @@ const BookPage = async ({
     ...(book.isbn13 && { isbn: book.isbn13 }),
     ...(book.description && { description: book.description }),
     ...(book.coverUrl && { image: book.coverUrl }),
-    ...(book.publisher && { publisher: { "@type": "Organization", name: book.publisher } }),
+    ...(book.publisher && {
+      publisher: { "@type": "Organization", name: book.publisher },
+    }),
     ...(book.publishedDate && { datePublished: book.publishedDate }),
     ...(book.pageCount && { numberOfPages: book.pageCount }),
     ...(book.language && { inLanguage: book.language }),
@@ -198,7 +195,10 @@ const BookPage = async ({
 
             {/* Status controls */}
             <div className="mt-6">
-              <StatusControls bookId={book.id} initialStatus={book.userStatus} />
+              <StatusControls
+                bookId={book.id}
+                initialStatus={book.userStatus}
+              />
             </div>
           </div>
         </div>
