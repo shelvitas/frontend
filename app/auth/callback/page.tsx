@@ -52,7 +52,7 @@ const AuthCallbackPage = () => {
     <main className="flex min-h-screen flex-col items-center justify-center gap-4">
       <Image
         src="/logo.svg"
-        alt="Shelves"
+        alt="Shelvitas"
         width={48}
         height={48}
         className="animate-pulse"

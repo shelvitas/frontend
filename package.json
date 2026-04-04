@@ -1,7 +1,7 @@
 {
-  "name": "shelves-frontend",
+  "name": "shelvitas-frontend",
   "version": "0.1.0",
-  "description": "Web app for Shelves — a social book tracking and discovery platform",
+  "description": "Web app for Shelvitas — a social book tracking and discovery platform",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

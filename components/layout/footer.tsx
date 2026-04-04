@@ -25,8 +25,8 @@ export const Footer = () => (
         {/* Brand */}
         <div className="space-y-3">
           <div className="flex items-center gap-1">
-            <Image src="/logo.svg" alt="Shelves" width={24} height={24} />
-            <span className="font-bold text-foreground">Shelves</span>
+            <Image src="/logo.svg" alt="Shelvitas" width={24} height={24} />
+            <span className="font-bold text-foreground">Shelvitas</span>
           </div>
           <p className="text-sm leading-relaxed text-muted-foreground">
             Track books you&apos;ve read. Save those you want to read. Tell your
@@ -73,7 +73,7 @@ export const Footer = () => (
       </div>
 
       <div className="mt-8 pt-6 text-center text-xs text-muted-foreground">
-        &copy; {new Date().getFullYear()} Shelves. Made for book lovers.
+        &copy; {new Date().getFullYear()} Shelvitas. Made for book lovers.
       </div>
     </div>
   </footer>

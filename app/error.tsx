@@ -25,7 +25,7 @@ const GlobalError = ({
       </p>
       <Button
         onClick={reset}
-        className="mt-2 bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+        className="mt-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
       >
         Try again
       </Button>

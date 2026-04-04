@@ -136,9 +136,9 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               href="/"
               className="mb-12 flex items-center justify-center gap-0.5 pb-8"
             >
-              <Image src="/logo.svg" alt="Shelves" width={40} height={40} />
+              <Image src="/logo.svg" alt="Shelvitas" width={40} height={40} />
               <span className="text-3xl font-bold tracking-tight text-foreground">
-                Shelves
+                Shelvitas
               </span>
             </Link>
             {children}
@@ -147,7 +147,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
         {/* Footer */}
         <footer className="px-6 py-6 text-center text-xs text-muted-foreground lg:px-10">
-          &copy; {new Date().getFullYear()} Shelves. Made for book lovers.
+          &copy; {new Date().getFullYear()} Shelvitas. Made for book lovers.
         </footer>
       </div>
     </div>

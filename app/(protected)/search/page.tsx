@@ -50,7 +50,7 @@ const BookResultCard = ({ book }: { book: BookResult }) => {
 
       {/* Info */}
       <div className="flex-1 space-y-1 overflow-hidden">
-        <p className="truncate text-sm font-semibold transition-colors group-hover:text-shelves-green">
+        <p className="truncate text-sm font-semibold transition-colors group-hover:text-shelvitas-green">
           {book.title}
         </p>
         {book.subtitle && (

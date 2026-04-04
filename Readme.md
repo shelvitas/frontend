@@ -1,6 +1,6 @@
-# Shelves Frontend
+# Shelvitas Frontend
 
-Web app for **Shelves** — a social book tracking and discovery platform. Built with Next.js 15, TypeScript, Tailwind CSS, and Supabase Auth.
+Web app for **Shelvitas** — a social book tracking and discovery platform. Built with Next.js 15, TypeScript, Tailwind CSS, and Supabase Auth.
 
 ## Tech Stack
 
@@ -89,7 +89,7 @@ middleware.ts               # Next.js middleware (route protection)
 
 ## Design System
 
-Letterboxd-inspired dark theme with Shelves brand colors:
+Letterboxd-inspired dark theme with Shelvitas brand colors:
 
 | Token              | Value     | Usage                                     |
 | ------------------ | --------- | ----------------------------------------- |
@@ -97,9 +97,9 @@ Letterboxd-inspired dark theme with Shelves brand colors:
 | `foreground`       | `#ededed` | Primary text                              |
 | `muted-foreground` | `#89929b` | Secondary text                            |
 | `secondary`        | `#2c3440` | Card backgrounds, borders, inputs         |
-| `shelves-green`    | `#00e054` | Primary CTAs, links, brand accent         |
-| `shelves-orange`   | `#ff8001` | Logo bar 1                                |
-| `shelves-blue`     | `#40bcf4` | Hover states, secondary accent            |
+| `shelvitas-green`    | `#00e054` | Primary CTAs, links, brand accent         |
+| `shelvitas-orange`   | `#ff8001` | Logo bar 1                                |
+| `shelvitas-blue`     | `#40bcf4` | Hover states, secondary accent            |
 
 ## Pages
 
@@ -207,13 +207,13 @@ The Dockerfile produces a standalone Next.js build (~200MB image). In production
 
 ```bash
 # Build production image
-docker build -t shelves-frontend .
+docker build -t shelvitas-frontend .
 
 # Run
 docker run -p 3000:3000 \
   -e NEXT_PUBLIC_SUPABASE_URL=... \
   -e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=... \
-  shelves-frontend
+  shelvitas-frontend
 ```
 
 For VPS deployment, the `infra/` repo handles this via `make deploy`.

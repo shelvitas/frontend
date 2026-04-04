@@ -217,7 +217,7 @@ const FeatureCard = ({
   description: string;
 }) => (
   <div className="rounded-sm border border-border/40 bg-secondary/30 p-5">
-    <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-sm bg-shelves-green/10 text-shelves-green">
+    <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-sm bg-shelvitas-green/10 text-shelvitas-green">
       {icon}
     </div>
     <h3 className="mb-1 text-sm font-semibold text-foreground">{title}</h3>
@@ -242,7 +242,7 @@ const SectionHeader = ({
     </h2>
     <Link
       href={href}
-      className="text-xs font-medium uppercase tracking-wider text-muted-foreground transition-colors hover:text-shelves-blue"
+      className="text-xs font-medium uppercase tracking-wider text-muted-foreground transition-colors hover:text-shelvitas-blue"
     >
       {linkText}
     </Link>
@@ -329,9 +329,9 @@ const ReviewCard = ({
             {Array.from({ length: 5 }).map((_, i) => {
               let starClass = "text-secondary";
               if (i < Math.floor(rating)) {
-                starClass = "fill-shelves-green text-shelves-green";
+                starClass = "fill-shelvitas-green text-shelvitas-green";
               } else if (i < rating) {
-                starClass = "fill-shelves-green/50 text-shelves-green";
+                starClass = "fill-shelvitas-green/50 text-shelvitas-green";
               }
               return (
                 <Star
@@ -373,7 +373,7 @@ const ListCard = ({
         />
       ))}
     </div>
-    <p className="text-sm font-semibold transition-colors group-hover:text-shelves-blue">
+    <p className="text-sm font-semibold transition-colors group-hover:text-shelvitas-blue">
       {title}
     </p>
     <p className="text-xs text-muted-foreground">
@@ -424,7 +424,7 @@ const HomePage = () => (
       <div className="container relative z-10 flex flex-col items-center pb-28 pt-40 text-center md:pb-40 md:pt-52">
         <Image
           src="/logo.svg"
-          alt="Shelves"
+          alt="Shelvitas"
           width={72}
           height={72}
           className="mb-5"
@@ -434,14 +434,14 @@ const HomePage = () => (
           <br />
           Save those you want to read.
           <br />
-          <span className="text-shelves-green">
+          <span className="text-shelvitas-green">
             Tell your friends what&apos;s good.
           </span>
         </h1>
         <Link href="/sign-up" className="mt-8">
           <Button
             size="lg"
-            className="bg-shelves-green px-8 text-base font-semibold text-background hover:bg-shelves-green/90"
+            className="bg-shelvitas-green px-8 text-base font-semibold text-background hover:bg-shelvitas-green/90"
           >
             Get started — it&apos;s free!
           </Button>
@@ -449,11 +449,11 @@ const HomePage = () => (
       </div>
     </section>
 
-    {/* "Shelves lets you..." */}
+    {/* "Shelvitas lets you..." */}
     <section>
       <div className="container py-12">
-        <h2 className="text-center text-xs font-semibold uppercase tracking-widest text-shelves-green">
-          Shelves lets you...
+        <h2 className="text-center text-xs font-semibold uppercase tracking-widest text-shelvitas-green">
+          Shelvitas lets you...
         </h2>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <FeatureCard
@@ -596,14 +596,14 @@ const HomePage = () => (
         </h2>
         <p className="mt-3 max-w-md text-sm text-muted-foreground">
           Goodreads has 150M+ users and hasn&apos;t shipped a meaningful update
-          since 2013. Shelves is what they should have built. Import your
+          since 2013. Shelvitas is what they should have built. Import your
           library and see the difference.
         </p>
         <div className="mt-6 flex gap-3">
           <Link href="/sign-up">
             <Button
               size="lg"
-              className="bg-shelves-green px-8 font-semibold text-background hover:bg-shelves-green/90"
+              className="bg-shelvitas-green px-8 font-semibold text-background hover:bg-shelvitas-green/90"
             >
               Create your account
             </Button>

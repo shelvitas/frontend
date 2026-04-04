@@ -54,10 +54,10 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        shelves: {
-          green: "hsl(var(--shelves-green))",
-          orange: "hsl(var(--shelves-orange))",
-          blue: "hsl(var(--shelves-blue))",
+        shelvitas: {
+          green: "hsl(var(--shelvitas-green))",
+          orange: "hsl(var(--shelvitas-orange))",
+          blue: "hsl(var(--shelvitas-blue))",
           body: "#14181c",
           header: "#0d1117",
           surface: "#1c2028",

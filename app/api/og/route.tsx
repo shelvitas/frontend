@@ -5,7 +5,7 @@ export const runtime = "edge";
 
 export const GET = (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get("title") ?? "Shelves";
+  const title = searchParams.get("title") ?? "Shelvitas";
 
   return new ImageResponse(
     <div

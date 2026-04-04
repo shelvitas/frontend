@@ -53,9 +53,9 @@ export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
         {/* Logo + Nav */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-1">
-            <Image src="/logo.svg" alt="Shelves" width={28} height={28} />
+            <Image src="/logo.svg" alt="Shelvitas" width={28} height={28} />
             <span className="text-lg font-bold tracking-tight text-foreground">
-              Shelves
+              Shelvitas
             </span>
           </Link>
 
@@ -107,7 +107,7 @@ export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
               <Link href="/sign-up">
                 <Button
                   size="sm"
-                  className="bg-shelves-green text-sm font-semibold text-background hover:bg-shelves-green/90"
+                  className="bg-shelvitas-green text-sm font-semibold text-background hover:bg-shelvitas-green/90"
                 >
                   Create account
                 </Button>

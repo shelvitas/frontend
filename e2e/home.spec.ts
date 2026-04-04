@@ -16,7 +16,7 @@ test.describe("Home Page", () => {
   test("should display the navbar with logo", async ({ page }) => {
     await page.goto("/");
     await expect(
-      page.getByRole("banner").getByRole("img", { name: "Shelves" }),
+      page.getByRole("banner").getByRole("img", { name: "Shelvitas" }),
     ).toBeVisible();
   });
 });

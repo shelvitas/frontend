@@ -7,11 +7,11 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Shelves — Track books you've read. Discover what to read next.",
-    template: "%s | Shelves",
+    default: "Shelvitas — Track books you've read. Discover what to read next.",
+    template: "%s | Shelvitas",
   },
   description:
-    "Shelves is a social book tracking and discovery platform. Log the books you've read, save those you want to read, and discover what your friends are reading.",
+    "Shelvitas is a social book tracking and discovery platform. Log the books you've read, save those you want to read, and discover what your friends are reading.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   ),
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     apple: "/logo.svg",
   },
   openGraph: {
-    title: "Shelves",
+    title: "Shelvitas",
     description:
       "A social book tracking and discovery platform. The Letterboxd for books.",
     type: "website",

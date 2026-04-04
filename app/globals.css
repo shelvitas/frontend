@@ -11,7 +11,7 @@
     --card-foreground: 0 0% 93%;
     --popover: 216 18% 11%;
     --popover-foreground: 0 0% 93%;
-    --primary: 145 100% 44%; /* #00e054 - Shelves green */
+    --primary: 145 100% 44%; /* #00e054 - Shelvitas green */
     --primary-foreground: 216 18% 11%;
     --secondary: 212 18% 22%; /* #2c3440 */
     --secondary-foreground: 0 0% 93%;
@@ -27,9 +27,9 @@
     --radius: 0.25rem;
 
     /* Brand colors */
-    --shelves-green: 145 100% 44%; /* #00e054 */
-    --shelves-orange: 30 100% 50%; /* #ff8001 */
-    --shelves-blue: 197 89% 60%; /* #40bcf4 */
+    --shelvitas-green: 145 100% 44%; /* #00e054 */
+    --shelvitas-orange: 30 100% 50%; /* #ff8001 */
+    --shelvitas-blue: 197 89% 60%; /* #40bcf4 */
   }
 }
 

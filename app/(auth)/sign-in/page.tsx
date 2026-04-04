@@ -34,7 +34,7 @@ const SignInPage = () => {
       <div className="text-center">
         <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Sign in to your Shelves account
+          Sign in to your Shelvitas account
         </p>
       </div>
 
@@ -76,7 +76,7 @@ const SignInPage = () => {
 
         <Button
           type="submit"
-          className="w-full bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+          className="w-full bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           disabled={isLoading}
         >
           {isLoading ? "Signing in..." : "Sign in"}
@@ -96,7 +96,7 @@ const SignInPage = () => {
         Don&apos;t have an account?{" "}
         <Link
           href="/sign-up"
-          className="font-medium text-shelves-green hover:underline"
+          className="font-medium text-shelvitas-green hover:underline"
         >
           Sign up
         </Link>

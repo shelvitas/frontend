@@ -35,8 +35,8 @@ const ForgotPasswordPage = () => {
   if (success) {
     return (
       <div className="space-y-4 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-shelves-green/10">
-          <Mail className="h-6 w-6 text-shelves-green" />
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-shelvitas-green/10">
+          <Mail className="h-6 w-6 text-shelvitas-green" />
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Check your email</h1>
         <p className="text-sm text-muted-foreground">
@@ -80,7 +80,7 @@ const ForgotPasswordPage = () => {
 
         <Button
           type="submit"
-          className="w-full bg-shelves-green font-semibold text-background hover:bg-shelves-green/90"
+          className="w-full bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           disabled={isLoading}
         >
           {isLoading ? "Sending..." : "Send reset link"}
