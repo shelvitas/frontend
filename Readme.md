@@ -74,7 +74,10 @@ components/
 ├── book/
 │   ├── rating-histogram.tsx # Community rating histogram (5-star bars)
 │   ├── status-controls.tsx  # 3-state + DNF reading status buttons
-│   └── review-card.tsx      # Review card with spoiler gate
+│   ├── review-card.tsx      # Review card with spoiler gate
+│   ├── star-rating.tsx      # Clickable half-star rating input (0.5-5.0)
+│   ├── tags-input.tsx       # Tag input with Enter/comma add, backspace remove
+│   └── log-modal.tsx        # Full log/review modal (status, dates, rating, format, tags, review, notes)
 └── ui/                     # shadcn/ui primitives (Button, Card, Input, etc.)
 
 lib/
