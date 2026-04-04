@@ -40,6 +40,7 @@ app/
 ├── (public)/               # Public pages (no auth required)
 │   ├── page.tsx            # Homepage — hero, features, book sections
 │   ├── [username]/page.tsx # Public profile page (SSR) — stats, tabs, follow
+│   ├── books/[id]/page.tsx # Book page (SSR) — cover, metadata, histogram, status, reviews, Schema.org
 │   ├── logo/page.tsx       # Logo display
 │   └── testing/page.tsx    # API testing page
 ├── (auth)/                 # Auth pages (split-screen layout with book mosaic)
@@ -70,6 +71,10 @@ components/
 ├── profile/
 │   ├── follow-button.tsx   # Follow/Unfollow/Request button (client)
 │   └── profile-tabs.tsx    # Read, Currently Reading, Reviews, Lists, Want to Read tabs
+├── book/
+│   ├── rating-histogram.tsx # Community rating histogram (5-star bars)
+│   ├── status-controls.tsx  # 3-state + DNF reading status buttons
+│   └── review-card.tsx      # Review card with spoiler gate
 └── ui/                     # shadcn/ui primitives (Button, Card, Input, etc.)
 
 lib/
