@@ -5,6 +5,8 @@ import { ThumbsUp, Bookmark } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { Tooltip } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
@@ -20,6 +22,7 @@ export const ReviewActions = ({
   initialSaves,
 }: ReviewActionsProps) => {
   const session = useAuthStore((s) => s.session);
+  const { toast } = useToast();
   const [likes, setLikes] = useState(initialLikes);
   const [saves, setSaves] = useState(initialSaves);
   const [liked, setLiked] = useState(false);
@@ -44,6 +47,7 @@ export const ReviewActions = ({
         await api.delete(`/v1/reviews/${reviewId}/like`);
       } else {
         await api.post(`/v1/reviews/${reviewId}/like`);
+        toast("Review liked");
       }
     } catch {
       setLiked(wasLiked);
@@ -69,6 +73,7 @@ export const ReviewActions = ({
         await api.delete(`/v1/reviews/${reviewId}/save`);
       } else {
         await api.post(`/v1/reviews/${reviewId}/save`);
+        toast("Review saved");
       }
     } catch {
       setSaved(wasSaved);
@@ -80,38 +85,42 @@ export const ReviewActions = ({
 
   return (
     <div className="flex items-center gap-3">
-      <Button
-        variant="ghost"
-        size="sm"
-        className={`gap-1.5 text-xs transition-all ${liked ? "text-shelvitas-green" : "text-muted-foreground"}`}
-        onClick={handleLike}
-        disabled={likeLoading}
-      >
-        {likeLoading ? (
-          <Spinner className="h-4 w-4" />
-        ) : (
-          <ThumbsUp
-            className={`h-4 w-4 transition-all ${liked ? "scale-110 fill-shelvitas-green" : ""}`}
-          />
-        )}
-        {likes}
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        className={`gap-1.5 text-xs transition-all ${saved ? "text-shelvitas-orange" : "text-muted-foreground"}`}
-        onClick={handleSave}
-        disabled={saveLoading}
-      >
-        {saveLoading ? (
-          <Spinner className="h-4 w-4" />
-        ) : (
-          <Bookmark
-            className={`h-4 w-4 transition-all ${saved ? "scale-110 fill-shelvitas-orange" : ""}`}
-          />
-        )}
-        {saves}
-      </Button>
+      <Tooltip content={liked ? "Unlike" : "Like"}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={`gap-1.5 text-xs transition-all ${liked ? "text-shelvitas-green" : "text-muted-foreground"}`}
+          onClick={handleLike}
+          disabled={likeLoading}
+        >
+          {likeLoading ? (
+            <Spinner className="h-4 w-4" />
+          ) : (
+            <ThumbsUp
+              className={`h-4 w-4 transition-all ${liked ? "scale-110 fill-shelvitas-green" : ""}`}
+            />
+          )}
+          {likes}
+        </Button>
+      </Tooltip>
+      <Tooltip content={saved ? "Unsave" : "Save"}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={`gap-1.5 text-xs transition-all ${saved ? "text-shelvitas-orange" : "text-muted-foreground"}`}
+          onClick={handleSave}
+          disabled={saveLoading}
+        >
+          {saveLoading ? (
+            <Spinner className="h-4 w-4" />
+          ) : (
+            <Bookmark
+              className={`h-4 w-4 transition-all ${saved ? "scale-110 fill-shelvitas-orange" : ""}`}
+            />
+          )}
+          {saves}
+        </Button>
+      </Tooltip>
     </div>
   );
 };

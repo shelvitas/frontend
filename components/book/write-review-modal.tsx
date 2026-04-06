@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { StarRating } from "@/components/book/star-rating";
@@ -31,6 +32,7 @@ export const WriteReviewModal = ({
 }: WriteReviewModalProps) => {
   const session = useAuthStore((s) => s.session);
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
   const [body, setBody] = useState("");
   const [rating, setRating] = useState<number | null>(null);
   const [containsSpoilers, setContainsSpoilers] = useState(false);
@@ -53,12 +55,14 @@ export const WriteReviewModal = ({
       setBody("");
       setRating(null);
       setContainsSpoilers(false);
+      toast("Review published!");
       if (onSaved) {
         onSaved(review.id);
       } else {
         window.location.href = `/reviews/${review.id}`;
       }
     } catch (err) {
+      toast("Failed to publish review", "error");
       setError(err instanceof Error ? err.message : "Failed to publish review");
     } finally {
       setIsSubmitting(false);
@@ -77,7 +81,10 @@ export const WriteReviewModal = ({
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button size="sm" className="gap-1.5 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90">
+          <Button
+            size="sm"
+            className="gap-1.5 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+          >
             <PenLine className="h-3.5 w-3.5" />
             Write a review
           </Button>
@@ -125,7 +132,11 @@ export const WriteReviewModal = ({
           {error && <p className="text-sm text-red-400">{error}</p>}
 
           <div className="flex gap-2 pt-2">
-            <Button variant="outline" className="flex-1" onClick={() => setOpen(false)}>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button

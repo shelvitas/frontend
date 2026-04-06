@@ -5,6 +5,7 @@ import { BookMarked, Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useBookStatus } from "@/lib/hooks/use-book-status";
 
@@ -13,6 +14,7 @@ interface WantToReadButtonProps {
 }
 
 export const WantToReadButton = ({ bookId }: WantToReadButtonProps) => {
+  const { toast } = useToast();
   const { status, isHydrated, isAuthenticated, setStatus, clear } =
     useBookStatus(bookId);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,14 +39,17 @@ export const WantToReadButton = ({ bookId }: WantToReadButtonProps) => {
     try {
       if (wanted) {
         await api.delete(`/v1/books/${bookId}/status`);
+        toast("Removed from reading list");
       } else {
         await api.post(`/v1/books/${bookId}/status`, {
           status: "want_to_read",
         });
+        toast("Added to reading list");
       }
     } catch {
       if (prev) setStatus(prev);
       else clear();
+      toast("Something went wrong", "error");
     } finally {
       setIsLoading(false);
     }

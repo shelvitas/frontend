@@ -5,6 +5,7 @@ import { UserPlus, UserCheck, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
@@ -23,6 +24,8 @@ export const FollowButton = ({
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [isPending, setIsPending] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { toast } = useToast();
 
   if (!session) {
     return (
@@ -47,11 +50,13 @@ export const FollowButton = ({
       );
       if (result.status === "pending") {
         setIsPending(true);
+        toast("Follow request sent");
       } else {
         setIsFollowing(true);
+        toast("Following!");
       }
     } catch {
-      // Silently handle
+      toast("Failed to follow", "error");
     } finally {
       setIsLoading(false);
     }
@@ -64,10 +69,11 @@ export const FollowButton = ({
     setIsLoading(true);
     try {
       await api.delete(`/v1/users/${userId}/follow`);
+      toast("Unfollowed");
     } catch {
-      // Revert
       if (wasPending) setIsPending(true);
       else setIsFollowing(true);
+      toast("Failed to unfollow", "error");
     } finally {
       setIsLoading(false);
     }

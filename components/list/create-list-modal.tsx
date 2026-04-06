@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toaster";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
@@ -30,6 +31,7 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
   const [isPrivate, setIsPrivate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const handleCreate = async () => {
     if (!title.trim()) return;
@@ -48,12 +50,14 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
       setDescription("");
       setIsRanked(false);
       setIsPrivate(false);
+      toast("List created!");
       if (onSaved) {
         onSaved(list.id);
       } else {
         window.location.href = `/lists/${list.id}`;
       }
     } catch (err) {
+      toast("Failed to create list", "error");
       setError(err instanceof Error ? err.message : "Failed to create list");
     } finally {
       setIsSubmitting(false);
@@ -72,7 +76,10 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button size="sm" className="gap-1.5 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90">
+          <Button
+            size="sm"
+            className="gap-1.5 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+          >
             <List className="h-3.5 w-3.5" />
             Create list
           </Button>
@@ -86,7 +93,10 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
         <div className="space-y-4 pt-2">
           <div>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="list-modal-title" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            <label
+              htmlFor="list-modal-title"
+              className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-muted-foreground"
+            >
               Title
             </label>
             <Input
@@ -114,12 +124,22 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
           <div className="flex gap-4">
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="flex items-center gap-2 text-xs text-muted-foreground">
-              <input type="checkbox" checked={isRanked} onChange={(e) => setIsRanked(e.target.checked)} className="rounded border-secondary" />
+              <input
+                type="checkbox"
+                checked={isRanked}
+                onChange={(e) => setIsRanked(e.target.checked)}
+                className="rounded border-secondary"
+              />
               Ranked
             </label>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="flex items-center gap-2 text-xs text-muted-foreground">
-              <input type="checkbox" checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} className="rounded border-secondary" />
+              <input
+                type="checkbox"
+                checked={isPrivate}
+                onChange={(e) => setIsPrivate(e.target.checked)}
+                className="rounded border-secondary"
+              />
               Private
             </label>
           </div>
@@ -127,7 +147,11 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
           {error && <p className="text-sm text-red-400">{error}</p>}
 
           <div className="flex gap-2 pt-2">
-            <Button variant="outline" className="flex-1" onClick={() => setOpen(false)}>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button

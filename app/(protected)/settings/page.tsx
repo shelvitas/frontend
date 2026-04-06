@@ -8,12 +8,14 @@ import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
 const SettingsPage = () => {
   const { session, profile, setProfile } = useAuthStore();
 
+  const { toast } = useToast();
   const [displayName, setDisplayName] = useState(profile?.displayName ?? "");
   const [bio, setBio] = useState(profile?.bio ?? "");
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatarUrl ?? "");
@@ -44,9 +46,10 @@ const SettingsPage = () => {
       );
       setProfile(updated);
       setSaved(true);
+      toast("Profile updated");
       setTimeout(() => setSaved(false), 2000);
     } catch {
-      // handle silently
+      toast("Failed to save", "error");
     } finally {
       setIsSaving(false);
     }

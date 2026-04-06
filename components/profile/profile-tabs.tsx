@@ -243,7 +243,10 @@ export const ProfileTabs = ({ username }: { username: string }) => {
               <div className="mt-3">
                 <CreateListModal
                   trigger={
-                    <button type="button" className="text-xs text-shelvitas-green hover:underline">
+                    <button
+                      type="button"
+                      className="text-xs text-shelvitas-green hover:underline"
+                    >
                       Create your first list
                     </button>
                   }

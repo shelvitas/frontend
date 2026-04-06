@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { useToast } from "@/components/ui/toaster";
 import { StarRating } from "@/components/book/star-rating";
 import { TagsInput } from "@/components/book/tags-input";
 import { api } from "@/lib/api";
@@ -80,6 +81,7 @@ export const LogModal = ({
   onSaved,
 }: LogModalProps) => {
   const isEdit = !!existingEntry;
+  const { toast } = useToast();
 
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -134,8 +136,10 @@ export const LogModal = ({
       }
 
       setOpen(false);
+      toast(isEdit ? "Entry updated" : "Book logged!");
       onSaved?.();
     } catch (err) {
+      toast("Failed to save", "error");
       setError(
         err instanceof Error ? err.message : "Failed to save diary entry",
       );

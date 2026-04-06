@@ -5,6 +5,7 @@ import { Heart, Copy, Share2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
@@ -22,6 +23,7 @@ export const ListActions = ({
   listTitle,
 }: ListActionsProps) => {
   const session = useAuthStore((s) => s.session);
+  const { toast } = useToast();
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(initialIsLiked);
   const [likeLoading, setLikeLoading] = useState(false);
@@ -43,6 +45,7 @@ export const ListActions = ({
         await api.delete(`/v1/lists/${listId}/like`);
       } else {
         await api.post(`/v1/lists/${listId}/like`);
+        toast("List liked");
       }
     } catch {
       setLiked(wasLiked);
@@ -62,6 +65,7 @@ export const ListActions = ({
       const cloned = await api.post<{ id: string }>(
         `/v1/lists/${listId}/clone`,
       );
+      toast("List cloned!");
       window.location.href = `/lists/${cloned.id}`;
     } catch {
       setCloneLoading(false);

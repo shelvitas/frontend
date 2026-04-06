@@ -5,6 +5,8 @@ import { BookMarked, BookOpen, BookCheck, BookX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { Tooltip } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useBookStatus } from "@/lib/hooks/use-book-status";
 
@@ -45,6 +47,7 @@ const statuses: ReadingStatus[] = [
 ];
 
 export const StatusControls = ({ bookId }: StatusControlsProps) => {
+  const { toast } = useToast();
   const {
     status: activeStatus,
     isHydrated,
@@ -95,14 +98,19 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
     try {
       if (isToggleOff) {
         await api.delete(`/v1/books/${bookId}/status`);
+        toast("Status removed");
       } else if (status === "did_not_finish") {
         await api.post(`/v1/books/${bookId}/dnf`, { reason: "not_for_me" });
+        toast("Marked as Did Not Finish");
       } else {
         await api.post(`/v1/books/${bookId}/status`, { status });
+        const labels: Record<string, string> = { currently_reading: "Marked as Reading", read: "Marked as Read" };
+        toast(labels[status] ?? "Status updated");
       }
     } catch {
       if (prev) setStatus(prev);
       else clear();
+      toast("Failed to update status", "error");
     } finally {
       setLoadingStatus(null);
     }
@@ -117,8 +125,8 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
         const isThisLoading = loadingStatus === status;
 
         return (
+          <Tooltip key={status} content={isActive ? `Remove ${config.label}` : `Mark as ${config.label}`}>
           <Button
-            key={status}
             variant={isActive ? "default" : "outline"}
             size="sm"
             className={`flex-1 gap-1.5 text-xs transition-all ${
@@ -134,6 +142,7 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
             )}
             {config.label}
           </Button>
+          </Tooltip>
         );
       })}
     </div>
