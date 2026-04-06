@@ -24,7 +24,11 @@ export const ShareButtons = ({ url, text }: ShareButtonsProps) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-muted-foreground">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-7 px-2 text-xs text-muted-foreground"
+        >
           X
         </Button>
       </a>
@@ -33,7 +37,11 @@ export const ShareButtons = ({ url, text }: ShareButtonsProps) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-muted-foreground">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-7 px-2 text-xs text-muted-foreground"
+        >
           Threads
         </Button>
       </a>

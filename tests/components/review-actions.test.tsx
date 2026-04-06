@@ -8,7 +8,9 @@ vi.stubGlobal("fetch", mockFetch);
 
 vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({
-    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+    },
   }),
 }));
 
@@ -16,7 +18,12 @@ const { ReviewActions } = await import("@/components/review/review-actions");
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useAuthStore.setState({ session: null, user: null, profile: null, isLoading: false });
+  useAuthStore.setState({
+    session: null,
+    user: null,
+    profile: null,
+    isLoading: false,
+  });
 });
 
 describe("ReviewActions", () => {

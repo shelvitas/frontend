@@ -80,7 +80,9 @@ export const ReviewActions = ({
         onClick={handleLike}
         disabled={isLoading}
       >
-        <ThumbsUp className={`h-4 w-4 ${liked ? "fill-shelvitas-green" : ""}`} />
+        <ThumbsUp
+          className={`h-4 w-4 ${liked ? "fill-shelvitas-green" : ""}`}
+        />
         {likes}
       </Button>
       <Button
@@ -90,7 +92,9 @@ export const ReviewActions = ({
         onClick={handleSave}
         disabled={isLoading}
       >
-        <Bookmark className={`h-4 w-4 ${saved ? "fill-shelvitas-orange" : ""}`} />
+        <Bookmark
+          className={`h-4 w-4 ${saved ? "fill-shelvitas-orange" : ""}`}
+        />
         {saves}
       </Button>
     </div>

@@ -65,11 +65,7 @@ export async function generateMetadata({
   };
 }
 
-const ReviewPage = async ({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) => {
+const ReviewPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const [review, threadedComments] = await Promise.all([
     getReview(id),
@@ -132,7 +128,9 @@ const ReviewPage = async ({
                   }`}
                 />
               ))}
-              <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
+              <span className="ml-1 text-sm font-medium">
+                {rating.toFixed(1)}
+              </span>
             </div>
           )}
           {review.isDnf && (
@@ -174,10 +172,7 @@ const ReviewPage = async ({
             Comments ({review.commentsCount})
           </h2>
           <div className="mt-4">
-            <CommentThread
-              reviewId={review.id}
-              comments={threadedComments}
-            />
+            <CommentThread reviewId={review.id} comments={threadedComments} />
           </div>
         </div>
       </main>

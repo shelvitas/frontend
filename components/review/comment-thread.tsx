@@ -34,7 +34,7 @@ const CommentItem = ({
             {comment.author.displayName.charAt(0).toUpperCase()}
           </div>
         )}
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <Link
               href={`/${comment.author.username}`}
@@ -46,7 +46,9 @@ const CommentItem = ({
               {new Date(comment.createdAt).toLocaleDateString()}
             </span>
             {comment.isDeleted && (
-              <span className="text-[10px] italic text-muted-foreground">deleted</span>
+              <span className="text-[10px] italic text-muted-foreground">
+                deleted
+              </span>
             )}
           </div>
 

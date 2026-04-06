@@ -6,7 +6,9 @@ import type { CommentData } from "@/lib/types";
 
 vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({
-    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+    },
   }),
 }));
 
@@ -17,7 +19,12 @@ const { CommentThread } = await import("@/components/review/comment-thread");
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useAuthStore.setState({ session: null, user: null, profile: null, isLoading: false });
+  useAuthStore.setState({
+    session: null,
+    user: null,
+    profile: null,
+    isLoading: false,
+  });
 });
 
 const baseComment: CommentData = {
@@ -96,7 +103,9 @@ describe("CommentThread", () => {
     render(<CommentThread reviewId="r1" comments={[spoilerComment]} />);
 
     expect(screen.getByText("Show spoiler")).toBeInTheDocument();
-    expect(screen.queryByText("This is a great review!")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("This is a great review!"),
+    ).not.toBeInTheDocument();
   });
 
   it("should show deleted placeholder", () => {
@@ -108,14 +117,18 @@ describe("CommentThread", () => {
 
     render(<CommentThread reviewId="r1" comments={[deletedComment]} />);
 
-    expect(screen.getByText("[This comment has been deleted]")).toBeInTheDocument();
+    expect(
+      screen.getByText("[This comment has been deleted]"),
+    ).toBeInTheDocument();
     expect(screen.getByText("deleted")).toBeInTheDocument();
   });
 
   it("should show sign-in prompt in placeholder when not authenticated", () => {
     render(<CommentThread reviewId="r1" comments={[]} />);
 
-    expect(screen.getByPlaceholderText("Sign in to comment")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Sign in to comment"),
+    ).toBeInTheDocument();
   });
 
   it("should show write prompt when authenticated", () => {
@@ -123,6 +136,8 @@ describe("CommentThread", () => {
 
     render(<CommentThread reviewId="r1" comments={[]} />);
 
-    expect(screen.getByPlaceholderText("Write a comment...")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Write a comment..."),
+    ).toBeInTheDocument();
   });
 });
