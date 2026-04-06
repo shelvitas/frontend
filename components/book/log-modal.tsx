@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/components/ui/toaster";
 import { StarRating } from "@/components/book/star-rating";
@@ -48,6 +49,7 @@ interface DiaryEntry {
 interface LogModalProps {
   bookId: string;
   bookTitle: string;
+  bookCoverUrl?: string | null;
   existingEntry?: DiaryEntry | null;
   trigger?: React.ReactNode;
   onSaved?: () => void;
@@ -76,6 +78,7 @@ function toDateInput(dateStr: string | null): string {
 export const LogModal = ({
   bookId,
   bookTitle,
+  bookCoverUrl,
   existingEntry,
   trigger,
   onSaved,
@@ -162,13 +165,25 @@ export const LogModal = ({
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-lg">
-            {isEdit ? "Edit Entry" : "Log"}{" "}
-            <span className="text-shelvitas-green">{bookTitle}</span>
+          <DialogTitle className="flex items-center gap-2 text-lg">
+            <BookMarked className="h-4 w-4 text-shelvitas-green" />
+            {isEdit ? "Edit Entry" : "Log Book"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-5 pt-2">
+        {/* Book strip */}
+        <div className="flex items-center gap-3 rounded-sm bg-secondary/30 px-3 py-2.5">
+          {bookCoverUrl ? (
+            <img src={bookCoverUrl} alt={bookTitle} className="h-16 w-11 shrink-0 rounded-sm object-cover shadow-sm" />
+          ) : (
+            <div className="flex h-16 w-11 shrink-0 items-center justify-center rounded-sm bg-secondary text-[10px]">
+              <BookMarked className="h-3 w-3 text-muted-foreground" />
+            </div>
+          )}
+          <p className="text-sm font-medium text-shelvitas-green">{bookTitle}</p>
+        </div>
+
+        <div className="space-y-5">
           {/* Status */}
           <div>
             <p className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -341,16 +356,7 @@ export const LogModal = ({
           </div>
 
           {/* Reread checkbox */}
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label className="flex items-center gap-2 text-xs text-muted-foreground">
-            <input
-              type="checkbox"
-              checked={isReread}
-              onChange={(e) => setIsReread(e.target.checked)}
-              className="rounded border-secondary"
-            />
-            This is a reread
-          </label>
+          <Checkbox checked={isReread} onChange={setIsReread} label="This is a reread" />
 
           {/* Error */}
           {error && <p className="text-sm text-red-500">{error}</p>}

@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toaster";
 import { Spinner } from "@/components/ui/spinner";
@@ -87,10 +88,18 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Create a List</DialogTitle>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-shelvitas-green/10">
+              <List className="h-5 w-5 text-shelvitas-green" />
+            </div>
+            <div>
+              <DialogTitle>Create a List</DialogTitle>
+              <p className="text-xs text-muted-foreground">Curate books for yourself or share with others</p>
+            </div>
+          </div>
         </DialogHeader>
 
-        <div className="space-y-4 pt-2">
+        <div className="space-y-4 border-t border-secondary/40 pt-4">
           <div>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label
@@ -122,26 +131,8 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
           </div>
 
           <div className="flex gap-4">
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label className="flex items-center gap-2 text-xs text-muted-foreground">
-              <input
-                type="checkbox"
-                checked={isRanked}
-                onChange={(e) => setIsRanked(e.target.checked)}
-                className="rounded border-secondary"
-              />
-              Ranked
-            </label>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label className="flex items-center gap-2 text-xs text-muted-foreground">
-              <input
-                type="checkbox"
-                checked={isPrivate}
-                onChange={(e) => setIsPrivate(e.target.checked)}
-                className="rounded border-secondary"
-              />
-              Private
-            </label>
+            <Checkbox checked={isRanked} onChange={setIsRanked} label="Ranked" />
+            <Checkbox checked={isPrivate} onChange={setIsPrivate} label="Private" />
           </div>
 
           {error && <p className="text-sm text-red-400">{error}</p>}

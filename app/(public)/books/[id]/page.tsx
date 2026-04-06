@@ -324,7 +324,7 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             Write a review to help other readers discover this book.
           </p>
           <div className="mt-3">
-            <WriteReviewModal bookId={book.id} bookTitle={book.title} />
+            <WriteReviewModal bookId={book.id} bookTitle={book.title} bookCoverUrl={book.coverUrl} />
           </div>
         </div>
       </main>
