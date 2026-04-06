@@ -104,13 +104,19 @@ export const WriteReviewModal = ({
         {/* Book strip */}
         <div className="flex items-center gap-3 rounded-sm bg-secondary/30 px-3 py-2.5">
           {bookCoverUrl ? (
-            <img src={bookCoverUrl} alt={bookTitle} className="h-16 w-11 shrink-0 rounded-sm object-cover shadow-sm" />
+            <img
+              src={bookCoverUrl}
+              alt={bookTitle}
+              className="h-16 w-11 shrink-0 rounded-sm object-cover shadow-sm"
+            />
           ) : (
             <div className="flex h-16 w-11 shrink-0 items-center justify-center rounded-sm bg-secondary text-[10px]">
               <PenLine className="h-3 w-3 text-muted-foreground" />
             </div>
           )}
-          <p className="text-sm font-medium text-shelvitas-green">{bookTitle}</p>
+          <p className="text-sm font-medium text-shelvitas-green">
+            {bookTitle}
+          </p>
         </div>
 
         <div className="space-y-5">

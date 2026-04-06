@@ -94,7 +94,9 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
             </div>
             <div>
               <DialogTitle>Create a List</DialogTitle>
-              <p className="text-xs text-muted-foreground">Curate books for yourself or share with others</p>
+              <p className="text-xs text-muted-foreground">
+                Curate books for yourself or share with others
+              </p>
             </div>
           </div>
         </DialogHeader>
@@ -131,8 +133,16 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
           </div>
 
           <div className="flex gap-4">
-            <Checkbox checked={isRanked} onChange={setIsRanked} label="Ranked" />
-            <Checkbox checked={isPrivate} onChange={setIsPrivate} label="Private" />
+            <Checkbox
+              checked={isRanked}
+              onChange={setIsRanked}
+              label="Ranked"
+            />
+            <Checkbox
+              checked={isPrivate}
+              onChange={setIsPrivate}
+              label="Private"
+            />
           </div>
 
           {error && <p className="text-sm text-red-400">{error}</p>}
