@@ -17,6 +17,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { StarRating } from "@/components/book/star-rating";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 interface WriteReviewModalProps {
   bookId: string;
@@ -104,9 +105,11 @@ export const WriteReviewModal = ({
         {/* Book strip */}
         <div className="flex items-center gap-3 rounded-sm bg-secondary/30 px-3 py-2.5">
           {bookCoverUrl ? (
-            <img
+            <RemoteImage
               src={bookCoverUrl}
               alt={bookTitle}
+              width={44}
+              height={64}
               className="h-16 w-11 shrink-0 rounded-sm object-cover shadow-sm"
             />
           ) : (

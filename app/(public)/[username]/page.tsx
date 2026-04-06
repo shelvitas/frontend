@@ -19,6 +19,7 @@ import { ProfileTabs } from "@/components/profile/profile-tabs";
 import type { ProfileData } from "@/lib/types";
 import { isFullProfile } from "@/lib/types";
 import { serverFetch } from "@/lib/server-fetch";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 async function getProfile(username: string) {
   return serverFetch<ProfileData>(`/v1/profile/${username}`);
@@ -219,9 +220,11 @@ const ProfilePage = async ({
                   className="group"
                 >
                   {book.coverUrl ? (
-                    <img
+                    <RemoteImage
                       src={book.coverUrl}
                       alt={book.title}
+                      width={44}
+                      height={64}
                       className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
                     />
                   ) : (

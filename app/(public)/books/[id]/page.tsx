@@ -13,6 +13,7 @@ import { ReviewCard } from "@/components/book/review-card";
 import { WriteReviewModal } from "@/components/book/write-review-modal";
 import { serverFetch } from "@/lib/server-fetch";
 import type { BookPageData } from "@/lib/types";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 async function getBookPage(id: string) {
   return serverFetch<BookPageData>(`/v1/books/${id}`);
@@ -284,9 +285,11 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
               {book.authors.map((author) => (
                 <div key={author.id} className="flex items-start gap-3">
                   {author.photoUrl ? (
-                    <img
+                    <RemoteImage
                       src={author.photoUrl}
                       alt={author.name}
+                      width={48}
+                      height={48}
                       className="h-12 w-12 rounded-full"
                     />
                   ) : (

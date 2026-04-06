@@ -9,6 +9,7 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 type SearchTab = "books" | "authors" | "members" | "lists";
 
@@ -46,11 +47,12 @@ const BookResultCard = ({ book }: { book: BookResult }) => {
       className="group flex gap-4 rounded-sm p-3 transition-colors hover:bg-secondary/30"
     >
       {book.coverUrl ? (
-        <img
+        <RemoteImage
           src={book.coverUrl}
           alt={book.title}
+          width={64}
+          height={96}
           className="h-24 w-16 shrink-0 rounded-sm object-cover"
-          loading="lazy"
         />
       ) : (
         <div className="flex h-24 w-16 shrink-0 items-center justify-center rounded-sm bg-secondary">

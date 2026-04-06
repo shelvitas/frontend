@@ -11,6 +11,7 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 interface Notification {
   id: string;
@@ -142,9 +143,11 @@ const NotificationsPage = () => {
                 className={`flex items-start gap-3 rounded-sm p-3 ${!n.isRead ? "bg-secondary/30" : ""}`}
               >
                 {n.actor.avatarUrl ? (
-                  <img
+                  <RemoteImage
                     src={n.actor.avatarUrl}
                     alt={n.actor.displayName}
+                    width={32}
+                    height={32}
                     className="h-8 w-8 rounded-full"
                   />
                 ) : (

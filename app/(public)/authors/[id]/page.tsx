@@ -6,6 +6,7 @@ import { BookOpen } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { serverFetch } from "@/lib/server-fetch";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 interface AuthorPageData {
   id: string;
@@ -65,9 +66,11 @@ const AuthorPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         {/* Header */}
         <div className="flex items-start gap-5">
           {author.photoUrl ? (
-            <img
+            <RemoteImage
               src={author.photoUrl}
               alt={author.name}
+              width={96}
+              height={96}
               className="h-24 w-24 rounded-full"
             />
           ) : (
@@ -102,9 +105,11 @@ const AuthorPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                   className="flex items-center gap-3 rounded-sm p-2 hover:bg-secondary/30"
                 >
                   {book.coverUrl ? (
-                    <img
+                    <RemoteImage
                       src={book.coverUrl}
                       alt={book.title}
+                      width={44}
+                      height={64}
                       className="h-16 w-11 rounded-sm object-cover"
                     />
                   ) : (
@@ -143,9 +148,11 @@ const AuthorPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                   className="flex items-center gap-3 rounded-sm p-2 hover:bg-secondary/30"
                 >
                   {book.coverUrl ? (
-                    <img
+                    <RemoteImage
                       src={book.coverUrl}
                       alt={book.title}
+                      width={44}
+                      height={64}
                       className="h-16 w-11 rounded-sm object-cover"
                     />
                   ) : (

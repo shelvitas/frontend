@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Star, ThumbsUp, MessageCircle, AlertTriangle } from "lucide-react";
 
@@ -8,9 +9,11 @@ export const ReviewCard = ({ review }: { review: BookReview }) => (
     {/* Reviewer info */}
     <div className="flex items-center gap-2">
       {review.reviewer.avatarUrl ? (
-        <img
+        <Image
           src={review.reviewer.avatarUrl}
           alt={review.reviewer.displayName}
+          width={32}
+          height={32}
           className="h-8 w-8 rounded-full"
         />
       ) : (

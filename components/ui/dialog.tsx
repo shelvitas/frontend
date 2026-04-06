@@ -39,8 +39,6 @@ const DialogContent = React.forwardRef<
       )}
       {...props}
     >
-      {/* Subtle green accent line at top */}
-      <div className="absolute left-0 right-0 top-0 h-[2px] rounded-t-md bg-gradient-to-r from-transparent via-shelvitas-green/40 to-transparent" />
       {children}
       <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus:outline-none focus:ring-1 focus:ring-shelvitas-green/50 disabled:pointer-events-none">
         <X className="h-4 w-4" />

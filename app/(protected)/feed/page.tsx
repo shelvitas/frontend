@@ -12,6 +12,7 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { FeedEvent, FeedResponse, SocialRec } from "@/lib/types";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 type Tab = "following" | "discover";
 
@@ -121,9 +122,11 @@ const FeedPage = () => {
                     >
                       <div className="w-28">
                         {rec.book.coverUrl ? (
-                          <img
+                          <RemoteImage
                             src={rec.book.coverUrl}
                             alt={rec.book.title}
+                            width={112}
+                            height={160}
                             className="h-40 w-28 rounded-sm object-cover transition-opacity hover:opacity-80"
                           />
                         ) : (

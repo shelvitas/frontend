@@ -10,6 +10,7 @@ import { CommentThread } from "@/components/review/comment-thread";
 import type { ListPageData, CommentData } from "@/lib/types";
 
 import { serverFetch, SERVER_API_URL } from "@/lib/server-fetch";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 async function getList(id: string) {
   return serverFetch<ListPageData>(`/v1/lists/${id}`);
@@ -134,9 +135,11 @@ const ListPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                 {/* Cover */}
                 <Link href={`/books/${book.bookId}`} className="shrink-0">
                   {book.coverUrl ? (
-                    <img
+                    <RemoteImage
                       src={book.coverUrl}
                       alt={book.title}
+                      width={56}
+                      height={80}
                       className="h-20 w-14 rounded-sm object-cover transition-opacity hover:opacity-80"
                     />
                   ) : (

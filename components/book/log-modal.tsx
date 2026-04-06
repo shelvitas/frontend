@@ -25,6 +25,7 @@ import { useToast } from "@/components/ui/toaster";
 import { StarRating } from "@/components/book/star-rating";
 import { TagsInput } from "@/components/book/tags-input";
 import { api } from "@/lib/api";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 type ReadingStatus =
   | "want_to_read"
@@ -174,9 +175,11 @@ export const LogModal = ({
         {/* Book strip */}
         <div className="flex items-center gap-3 rounded-sm bg-secondary/30 px-3 py-2.5">
           {bookCoverUrl ? (
-            <img
+            <RemoteImage
               src={bookCoverUrl}
               alt={bookTitle}
+              width={44}
+              height={64}
               className="h-16 w-11 shrink-0 rounded-sm object-cover shadow-sm"
             />
           ) : (

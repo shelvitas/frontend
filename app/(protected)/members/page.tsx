@@ -10,6 +10,7 @@ import { FollowButton } from "@/components/profile/follow-button";
 import { PageLoader } from "@/components/ui/page-loader";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 interface Member {
   id: string;
@@ -83,9 +84,11 @@ const MembersPage = () => {
               {/* Avatar */}
               <Link href={`/${member.username}`} className="shrink-0">
                 {member.avatarUrl ? (
-                  <img
+                  <RemoteImage
                     src={member.avatarUrl}
                     alt={member.displayName}
+                    width={48}
+                    height={48}
                     className="h-12 w-12 rounded-full transition-opacity hover:opacity-80"
                   />
                 ) : (

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import type { FeedEvent } from "@/lib/types";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 const eventLabels: Record<string, string> = {
   status_update: "updated status",
@@ -64,9 +65,11 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
       {/* Book cover */}
       {book?.coverUrl && (
         <Link href={`/books/${book.id}`} className="shrink-0">
-          <img
+          <RemoteImage
             src={book.coverUrl}
             alt={book.title}
+            width={56}
+            height={80}
             className="h-20 w-14 rounded-sm object-cover transition-opacity hover:opacity-80"
           />
         </Link>
@@ -79,9 +82,11 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
           {event.user && (
             <>
               {event.user.avatarUrl ? (
-                <img
+                <RemoteImage
                   src={event.user.avatarUrl}
                   alt={event.user.displayName}
+                  width={24}
+                  height={24}
                   className="h-6 w-6 rounded-full"
                 />
               ) : (

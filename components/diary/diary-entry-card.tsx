@@ -5,6 +5,7 @@ import { Star, Pencil, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import type { DiaryEntry } from "@/lib/types";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 const formatLabels: Record<string, string> = {
   physical: "Physical",
@@ -42,9 +43,11 @@ export const DiaryEntryCard = ({ entry, onEdit }: DiaryEntryCardProps) => {
       {/* Cover thumbnail */}
       <Link href={`/books/${entry.book.id}`} className="shrink-0">
         {entry.book.coverUrl ? (
-          <img
+          <RemoteImage
             src={entry.book.coverUrl}
             alt={entry.book.title}
+            width={64}
+            height={96}
             className="h-24 w-16 rounded-sm object-cover transition-opacity hover:opacity-80"
           />
         ) : (

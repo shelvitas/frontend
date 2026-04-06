@@ -11,6 +11,7 @@ import { CommentThread } from "@/components/review/comment-thread";
 import type { ReviewPageData, CommentData } from "@/lib/types";
 
 import { serverFetch, SERVER_API_URL } from "@/lib/server-fetch";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
@@ -78,9 +79,11 @@ const ReviewPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         {/* ── Reviewer Header ── */}
         <div className="flex items-center gap-3">
           {review.reviewer.avatarUrl ? (
-            <img
+            <RemoteImage
               src={review.reviewer.avatarUrl}
               alt={review.reviewer.displayName}
+              width={48}
+              height={48}
               className="h-12 w-12 rounded-full"
             />
           ) : (

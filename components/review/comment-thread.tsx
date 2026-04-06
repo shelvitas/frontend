@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { CommentData } from "@/lib/types";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 const CommentItem = ({
   comment,
@@ -24,9 +25,11 @@ const CommentItem = ({
     <div className={`${isReply ? "ml-8 border-l border-secondary pl-4" : ""}`}>
       <div className="flex items-start gap-2">
         {comment.author.avatarUrl ? (
-          <img
+          <RemoteImage
             src={comment.author.avatarUrl}
             alt={comment.author.displayName}
+            width={28}
+            height={28}
             className="h-7 w-7 rounded-full"
           />
         ) : (

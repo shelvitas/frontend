@@ -27,6 +27,7 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { ProfileTabs } from "@/components/profile/profile-tabs";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 interface ProfileData {
   id: string;
@@ -222,9 +223,11 @@ const ProfilePage = () => {
                     className="group"
                   >
                     {book.coverUrl ? (
-                      <img
+                      <RemoteImage
                         src={book.coverUrl}
                         alt={book.title}
+                        width={44}
+                        height={64}
                         className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
                       />
                     ) : (

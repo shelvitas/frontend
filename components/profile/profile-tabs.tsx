@@ -7,6 +7,7 @@ import { BookOpen, BookMarked, Star, List, BookCheck } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import { CreateListModal } from "@/components/list/create-list-modal";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 const tabs = [
   { id: "read", label: "Read", icon: BookCheck },
@@ -140,9 +141,11 @@ export const ProfileTabs = ({ username }: { username: string }) => {
                     className="group"
                   >
                     {entry.book.coverUrl ? (
-                      <img
+                      <RemoteImage
                         src={entry.book.coverUrl}
                         alt={entry.book.title}
+                        width={44}
+                        height={64}
                         className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
                       />
                     ) : (

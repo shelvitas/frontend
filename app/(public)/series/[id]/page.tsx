@@ -6,6 +6,7 @@ import { BookOpen, CheckCircle } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { serverFetch } from "@/lib/server-fetch";
+import { RemoteImage } from "@/components/ui/remote-image";
 
 interface SeriesBook {
   id: string;
@@ -87,9 +88,11 @@ const SeriesPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                   {book.positionInSeries ?? idx + 1}
                 </span>
                 {book.coverUrl ? (
-                  <img
+                  <RemoteImage
                     src={book.coverUrl}
                     alt={book.title}
+                    width={44}
+                    height={64}
                     className="h-16 w-11 rounded-sm object-cover"
                   />
                 ) : (
