@@ -9,25 +9,16 @@ import { ListActions } from "@/components/list/list-actions";
 import { CommentThread } from "@/components/review/comment-thread";
 import type { ListPageData, CommentData } from "@/lib/types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+import { serverFetch, SERVER_API_URL } from "@/lib/server-fetch";
 
-async function getList(id: string): Promise<ListPageData | null> {
-  try {
-    const res = await fetch(`${API_URL}/v1/lists/${id}`, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.data as ListPageData;
-  } catch {
-    return null;
-  }
+async function getList(id: string) {
+  return serverFetch<ListPageData>(`/v1/lists/${id}`);
 }
 
 async function getComments(listId: string): Promise<CommentData[]> {
   try {
-    const res = await fetch(`${API_URL}/v1/lists/${listId}/comments?limit=50`, {
-      next: { revalidate: 30 },
+    const res = await fetch(`${SERVER_API_URL}/v1/lists/${listId}/comments?limit=50`, {
+      cache: "no-store",
     });
     if (!res.ok) return [];
     const json = await res.json();

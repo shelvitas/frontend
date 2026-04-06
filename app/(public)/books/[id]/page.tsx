@@ -10,21 +10,11 @@ import { RatingHistogram } from "@/components/book/rating-histogram";
 import { StatusControls } from "@/components/book/status-controls";
 import { WantToReadButton } from "@/components/book/want-to-read-button";
 import { ReviewCard } from "@/components/book/review-card";
+import { serverFetch } from "@/lib/server-fetch";
 import type { BookPageData } from "@/lib/types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
-
-async function getBookPage(id: string): Promise<BookPageData | null> {
-  try {
-    const res = await fetch(`${API_URL}/v1/books/${id}`, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.data as BookPageData;
-  } catch {
-    return null;
-  }
+async function getBookPage(id: string) {
+  return serverFetch<BookPageData>(`/v1/books/${id}`);
 }
 
 export async function generateMetadata({

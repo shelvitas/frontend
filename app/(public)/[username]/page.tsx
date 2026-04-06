@@ -18,22 +18,10 @@ import { FollowButton } from "@/components/profile/follow-button";
 import { ProfileTabs } from "@/components/profile/profile-tabs";
 import type { ProfileData } from "@/lib/types";
 import { isFullProfile } from "@/lib/types";
+import { serverFetch } from "@/lib/server-fetch";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
-
-async function getProfile(username: string): Promise<ProfileData | null> {
-  try {
-    const res = await fetch(`${API_URL}/v1/profile/${username}`, {
-      next: { revalidate: 60 },
-    });
-
-    if (!res.ok) return null;
-
-    const json = await res.json();
-    return json.data as ProfileData;
-  } catch {
-    return null;
-  }
+async function getProfile(username: string) {
+  return serverFetch<ProfileData>(`/v1/profile/${username}`);
 }
 
 export async function generateMetadata({

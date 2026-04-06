@@ -10,27 +10,19 @@ import { ShareButtons } from "@/components/review/share-buttons";
 import { CommentThread } from "@/components/review/comment-thread";
 import type { ReviewPageData, CommentData } from "@/lib/types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+import { serverFetch, SERVER_API_URL } from "@/lib/server-fetch";
+
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
-async function getReview(id: string): Promise<ReviewPageData | null> {
-  try {
-    const res = await fetch(`${API_URL}/v1/reviews/${id}`, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.data as ReviewPageData;
-  } catch {
-    return null;
-  }
+async function getReview(id: string) {
+  return serverFetch<ReviewPageData>(`/v1/reviews/${id}`);
 }
 
 async function getComments(reviewId: string): Promise<CommentData[]> {
   try {
     const res = await fetch(
-      `${API_URL}/v1/reviews/${reviewId}/comments?limit=50`,
-      { next: { revalidate: 30 } },
+      `${SERVER_API_URL}/v1/reviews/${reviewId}/comments?limit=50`,
+      { cache: "no-store" },
     );
     if (!res.ok) return [];
     const json = await res.json();
