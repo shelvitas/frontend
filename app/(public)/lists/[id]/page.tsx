@@ -49,7 +49,8 @@ export async function generateMetadata({
 
   return {
     title: list.title,
-    description: list.description ?? `A list of ${list.bookCount} books on Shelvitas`,
+    description:
+      list.description ?? `A list of ${list.bookCount} books on Shelvitas`,
     openGraph: {
       title: list.title,
       description: list.description ?? `${list.bookCount} books`,
@@ -58,13 +59,12 @@ export async function generateMetadata({
   };
 }
 
-const ListPage = async ({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) => {
+const ListPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const [list, listComments] = await Promise.all([getList(id), getComments(id)]);
+  const [list, listComments] = await Promise.all([
+    getList(id),
+    getComments(id),
+  ]);
 
   if (!list) notFound();
 
@@ -79,15 +79,23 @@ const ListPage = async ({
             <div className="flex items-center gap-2">
               <List className="h-5 w-5 text-shelvitas-green" />
               <h1 className="text-2xl font-bold">{list.title}</h1>
-              {list.isPrivate && <Lock className="h-4 w-4 text-muted-foreground" />}
+              {list.isPrivate && (
+                <Lock className="h-4 w-4 text-muted-foreground" />
+              )}
             </div>
             {list.description && (
-              <p className="mt-2 text-sm text-foreground/80">{list.description}</p>
+              <p className="mt-2 text-sm text-foreground/80">
+                {list.description}
+              </p>
             )}
             <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-              <span>{list.bookCount} book{list.bookCount !== 1 ? "s" : ""}</span>
+              <span>
+                {list.bookCount} book{list.bookCount !== 1 ? "s" : ""}
+              </span>
               {list.isRanked && <span>Ranked</span>}
-              <span>{list.likesCount} like{list.likesCount !== 1 ? "s" : ""}</span>
+              <span>
+                {list.likesCount} like{list.likesCount !== 1 ? "s" : ""}
+              </span>
             </div>
           </div>
 
@@ -145,7 +153,7 @@ const ListPage = async ({
                 </Link>
 
                 {/* Info */}
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
                   <Link
                     href={`/books/${book.bookId}`}
                     className="text-sm font-medium hover:text-shelvitas-green"
@@ -153,7 +161,9 @@ const ListPage = async ({
                     {book.title}
                   </Link>
                   {book.notes && (
-                    <p className="mt-1 text-xs text-foreground/70">{book.notes}</p>
+                    <p className="mt-1 text-xs text-foreground/70">
+                      {book.notes}
+                    </p>
                   )}
                 </div>
               </div>

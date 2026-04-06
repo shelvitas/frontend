@@ -8,7 +8,9 @@ vi.stubGlobal("fetch", mockFetch);
 
 vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({
-    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+    },
   }),
 }));
 
@@ -16,13 +18,23 @@ const { ListActions } = await import("@/components/list/list-actions");
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useAuthStore.setState({ session: null, user: null, profile: null, isLoading: false });
+  useAuthStore.setState({
+    session: null,
+    user: null,
+    profile: null,
+    isLoading: false,
+  });
 });
 
 describe("ListActions", () => {
   it("should render like count and action buttons", () => {
     render(
-      <ListActions listId="l1" initialLikes={5} initialIsLiked={false} listTitle="My List" />,
+      <ListActions
+        listId="l1"
+        initialLikes={5}
+        initialIsLiked={false}
+        listTitle="My List"
+      />,
     );
 
     expect(screen.getByText("5")).toBeInTheDocument();
@@ -36,7 +48,12 @@ describe("ListActions", () => {
     mockFetch.mockResolvedValueOnce({ ok: true, status: 204 });
 
     render(
-      <ListActions listId="l1" initialLikes={5} initialIsLiked={false} listTitle="My List" />,
+      <ListActions
+        listId="l1"
+        initialLikes={5}
+        initialIsLiked={false}
+        listTitle="My List"
+      />,
     );
 
     fireEvent.click(screen.getByText("5"));
@@ -55,7 +72,12 @@ describe("ListActions", () => {
     mockFetch.mockResolvedValueOnce({ ok: true, status: 204 });
 
     render(
-      <ListActions listId="l1" initialLikes={5} initialIsLiked listTitle="My List" />,
+      <ListActions
+        listId="l1"
+        initialLikes={5}
+        initialIsLiked
+        listTitle="My List"
+      />,
     );
 
     fireEvent.click(screen.getByText("5"));
@@ -78,7 +100,12 @@ describe("ListActions", () => {
     });
 
     render(
-      <ListActions listId="l1" initialLikes={5} initialIsLiked={false} listTitle="My List" />,
+      <ListActions
+        listId="l1"
+        initialLikes={5}
+        initialIsLiked={false}
+        listTitle="My List"
+      />,
     );
 
     fireEvent.click(screen.getByText("Clone"));

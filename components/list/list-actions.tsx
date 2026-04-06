@@ -54,7 +54,9 @@ export const ListActions = ({
       return;
     }
     try {
-      const cloned = await api.post<{ id: string }>(`/v1/lists/${listId}/clone`);
+      const cloned = await api.post<{ id: string }>(
+        `/v1/lists/${listId}/clone`,
+      );
       window.location.href = `/lists/${cloned.id}`;
     } catch {
       // Silently handle

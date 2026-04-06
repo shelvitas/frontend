@@ -8,15 +8,23 @@ vi.stubGlobal("fetch", mockFetch);
 
 vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({
-    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+    },
   }),
 }));
 
-const { WantToReadButton } = await import("@/components/book/want-to-read-button");
+const { WantToReadButton } =
+  await import("@/components/book/want-to-read-button");
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useAuthStore.setState({ session: null, user: null, profile: null, isLoading: false });
+  useAuthStore.setState({
+    session: null,
+    user: null,
+    profile: null,
+    isLoading: false,
+  });
 });
 
 describe("WantToReadButton", () => {
