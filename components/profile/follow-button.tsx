@@ -82,7 +82,11 @@ export const FollowButton = ({
         onClick={handleUnfollow}
         disabled={isLoading}
       >
-        {isLoading ? <Spinner className="h-3.5 w-3.5" /> : <Clock className="h-3.5 w-3.5" />}
+        {isLoading ? (
+          <Spinner className="h-3.5 w-3.5" />
+        ) : (
+          <Clock className="h-3.5 w-3.5" />
+        )}
         Requested
       </Button>
     );
@@ -97,7 +101,11 @@ export const FollowButton = ({
         onClick={handleUnfollow}
         disabled={isLoading}
       >
-        {isLoading ? <Spinner className="h-3.5 w-3.5" /> : <UserCheck className="h-3.5 w-3.5" />}
+        {isLoading ? (
+          <Spinner className="h-3.5 w-3.5" />
+        ) : (
+          <UserCheck className="h-3.5 w-3.5" />
+        )}
         Following
       </Button>
     );
@@ -106,11 +114,15 @@ export const FollowButton = ({
   return (
     <Button
       size="sm"
-      className="gap-1.5 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90 transition-all"
+      className="gap-1.5 bg-shelvitas-green font-semibold text-background transition-all hover:bg-shelvitas-green/90"
       onClick={handleFollow}
       disabled={isLoading}
     >
-      {isLoading ? <Spinner className="h-3.5 w-3.5" /> : <UserPlus className="h-3.5 w-3.5" />}
+      {isLoading ? (
+        <Spinner className="h-3.5 w-3.5" />
+      ) : (
+        <UserPlus className="h-3.5 w-3.5" />
+      )}
       {isPrivate ? "Request" : "Follow"}
     </Button>
   );

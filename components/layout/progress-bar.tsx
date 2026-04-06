@@ -33,7 +33,7 @@ export const ProgressBar = () => {
   if (!loading && progress === 0) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[100] h-0.5">
+    <div className="fixed left-0 right-0 top-0 z-[100] h-0.5">
       <div
         className="relative h-full bg-shelvitas-green transition-all duration-200 ease-out"
         style={{ width: `${progress}%` }}

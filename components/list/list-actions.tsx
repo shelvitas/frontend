@@ -89,7 +89,9 @@ export const ListActions = ({
         {likeLoading ? (
           <Spinner className="h-4 w-4" />
         ) : (
-          <Heart className={`h-4 w-4 transition-all ${liked ? "fill-red-400 scale-110" : ""}`} />
+          <Heart
+            className={`h-4 w-4 transition-all ${liked ? "scale-110 fill-red-400" : ""}`}
+          />
         )}
         {likes}
       </Button>
@@ -100,7 +102,11 @@ export const ListActions = ({
         onClick={handleClone}
         disabled={cloneLoading}
       >
-        {cloneLoading ? <Spinner className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        {cloneLoading ? (
+          <Spinner className="h-4 w-4" />
+        ) : (
+          <Copy className="h-4 w-4" />
+        )}
         Clone
       </Button>
       <Button

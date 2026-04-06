@@ -90,7 +90,9 @@ export const ReviewActions = ({
         {likeLoading ? (
           <Spinner className="h-4 w-4" />
         ) : (
-          <ThumbsUp className={`h-4 w-4 transition-all ${liked ? "fill-shelvitas-green scale-110" : ""}`} />
+          <ThumbsUp
+            className={`h-4 w-4 transition-all ${liked ? "scale-110 fill-shelvitas-green" : ""}`}
+          />
         )}
         {likes}
       </Button>
@@ -104,7 +106,9 @@ export const ReviewActions = ({
         {saveLoading ? (
           <Spinner className="h-4 w-4" />
         ) : (
-          <Bookmark className={`h-4 w-4 transition-all ${saved ? "fill-shelvitas-orange scale-110" : ""}`} />
+          <Bookmark
+            className={`h-4 w-4 transition-all ${saved ? "scale-110 fill-shelvitas-orange" : ""}`}
+          />
         )}
         {saves}
       </Button>
