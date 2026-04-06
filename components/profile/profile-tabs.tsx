@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import { BookOpen, BookMarked, Star, List, BookCheck } from "lucide-react";
+
+import { api } from "@/lib/api";
+import { useAuthStore } from "@/store/auth";
 
 const tabs = [
   { id: "read", label: "Read", icon: BookCheck },
@@ -13,8 +17,80 @@ const tabs = [
 
 type TabId = (typeof tabs)[number]["id"];
 
+interface DiaryEntry {
+  id: string;
+  bookId: string;
+  status: string;
+  rating: string | null;
+  book: { id: string; title: string; coverUrl: string | null };
+}
+
+interface Review {
+  id: string;
+  bookId: string;
+  body: string;
+  rating: string | null;
+  likesCount: number;
+  createdAt: string;
+}
+
+interface UserList {
+  id: string;
+  title: string;
+  bookCount: number;
+  likesCount: number;
+}
+
 export const ProfileTabs = ({ username }: { username: string }) => {
+  const session = useAuthStore((s) => s.session);
   const [activeTab, setActiveTab] = useState<TabId>("read");
+  const [entries, setEntries] = useState<DiaryEntry[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [lists, setLists] = useState<UserList[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!session) return;
+    setIsLoading(true);
+
+    const fetchData = async () => {
+      try {
+        if (
+          activeTab === "read" ||
+          activeTab === "reading" ||
+          activeTab === "want"
+        ) {
+          const data = await api.get<DiaryEntry[]>(
+            "/v1/diary?limit=50&offset=0",
+          );
+          setEntries(data);
+        } else if (activeTab === "reviews") {
+          const data = await api.get<Review[]>("/v1/reviews?limit=20&offset=0");
+          setReviews(data);
+        } else if (activeTab === "lists") {
+          const data = await api.get<UserList[]>("/v1/lists?limit=20&offset=0");
+          setLists(data);
+        }
+      } catch {
+        // handle silently
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [activeTab, session]);
+
+  const statusMap: Record<string, string> = {
+    read: "read",
+    reading: "currently_reading",
+    want: "want_to_read",
+  };
+
+  const filteredEntries =
+    activeTab === "read" || activeTab === "reading" || activeTab === "want"
+      ? entries.filter((e) => e.status === statusMap[activeTab])
+      : [];
 
   return (
     <div>
@@ -41,18 +117,138 @@ export const ProfileTabs = ({ username }: { username: string }) => {
         })}
       </div>
 
-      {/* Tab content placeholder */}
-      <div className="py-8 text-center">
-        <p className="text-sm text-muted-foreground">
-          {activeTab === "read" && `${username}'s read books will appear here.`}
-          {activeTab === "reading" &&
-            `Books ${username} is currently reading will appear here.`}
-          {activeTab === "reviews" && `${username}'s reviews will appear here.`}
-          {activeTab === "lists" && `${username}'s lists will appear here.`}
-          {activeTab === "want" &&
-            `Books ${username} wants to read will appear here.`}
-        </p>
-      </div>
+      {/* Loading */}
+      {isLoading && (
+        <div className="py-8 text-center text-xs text-muted-foreground">
+          Loading...
+        </div>
+      )}
+
+      {/* Book entries (Read / Reading / Want to Read) */}
+      {!isLoading &&
+        (activeTab === "read" ||
+          activeTab === "reading" ||
+          activeTab === "want") && (
+          <div>
+            {filteredEntries.length > 0 ? (
+              <div className="mt-4 grid grid-cols-5 gap-3 sm:grid-cols-6 md:grid-cols-8">
+                {filteredEntries.map((entry) => (
+                  <Link
+                    key={entry.id}
+                    href={`/books/${entry.book.id}`}
+                    className="group"
+                  >
+                    {entry.book.coverUrl ? (
+                      <img
+                        src={entry.book.coverUrl}
+                        alt={entry.book.title}
+                        className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
+                      />
+                    ) : (
+                      <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-[10px] text-muted-foreground">
+                        <BookOpen className="h-4 w-4" />
+                      </div>
+                    )}
+                    {entry.rating && (
+                      <div className="mt-0.5 flex items-center gap-0.5">
+                        <Star className="h-2.5 w-2.5 fill-shelvitas-orange text-shelvitas-orange" />
+                        <span className="text-[10px] text-muted-foreground">
+                          {entry.rating}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="py-8 text-center text-xs text-muted-foreground">
+                {activeTab === "read" &&
+                  `${username} hasn't read any books yet.`}
+                {activeTab === "reading" &&
+                  `${username} isn't reading anything right now.`}
+                {activeTab === "want" && `${username}'s reading list is empty.`}
+              </p>
+            )}
+          </div>
+        )}
+
+      {/* Reviews */}
+      {!isLoading && activeTab === "reviews" && (
+        <div>
+          {reviews.length > 0 ? (
+            <div className="mt-4 space-y-3">
+              {reviews.map((review) => (
+                <Link
+                  key={review.id}
+                  href={`/reviews/${review.id}`}
+                  className="block rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20"
+                >
+                  <div className="flex items-center gap-2">
+                    {review.rating && (
+                      <div className="flex items-center gap-0.5">
+                        <Star className="h-3 w-3 fill-shelvitas-orange text-shelvitas-orange" />
+                        <span className="text-xs">{review.rating}</span>
+                      </div>
+                    )}
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {review.likesCount} likes
+                    </span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-sm text-foreground/80">
+                    {review.body}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="py-8 text-center text-xs text-muted-foreground">
+              {username} hasn&apos;t written any reviews yet.
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Lists */}
+      {!isLoading && activeTab === "lists" && (
+        <div>
+          {lists.length > 0 ? (
+            <div className="mt-4 space-y-2">
+              {lists.map((list) => (
+                <Link
+                  key={list.id}
+                  href={`/lists/${list.id}`}
+                  className="flex items-center justify-between rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20"
+                >
+                  <div>
+                    <p className="text-sm font-medium">{list.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {list.bookCount} book{list.bookCount !== 1 ? "s" : ""}{" "}
+                      &middot; {list.likesCount} like
+                      {list.likesCount !== 1 ? "s" : ""}
+                    </p>
+                  </div>
+                  <List className="h-4 w-4 text-muted-foreground" />
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="py-8 text-center">
+              <p className="text-xs text-muted-foreground">
+                {username} hasn&apos;t created any lists yet.
+              </p>
+              <Link
+                href="/lists/create"
+                className="mt-2 inline-block text-xs text-shelvitas-green hover:underline"
+              >
+                Create your first list
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

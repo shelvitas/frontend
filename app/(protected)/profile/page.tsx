@@ -1,32 +1,65 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { LogOut } from "lucide-react";
+import Link from "next/link";
+import {
+  LogOut,
+  Settings,
+  BookOpen,
+  BookCheck,
+  Star,
+  Users,
+  Calendar,
+  MapPin,
+  Globe,
+  Download,
+  Import,
+  BadgeCheck,
+  Lock,
+} from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
 import { useAuthStore } from "@/store/auth";
+import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { PageLoader } from "@/components/ui/page-loader";
+import { ProfileTabs } from "@/components/profile/profile-tabs";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 
-const StatBlock = ({ label, value }: { label: string; value: string }) => (
-  <div>
-    <p className="text-xl font-bold">{value}</p>
-    <p className="text-xs text-muted-foreground">{label}</p>
-  </div>
-);
-
-const InfoBlock = ({ label, value }: { label: string; value: string }) => (
-  <div>
-    <p className="text-xs font-medium text-muted-foreground">{label}</p>
-    <p className="text-sm capitalize">{value}</p>
-  </div>
-);
+interface ProfileData {
+  id: string;
+  username: string;
+  displayName: string;
+  bio: string | null;
+  avatarUrl: string | null;
+  websiteUrl: string | null;
+  location: string | null;
+  profileVisibility: "public" | "private";
+  isVerified: boolean;
+  createdAt: string;
+  followerCount: number;
+  followingCount: number;
+  booksReadCount: number;
+  favouriteBooks: { id: string; title: string; coverUrl: string | null }[];
+  isFollowing: boolean | null;
+  isOwnProfile: boolean;
+}
 
 const ProfilePage = () => {
-  const { user, profile, isLoading } = useAuthStore();
+  const { user, profile: authProfile, isLoading: authLoading } = useAuthStore();
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!authProfile?.username) return;
+    api
+      .get<ProfileData>(`/v1/profile/${authProfile.username}`)
+      .then(setProfileData)
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, [authProfile?.username]);
 
   const handleSignOut = useCallback(async () => {
     const supabase = createClient();
@@ -34,7 +67,7 @@ const ProfilePage = () => {
     window.location.href = "/";
   }, []);
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
@@ -45,115 +78,214 @@ const ProfilePage = () => {
     );
   }
 
-  if (!user) {
-    window.location.href = "/sign-in";
+  if (!user || !authProfile) {
+    if (typeof window !== "undefined") window.location.href = "/sign-in";
     return null;
   }
 
-  if (!profile) {
-    return (
-      <div className="flex min-h-screen flex-col">
-        <Navbar />
-        <main className="flex flex-1 items-center justify-center">
-          <div className="text-center">
-            <PageLoader />
-            <Button
-              variant="ghost"
-              className="mt-4 text-xs text-muted-foreground"
-              onClick={handleSignOut}
-            >
-              Sign out
-            </Button>
-          </div>
-        </main>
-      </div>
-    );
-  }
+  const p = profileData;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col pb-16 md:pb-0">
       <Navbar />
 
       <main className="container max-w-2xl flex-1 py-10">
-        {/* Profile header */}
+        {/* ── Header ── */}
         <div className="flex items-start gap-5">
-          {profile.avatarUrl ? (
+          {authProfile.avatarUrl ? (
             <Image
-              src={profile.avatarUrl}
-              alt={profile.displayName}
-              width={80}
-              height={80}
-              className="h-20 w-20 rounded-full"
+              src={authProfile.avatarUrl}
+              alt={authProfile.displayName}
+              width={96}
+              height={96}
+              className="h-24 w-24 rounded-full ring-2 ring-shelvitas-green/30 ring-offset-2 ring-offset-background"
             />
           ) : (
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-secondary text-3xl font-bold">
-              {profile.displayName.charAt(0).toUpperCase()}
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-secondary text-4xl font-bold ring-2 ring-shelvitas-green/30 ring-offset-2 ring-offset-background">
+              {authProfile.displayName.charAt(0).toUpperCase()}
             </div>
           )}
+
           <div className="flex-1">
-            <h1 className="text-2xl font-bold">{profile.displayName}</h1>
-            <p className="text-sm text-muted-foreground">@{profile.username}</p>
-            {profile.bio && (
-              <p className="mt-2 text-sm text-foreground/80">{profile.bio}</p>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-bold">{authProfile.displayName}</h1>
+              {p?.isVerified && (
+                <BadgeCheck className="h-5 w-5 text-shelvitas-blue" />
+              )}
+              {authProfile.profileVisibility === "private" && (
+                <Lock className="h-4 w-4 text-muted-foreground" />
+              )}
+            </div>
+            <p className="text-sm text-muted-foreground">
+              @{authProfile.username}
+            </p>
+
+            {authProfile.bio && (
+              <p className="mt-2 text-sm text-foreground/80">
+                {authProfile.bio}
+              </p>
             )}
+
+            {/* Meta */}
+            <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+              {p?.location && (
+                <span className="flex items-center gap-1">
+                  <MapPin className="h-3 w-3" />
+                  {p.location}
+                </span>
+              )}
+              {p?.websiteUrl && (
+                <a
+                  href={p.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 hover:text-shelvitas-green"
+                >
+                  <Globe className="h-3 w-3" />
+                  {p.websiteUrl.replace(/^https?:\/\//, "")}
+                </a>
+              )}
+              <span className="flex items-center gap-1">
+                <Calendar className="h-3 w-3" />
+                Joined{" "}
+                {new Date(user.created_at).toLocaleDateString("en-US", {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </span>
+            </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1.5 text-xs"
-            onClick={handleSignOut}
+
+          {/* Actions */}
+          <div className="flex flex-col gap-1.5">
+            <Link href="/settings">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full gap-1.5 text-xs"
+              >
+                <Settings className="h-3 w-3" />
+                Edit
+              </Button>
+            </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-1.5 text-xs text-muted-foreground"
+              onClick={handleSignOut}
+            >
+              <LogOut className="h-3 w-3" />
+              Sign out
+            </Button>
+          </div>
+        </div>
+
+        {/* ── Stats Strip ── */}
+        <div className="mt-6 flex items-center justify-around rounded-sm border border-secondary bg-secondary/10 px-4 py-4">
+          <Link
+            href="/diary"
+            className="text-center hover:text-shelvitas-green"
           >
-            <LogOut className="h-3 w-3" />
-            Sign out
-          </Button>
-        </div>
-
-        {/* Stats placeholder — 0 books for now */}
-        <div className="mt-8 grid grid-cols-4 gap-4 text-center">
-          <StatBlock label="Books" value="0" />
-          <StatBlock label="This year" value="0" />
-          <StatBlock label="Lists" value="0" />
-          <StatBlock label="Following" value="0" />
-        </div>
-
-        {/* Info section */}
-        <div className="mt-8 space-y-4">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Account
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <InfoBlock label="Email" value={user.email || ""} />
-            <InfoBlock label="Visibility" value={profile.profileVisibility} />
-            <InfoBlock
-              label="Provider"
-              value={user.app_metadata?.provider || "email"}
-            />
-            <InfoBlock
-              label="Member since"
-              value={new Date(user.created_at).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })}
-            />
+            <p className="text-2xl font-bold">{p?.booksReadCount ?? 0}</p>
+            <p className="flex items-center justify-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+              <BookCheck className="h-3 w-3" />
+              Books
+            </p>
+          </Link>
+          <div className="text-center">
+            <p className="text-2xl font-bold">{p?.followerCount ?? 0}</p>
+            <p className="flex items-center justify-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+              <Users className="h-3 w-3" />
+              Followers
+            </p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-bold">{p?.followingCount ?? 0}</p>
+            <p className="flex items-center justify-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+              <Users className="h-3 w-3" />
+              Following
+            </p>
           </div>
         </div>
 
-        {/* Favourite books placeholder */}
-        <div className="mt-8 space-y-4">
+        {/* ── Favourite Books ── */}
+        <div className="mt-8">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             Favourite books
           </h2>
-          <div className="grid grid-cols-4 gap-3">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div
-                key={`fav-${i + 1}`}
-                className="aspect-[2/3] rounded-sm border border-dashed border-secondary bg-secondary/20"
-              />
-            ))}
+          <div className="mt-3 grid grid-cols-4 gap-3">
+            {p?.favouriteBooks && p.favouriteBooks.length > 0
+              ? p.favouriteBooks.map((book) => (
+                  <Link
+                    key={book.id}
+                    href={`/books/${book.id}`}
+                    className="group"
+                  >
+                    {book.coverUrl ? (
+                      <img
+                        src={book.coverUrl}
+                        alt={book.title}
+                        className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
+                      />
+                    ) : (
+                      <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-xs text-muted-foreground">
+                        <BookOpen className="h-5 w-5" />
+                      </div>
+                    )}
+                  </Link>
+                ))
+              : Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={`empty-fav-${i + 1}`}
+                    className="aspect-[2/3] rounded-sm border border-dashed border-secondary bg-secondary/10"
+                  />
+                ))}
           </div>
-          <p className="text-xs text-muted-foreground">
-            Add your 4 favourite books to show on your profile.
-          </p>
+          {(!p?.favouriteBooks || p.favouriteBooks.length === 0) && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Add your 4 favourite books in{" "}
+              <Link
+                href="/settings"
+                className="text-shelvitas-green hover:underline"
+              >
+                settings
+              </Link>
+              .
+            </p>
+          )}
+        </div>
+
+        {/* ── Quick Actions ── */}
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Link href="/diary">
+            <div className="flex flex-col items-center gap-1.5 rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20">
+              <BookOpen className="h-5 w-5 text-shelvitas-green" />
+              <span className="text-xs font-medium">Diary</span>
+            </div>
+          </Link>
+          <Link href="/shelves">
+            <div className="flex flex-col items-center gap-1.5 rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20">
+              <Star className="h-5 w-5 text-shelvitas-orange" />
+              <span className="text-xs font-medium">Shelves</span>
+            </div>
+          </Link>
+          <Link href="/import">
+            <div className="flex flex-col items-center gap-1.5 rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20">
+              <Import className="h-5 w-5 text-shelvitas-blue" />
+              <span className="text-xs font-medium">Import</span>
+            </div>
+          </Link>
+          <Link href="/export">
+            <div className="flex flex-col items-center gap-1.5 rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20">
+              <Download className="h-5 w-5 text-muted-foreground" />
+              <span className="text-xs font-medium">Export</span>
+            </div>
+          </Link>
+        </div>
+
+        {/* ── Activity Tabs ── */}
+        <div className="mt-8">
+          <ProfileTabs username={authProfile.username} />
         </div>
       </main>
 

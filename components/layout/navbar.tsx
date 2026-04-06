@@ -11,7 +11,7 @@ const navItems = [
   { href: "/feed", label: "Home" },
   { href: "/search", label: "Search" },
   { href: "/diary", label: "Library" },
-  { href: "/members", label: "Community" },
+  { href: "/members", label: "Members" },
   { href: "/profile", label: "Profile" },
 ];
 

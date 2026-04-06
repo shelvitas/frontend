@@ -49,7 +49,7 @@ describe("Navbar", () => {
     expect(screen.getAllByText("Home").length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText("Search").length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText("Library").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText("Community").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("Members").length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText("Profile").length).toBeGreaterThanOrEqual(1);
   });
 

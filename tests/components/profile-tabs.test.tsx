@@ -1,10 +1,40 @@
-import { describe, it, expect } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
-import { ProfileTabs } from "@/components/profile/profile-tabs";
+import { useAuthStore } from "@/store/auth";
+
+const mockFetch = vi.fn();
+vi.stubGlobal("fetch", mockFetch);
+
+vi.mock("@/lib/supabase/client", () => ({
+  createClient: () => ({
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+    },
+  }),
+}));
+
+const { ProfileTabs } = await import("@/components/profile/profile-tabs");
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  useAuthStore.setState({
+    session: { access_token: "token" } as never,
+    user: { id: "u1" } as never,
+    profile: { id: "p1", username: "testuser" } as never,
+    isLoading: false,
+  });
+});
 
 describe("ProfileTabs", () => {
   it("should render all 5 tabs", () => {
+    // Mock diary fetch for default tab
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: [] }),
+    });
+
     render(<ProfileTabs username="testuser" />);
 
     expect(screen.getByText("Read")).toBeInTheDocument();
@@ -14,43 +44,95 @@ describe("ProfileTabs", () => {
     expect(screen.getByText("Want to Read")).toBeInTheDocument();
   });
 
-  it("should show Read tab content by default", () => {
+  it("should show empty state for read tab when no books", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: [] }),
+    });
+
     render(<ProfileTabs username="testuser" />);
 
-    expect(
-      screen.getByText("testuser's read books will appear here."),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText("testuser hasn't read any books yet."),
+      ).toBeInTheDocument();
+    });
   });
 
-  it("should switch to Reviews tab on click", () => {
+  it("should fetch reviews when Reviews tab is clicked", async () => {
+    // First: diary fetch for default tab
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: [] }),
+    });
+
     render(<ProfileTabs username="testuser" />);
+
+    // Reviews fetch
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: [] }),
+    });
 
     fireEvent.click(screen.getByText("Reviews"));
 
-    expect(
-      screen.getByText("testuser's reviews will appear here."),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText("testuser hasn't written any reviews yet."),
+      ).toBeInTheDocument();
+    });
   });
 
-  it("should switch to Currently Reading tab on click", () => {
-    render(<ProfileTabs username="booklover" />);
+  it("should fetch lists when Lists tab is clicked", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: [] }),
+    });
 
-    fireEvent.click(screen.getByText("Currently Reading"));
+    render(<ProfileTabs username="testuser" />);
 
-    expect(
-      screen.getByText(
-        "Books booklover is currently reading will appear here.",
-      ),
-    ).toBeInTheDocument();
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: [] }),
+    });
+
+    fireEvent.click(screen.getByText("Lists"));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("testuser hasn't created any lists yet."),
+      ).toBeInTheDocument();
+    });
   });
 
-  it("should switch to Want to Read tab on click", () => {
-    render(<ProfileTabs username="reader" />);
+  it("should render book covers when diary has entries", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () =>
+        Promise.resolve({
+          data: [
+            {
+              id: "ub-1",
+              bookId: "b-1",
+              status: "read",
+              rating: "4.5",
+              book: { id: "b-1", title: "Test Book", coverUrl: "/cover.jpg" },
+            },
+          ],
+        }),
+    });
 
-    fireEvent.click(screen.getByText("Want to Read"));
+    render(<ProfileTabs username="testuser" />);
 
-    expect(
-      screen.getByText("Books reader wants to read will appear here."),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByAltText("Test Book")).toBeInTheDocument();
+      expect(screen.getByText("4.5")).toBeInTheDocument();
+    });
   });
 });

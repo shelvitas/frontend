@@ -17,7 +17,7 @@ type Tab = "following" | "discover";
 
 const FeedPage = () => {
   const { session, isLoading: authLoading } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<Tab>("following");
+  const [activeTab, setActiveTab] = useState<Tab>("discover");
   const [events, setEvents] = useState<FeedEvent[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [recs, setRecs] = useState<SocialRec[]>([]);
