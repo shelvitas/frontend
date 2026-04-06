@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Heart, Copy, Share2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
@@ -23,28 +24,31 @@ export const ListActions = ({
   const session = useAuthStore((s) => s.session);
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(initialIsLiked);
-  const [isLoading, setIsLoading] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
+  const [cloneLoading, setCloneLoading] = useState(false);
 
   const handleLike = async () => {
     if (!session) {
       window.location.href = "/sign-in";
       return;
     }
-    setIsLoading(true);
+
+    const wasLiked = liked;
+    setLiked(!liked);
+    setLikes((l) => (wasLiked ? l - 1 : l + 1));
+    setLikeLoading(true);
+
     try {
-      if (liked) {
+      if (wasLiked) {
         await api.delete(`/v1/lists/${listId}/like`);
-        setLikes((l) => l - 1);
-        setLiked(false);
       } else {
         await api.post(`/v1/lists/${listId}/like`);
-        setLikes((l) => l + 1);
-        setLiked(true);
       }
     } catch {
-      // Silently handle
+      setLiked(wasLiked);
+      setLikes((l) => (wasLiked ? l + 1 : l - 1));
     } finally {
-      setIsLoading(false);
+      setLikeLoading(false);
     }
   };
 
@@ -53,13 +57,14 @@ export const ListActions = ({
       window.location.href = "/sign-in";
       return;
     }
+    setCloneLoading(true);
     try {
       const cloned = await api.post<{ id: string }>(
         `/v1/lists/${listId}/clone`,
       );
       window.location.href = `/lists/${cloned.id}`;
     } catch {
-      // Silently handle
+      setCloneLoading(false);
     }
   };
 
@@ -77,11 +82,15 @@ export const ListActions = ({
       <Button
         variant="ghost"
         size="sm"
-        className={`gap-1.5 text-xs ${liked ? "text-red-400" : "text-muted-foreground"}`}
+        className={`gap-1.5 text-xs transition-all ${liked ? "text-red-400" : "text-muted-foreground"}`}
         onClick={handleLike}
-        disabled={isLoading}
+        disabled={likeLoading}
       >
-        <Heart className={`h-4 w-4 ${liked ? "fill-red-400" : ""}`} />
+        {likeLoading ? (
+          <Spinner className="h-4 w-4" />
+        ) : (
+          <Heart className={`h-4 w-4 transition-all ${liked ? "fill-red-400 scale-110" : ""}`} />
+        )}
         {likes}
       </Button>
       <Button
@@ -89,8 +98,9 @@ export const ListActions = ({
         size="sm"
         className="gap-1.5 text-xs text-muted-foreground"
         onClick={handleClone}
+        disabled={cloneLoading}
       >
-        <Copy className="h-4 w-4" />
+        {cloneLoading ? <Spinner className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
         Clone
       </Button>
       <Button

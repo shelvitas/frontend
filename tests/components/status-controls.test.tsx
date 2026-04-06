@@ -27,39 +27,65 @@ beforeEach(() => {
 });
 
 describe("StatusControls", () => {
-  it("should show Want to Read button when not authenticated", () => {
-    render(<StatusControls bookId="book-1" initialStatus={null} />);
+  it("should render nothing when not authenticated", () => {
+    const { container } = render(<StatusControls bookId="book-1" />);
 
-    expect(
-      screen.getByRole("button", { name: /Want to Read/i }),
-    ).toBeInTheDocument();
+    // Unauthenticated — WantToReadButton handles CTA, StatusControls returns null
+    expect(container.innerHTML).toBe("");
   });
 
-  it("should show all 4 status buttons when authenticated", () => {
+  it("should show all 4 status buttons after hydration", async () => {
     useAuthStore.setState({ session: { access_token: "token" } as never });
 
-    render(<StatusControls bookId="book-1" initialStatus={null} />);
+    // Hydration fetch returns no status
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: null }),
+    });
 
-    expect(
-      screen.getByRole("button", { name: /Want to Read/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /Reading/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^Read$/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /DNF/i })).toBeInTheDocument();
+    render(<StatusControls bookId="book-1" />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /Want to Read/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Reading/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /^Read$/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /DNF/i }),
+      ).toBeInTheDocument();
+    });
   });
 
   it("should call API when clicking a status", async () => {
     useAuthStore.setState({ session: { access_token: "token" } as never });
 
+    // Hydration
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: null }),
+    });
+
+    render(<StatusControls bookId="book-1" />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /Want to Read/i }),
+      ).toBeInTheDocument();
+    });
+
+    // Click action
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 201,
       json: () => Promise.resolve({ data: { status: "want_to_read" } }),
     });
-
-    render(<StatusControls bookId="book-1" initialStatus={null} />);
 
     fireEvent.click(screen.getByRole("button", { name: /Want to Read/i }));
 
@@ -76,11 +102,23 @@ describe("StatusControls", () => {
 
     mockFetch.mockResolvedValueOnce({
       ok: true,
+      status: 200,
+      json: () => Promise.resolve({ data: null }),
+    });
+
+    render(<StatusControls bookId="book-1" />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /DNF/i }),
+      ).toBeInTheDocument();
+    });
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
       status: 201,
       json: () => Promise.resolve({ data: { status: "did_not_finish" } }),
     });
-
-    render(<StatusControls bookId="book-1" initialStatus={null} />);
 
     fireEvent.click(screen.getByRole("button", { name: /DNF/i }));
 

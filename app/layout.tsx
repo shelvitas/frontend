@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ProgressBar } from "@/components/layout/progress-bar";
 import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -30,7 +31,10 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang="en" className="dark">
     <body className={inter.className}>
-      <Providers>{children}</Providers>
+      <Providers>
+        <ProgressBar />
+        {children}
+      </Providers>
     </body>
   </html>
 );

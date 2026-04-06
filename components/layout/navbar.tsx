@@ -4,17 +4,15 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Home, Search, Library, Users, User } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth";
 
 const navItems = [
-  { href: "/feed", label: "Home", icon: Home },
-  { href: "/search", label: "Search", icon: Search },
-  { href: "/diary", label: "Library", icon: Library },
-  { href: "/members", label: "Community", icon: Users },
-  { href: "/profile", label: "Profile", icon: User },
+  { href: "/feed", label: "Home" },
+  { href: "/search", label: "Search" },
+  { href: "/diary", label: "Library" },
+  { href: "/members", label: "Community" },
+  { href: "/profile", label: "Profile" },
 ];
 
 export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
@@ -58,20 +56,18 @@ export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
           {/* Desktop nav */}
           <nav className="hidden items-center gap-1 md:flex">
             {navItems.map((item) => {
-              const Icon = item.icon;
               const isActive =
                 pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-sm font-medium transition-colors ${
+                  className={`rounded-sm px-3 py-1.5 text-sm font-medium transition-colors ${
                     isActive
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
                   {item.label}
                 </Link>
               );
@@ -126,19 +122,17 @@ export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
         <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-secondary bg-background/95 backdrop-blur md:hidden">
           <div className="flex items-center justify-around py-2">
             {navItems.map((item) => {
-              const Icon = item.icon;
               const isActive =
                 pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex flex-col items-center gap-0.5 px-3 py-1 ${
+                  className={`px-3 py-1 text-xs font-medium ${
                     isActive ? "text-shelvitas-green" : "text-muted-foreground"
                   }`}
                 >
-                  <Icon className="h-5 w-5" />
-                  <span className="text-[10px]">{item.label}</span>
+                  {item.label}
                 </Link>
               );
             })}

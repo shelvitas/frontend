@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ThumbsUp, Bookmark } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
@@ -23,28 +24,32 @@ export const ReviewActions = ({
   const [saves, setSaves] = useState(initialSaves);
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
 
   const handleLike = async () => {
     if (!session) {
       window.location.href = "/sign-in";
       return;
     }
-    setIsLoading(true);
+
+    // Optimistic
+    const wasLiked = liked;
+    setLiked(!liked);
+    setLikes((l) => (wasLiked ? l - 1 : l + 1));
+    setLikeLoading(true);
+
     try {
-      if (liked) {
+      if (wasLiked) {
         await api.delete(`/v1/reviews/${reviewId}/like`);
-        setLikes((l) => l - 1);
-        setLiked(false);
       } else {
         await api.post(`/v1/reviews/${reviewId}/like`);
-        setLikes((l) => l + 1);
-        setLiked(true);
       }
     } catch {
-      // Silently handle
+      setLiked(wasLiked);
+      setLikes((l) => (wasLiked ? l + 1 : l - 1));
     } finally {
-      setIsLoading(false);
+      setLikeLoading(false);
     }
   };
 
@@ -53,21 +58,23 @@ export const ReviewActions = ({
       window.location.href = "/sign-in";
       return;
     }
-    setIsLoading(true);
+
+    const wasSaved = saved;
+    setSaved(!saved);
+    setSaves((s) => (wasSaved ? s - 1 : s + 1));
+    setSaveLoading(true);
+
     try {
-      if (saved) {
+      if (wasSaved) {
         await api.delete(`/v1/reviews/${reviewId}/save`);
-        setSaves((s) => s - 1);
-        setSaved(false);
       } else {
         await api.post(`/v1/reviews/${reviewId}/save`);
-        setSaves((s) => s + 1);
-        setSaved(true);
       }
     } catch {
-      // Silently handle
+      setSaved(wasSaved);
+      setSaves((s) => (wasSaved ? s + 1 : s - 1));
     } finally {
-      setIsLoading(false);
+      setSaveLoading(false);
     }
   };
 
@@ -76,25 +83,29 @@ export const ReviewActions = ({
       <Button
         variant="ghost"
         size="sm"
-        className={`gap-1.5 text-xs ${liked ? "text-shelvitas-green" : "text-muted-foreground"}`}
+        className={`gap-1.5 text-xs transition-all ${liked ? "text-shelvitas-green" : "text-muted-foreground"}`}
         onClick={handleLike}
-        disabled={isLoading}
+        disabled={likeLoading}
       >
-        <ThumbsUp
-          className={`h-4 w-4 ${liked ? "fill-shelvitas-green" : ""}`}
-        />
+        {likeLoading ? (
+          <Spinner className="h-4 w-4" />
+        ) : (
+          <ThumbsUp className={`h-4 w-4 transition-all ${liked ? "fill-shelvitas-green scale-110" : ""}`} />
+        )}
         {likes}
       </Button>
       <Button
         variant="ghost"
         size="sm"
-        className={`gap-1.5 text-xs ${saved ? "text-shelvitas-orange" : "text-muted-foreground"}`}
+        className={`gap-1.5 text-xs transition-all ${saved ? "text-shelvitas-orange" : "text-muted-foreground"}`}
         onClick={handleSave}
-        disabled={isLoading}
+        disabled={saveLoading}
       >
-        <Bookmark
-          className={`h-4 w-4 ${saved ? "fill-shelvitas-orange" : ""}`}
-        />
+        {saveLoading ? (
+          <Spinner className="h-4 w-4" />
+        ) : (
+          <Bookmark className={`h-4 w-4 transition-all ${saved ? "fill-shelvitas-orange scale-110" : ""}`} />
+        )}
         {saves}
       </Button>
     </div>

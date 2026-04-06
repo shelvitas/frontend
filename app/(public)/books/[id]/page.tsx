@@ -186,18 +186,12 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
             {/* Want to Read — primary CTA */}
             <div className="mt-6">
-              <WantToReadButton
-                bookId={book.id}
-                initialWanted={book.userStatus?.status === "want_to_read"}
-              />
+              <WantToReadButton bookId={book.id} />
             </div>
 
             {/* Status controls */}
             <div className="mt-3">
-              <StatusControls
-                bookId={book.id}
-                initialStatus={book.userStatus}
-              />
+              <StatusControls bookId={book.id} />
             </div>
           </div>
         </div>

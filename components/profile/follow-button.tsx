@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { UserPlus, UserCheck, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
@@ -26,11 +28,12 @@ export const FollowButton = ({
     return (
       <Button
         size="sm"
-        className="bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+        className="gap-1.5 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
         onClick={() => {
           window.location.href = "/sign-in";
         }}
       >
+        <UserPlus className="h-3.5 w-3.5" />
         Follow
       </Button>
     );
@@ -48,20 +51,23 @@ export const FollowButton = ({
         setIsFollowing(true);
       }
     } catch {
-      // Silently handle — user may already follow
+      // Silently handle
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleUnfollow = async () => {
+    const wasPending = isPending;
+    setIsFollowing(false);
+    setIsPending(false);
     setIsLoading(true);
     try {
       await api.delete(`/v1/users/${userId}/follow`);
-      setIsFollowing(false);
-      setIsPending(false);
     } catch {
-      // Silently handle
+      // Revert
+      if (wasPending) setIsPending(true);
+      else setIsFollowing(true);
     } finally {
       setIsLoading(false);
     }
@@ -72,11 +78,12 @@ export const FollowButton = ({
       <Button
         size="sm"
         variant="outline"
-        className="text-xs"
+        className="gap-1.5 text-xs transition-all"
         onClick={handleUnfollow}
         disabled={isLoading}
       >
-        {isLoading ? "..." : "Requested"}
+        {isLoading ? <Spinner className="h-3.5 w-3.5" /> : <Clock className="h-3.5 w-3.5" />}
+        Requested
       </Button>
     );
   }
@@ -86,25 +93,25 @@ export const FollowButton = ({
       <Button
         size="sm"
         variant="outline"
-        className="text-xs"
+        className="gap-1.5 text-xs transition-all"
         onClick={handleUnfollow}
         disabled={isLoading}
       >
-        {isLoading ? "..." : "Following"}
+        {isLoading ? <Spinner className="h-3.5 w-3.5" /> : <UserCheck className="h-3.5 w-3.5" />}
+        Following
       </Button>
     );
   }
 
-  const followLabel = isPrivate ? "Request" : "Follow";
-
   return (
     <Button
       size="sm"
-      className="bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+      className="gap-1.5 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90 transition-all"
       onClick={handleFollow}
       disabled={isLoading}
     >
-      {isLoading ? "..." : followLabel}
+      {isLoading ? <Spinner className="h-3.5 w-3.5" /> : <UserPlus className="h-3.5 w-3.5" />}
+      {isPrivate ? "Request" : "Follow"}
     </Button>
   );
 };

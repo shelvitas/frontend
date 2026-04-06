@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { StarRating } from "@/components/book/star-rating";
 import { TagsInput } from "@/components/book/tags-input";
 import { api } from "@/lib/api";
@@ -360,10 +361,11 @@ export const LogModal = ({
               Cancel
             </Button>
             <Button
-              className="flex-1 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+              className="flex-1 gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
               onClick={handleSave}
               disabled={isLoading}
             >
+              {isLoading && <Spinner />}
               {isLoading && "Saving..."}
               {!isLoading && isEdit && "Save Changes"}
               {!isLoading && !isEdit && "Log Book"}
