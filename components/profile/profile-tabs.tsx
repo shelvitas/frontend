@@ -6,6 +6,7 @@ import { BookOpen, BookMarked, Star, List, BookCheck } from "lucide-react";
 
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
+import { CreateListModal } from "@/components/list/create-list-modal";
 
 const tabs = [
   { id: "read", label: "Read", icon: BookCheck },
@@ -239,12 +240,15 @@ export const ProfileTabs = ({ username }: { username: string }) => {
               <p className="text-xs text-muted-foreground">
                 {username} hasn&apos;t created any lists yet.
               </p>
-              <Link
-                href="/lists/create"
-                className="mt-2 inline-block text-xs text-shelvitas-green hover:underline"
-              >
-                Create your first list
-              </Link>
+              <div className="mt-3">
+                <CreateListModal
+                  trigger={
+                    <button type="button" className="text-xs text-shelvitas-green hover:underline">
+                      Create your first list
+                    </button>
+                  }
+                />
+              </div>
             </div>
           )}
         </div>
