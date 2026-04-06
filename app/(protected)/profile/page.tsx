@@ -7,6 +7,7 @@ import { LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuthStore } from "@/store/auth";
 import { Button } from "@/components/ui/button";
+import { PageLoader } from "@/components/ui/page-loader";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 
@@ -38,7 +39,7 @@ const ProfilePage = () => {
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <main className="flex flex-1 items-center justify-center">
-          <p className="text-sm text-muted-foreground">Loading...</p>
+          <PageLoader />
         </main>
       </div>
     );
@@ -55,7 +56,7 @@ const ProfilePage = () => {
         <Navbar />
         <main className="flex flex-1 items-center justify-center">
           <div className="text-center">
-            <p className="text-sm text-muted-foreground">Loading profile...</p>
+            <PageLoader />
             <Button
               variant="ghost"
               className="mt-4 text-xs text-muted-foreground"

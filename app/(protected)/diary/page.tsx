@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/footer";
 import { DiaryEntryCard } from "@/components/diary/diary-entry-card";
 import { LogModal } from "@/components/book/log-modal";
 import { Button } from "@/components/ui/button";
+import { PageLoader } from "@/components/ui/page-loader";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { DiaryEntry } from "@/lib/types";
@@ -118,13 +119,7 @@ const DiaryPage = () => {
         )}
 
         {/* Loading */}
-        {isLoading && (
-          <div className="mt-12 text-center">
-            <p className="text-sm text-muted-foreground">
-              Loading your diary...
-            </p>
-          </div>
-        )}
+        {isLoading && <PageLoader />}
 
         {/* Empty state */}
         {!isLoading && entries.length === 0 && (

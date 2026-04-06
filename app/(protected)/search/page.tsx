@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import { Search, X, Loader2, BookOpen, Users, List, User } from "lucide-react";
+import { Search, X, BookOpen, Users, List, User } from "lucide-react";
 
 import { api } from "@/lib/api";
+import { PageLoader } from "@/components/ui/page-loader";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -207,11 +208,7 @@ const SearchPage = () => {
         </div>
 
         {/* Loading */}
-        {isLoading && (
-          <div className="mt-12 flex justify-center">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-          </div>
-        )}
+        {isLoading && <PageLoader />}
 
         {/* Book results */}
         {!isLoading && activeTab === "books" && results.length > 0 && (

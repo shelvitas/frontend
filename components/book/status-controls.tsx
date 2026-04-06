@@ -37,8 +37,8 @@ const statusConfig = {
   },
 } as const;
 
+// want_to_read is handled by WantToReadButton — no duplicate here
 const statuses: ReadingStatus[] = [
-  "want_to_read",
   "currently_reading",
   "read",
   "did_not_finish",

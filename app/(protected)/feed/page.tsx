@@ -8,6 +8,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { FeedEventCard } from "@/components/feed/feed-event-card";
 import { Button } from "@/components/ui/button";
+import { PageLoader } from "@/components/ui/page-loader";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { FeedEvent, FeedResponse, SocialRec } from "@/lib/types";
@@ -166,11 +167,7 @@ const FeedPage = () => {
         )}
 
         {/* Loading */}
-        {isLoading && events.length === 0 && (
-          <div className="mt-12 text-center">
-            <p className="text-sm text-muted-foreground">Loading feed...</p>
-          </div>
-        )}
+        {isLoading && events.length === 0 && <PageLoader />}
 
         {/* Empty state — Following tab */}
         {!isLoading && events.length === 0 && activeTab === "following" && (

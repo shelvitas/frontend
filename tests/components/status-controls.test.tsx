@@ -36,7 +36,7 @@ describe("StatusControls", () => {
     expect(container.innerHTML).toBe("");
   });
 
-  it("should show all 4 status buttons after hydration", async () => {
+  it("should show 3 status buttons after hydration (no Want to Read)", async () => {
     useAuthStore.setState({ session: { access_token: "token" } as never });
 
     // Hydration fetch returns no status
@@ -50,9 +50,6 @@ describe("StatusControls", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /Want to Read/i }),
-      ).toBeInTheDocument();
-      expect(
         screen.getByRole("button", { name: /Reading/i }),
       ).toBeInTheDocument();
       expect(
@@ -60,6 +57,9 @@ describe("StatusControls", () => {
       ).toBeInTheDocument();
       expect(screen.getByRole("button", { name: /DNF/i })).toBeInTheDocument();
     });
+
+    // Want to Read is handled by WantToReadButton, not here
+    expect(screen.queryByRole("button", { name: /Want to Read/i })).not.toBeInTheDocument();
   });
 
   it("should call API when clicking a status", async () => {
@@ -76,18 +76,18 @@ describe("StatusControls", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /Want to Read/i }),
+        screen.getByRole("button", { name: /Reading/i }),
       ).toBeInTheDocument();
     });
 
-    // Click action
+    // Click action — set to currently_reading
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 201,
-      json: () => Promise.resolve({ data: { status: "want_to_read" } }),
+      json: () => Promise.resolve({ data: { status: "currently_reading" } }),
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /Want to Read/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Reading/i }));
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(

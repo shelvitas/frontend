@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
+import { PageLoader } from "@/components/ui/page-loader";
 import { createClient } from "@/lib/supabase/client";
 import { useAuthStore } from "@/store/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 const AuthCallbackPage = () => {
-  const [status, setStatus] = useState("Completing sign in...");
+  const [, setStatus] = useState("Completing sign in...");
   const setAuth = useAuthStore((s) => s.setAuth);
 
   useEffect(() => {
@@ -50,14 +50,7 @@ const AuthCallbackPage = () => {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4">
-      <Image
-        src="/logo.svg"
-        alt="Shelvitas"
-        width={48}
-        height={48}
-        className="animate-pulse"
-      />
-      <p className="text-sm text-muted-foreground">{status}</p>
+      <PageLoader />
     </main>
   );
 };
