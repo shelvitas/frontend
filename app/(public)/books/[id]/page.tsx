@@ -10,6 +10,7 @@ import { RatingHistogram } from "@/components/book/rating-histogram";
 import { StatusControls } from "@/components/book/status-controls";
 import { WantToReadButton } from "@/components/book/want-to-read-button";
 import { ReviewCard } from "@/components/book/review-card";
+import { Button } from "@/components/ui/button";
 import { serverFetch } from "@/lib/server-fetch";
 import type { BookPageData } from "@/lib/types";
 
@@ -316,6 +317,21 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           </div>
         )}
+        {/* ── Write Review CTA ── */}
+        <div className="mt-8 rounded-sm border border-dashed border-secondary p-4 text-center">
+          <p className="text-sm font-medium">Share your thoughts</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Write a review to help other readers discover this book.
+          </p>
+          <Link href={`/reviews/write?bookId=${book.id}`}>
+            <Button
+              size="sm"
+              className="mt-3 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+            >
+              Write a review
+            </Button>
+          </Link>
+        </div>
       </main>
 
       <Footer />

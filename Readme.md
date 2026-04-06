@@ -43,6 +43,8 @@ app/
 │   ├── books/[id]/page.tsx # Book page (SSR) — cover, metadata, histogram, status, reviews, Schema.org
 │   ├── reviews/[id]/page.tsx # Review page (SSR) — full review, like/save, comments, share
 │   ├── lists/[id]/page.tsx  # List page (SSR) — ranked books, % read, like/clone/share, comments
+│   ├── authors/[id]/page.tsx # Author page (SSR) — bio, bibliography by series
+│   ├── series/[id]/page.tsx  # Series page (SSR) — reading order, completion %
 │   ├── logo/page.tsx       # Logo display
 │   └── testing/page.tsx    # API testing page
 ├── (auth)/                 # Auth pages (split-screen layout with book mosaic)
@@ -57,6 +59,13 @@ app/
 │   ├── profile/page.tsx    # User profile with stats
 │   ├── diary/page.tsx      # Reading diary — chronological logs, year filter, edit inline
 │   ├── feed/page.tsx       # Home feed — Following + Discover tabs, social recs, empty states
+│   ├── notifications/page.tsx # Notifications center — bell badge, mark all read
+│   ├── settings/page.tsx   # Profile settings — edit name, bio, avatar, visibility
+│   ├── export/page.tsx     # Data export — generate ZIP, poll progress, download
+│   ├── shelves/page.tsx    # Shelves management — list, create
+│   ├── import/page.tsx     # Goodreads CSV import — 3-step wizard
+│   ├── reviews/write/page.tsx # Write a review
+│   ├── lists/create/page.tsx  # Create a new list
 │   └── search/page.tsx     # Book search (Typesense + external APIs)
 ├── auth/callback/page.tsx  # OAuth callback handler
 ├── layout.tsx              # Root layout (Inter font, providers, metadata)
