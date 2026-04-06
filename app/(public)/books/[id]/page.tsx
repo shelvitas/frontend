@@ -99,13 +99,13 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
               <Image
                 src={book.coverUrl}
                 alt={book.title}
-                width={240}
-                height={360}
-                className="w-48 rounded-sm shadow-lg sm:w-60"
+                width={96}
+                height={144}
+                className="w-20 rounded-sm shadow-lg sm:w-24"
                 priority
               />
             ) : (
-              <div className="flex h-72 w-48 items-center justify-center rounded-sm bg-secondary text-sm text-muted-foreground sm:h-[360px] sm:w-60">
+              <div className="flex h-[120px] w-20 items-center justify-center rounded-sm bg-secondary text-xs text-muted-foreground sm:h-36 sm:w-24">
                 No cover
               </div>
             )}

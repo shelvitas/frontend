@@ -17,9 +17,12 @@ async function getList(id: string) {
 
 async function getComments(listId: string): Promise<CommentData[]> {
   try {
-    const res = await fetch(`${SERVER_API_URL}/v1/lists/${listId}/comments?limit=50`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `${SERVER_API_URL}/v1/lists/${listId}/comments?limit=50`,
+      {
+        cache: "no-store",
+      },
+    );
     if (!res.ok) return [];
     const json = await res.json();
     return json.data as CommentData[];

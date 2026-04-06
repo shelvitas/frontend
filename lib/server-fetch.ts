@@ -18,14 +18,24 @@ export const SERVER_API_URL = resolveApiUrl();
 
 /**
  * Server-side fetch helper for SSR pages.
+ * Never throws — returns null on any failure (network, timeout, parse, non-200).
+ * 5s timeout to prevent SSR hangs.
  */
 export async function serverFetch<T>(path: string): Promise<T | null> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+
   try {
-    const res = await fetch(`${SERVER_API_URL}${path}`, { cache: "no-store" });
+    const res = await fetch(`${SERVER_API_URL}${path}`, {
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
     if (!res.ok) return null;
     const json = await res.json();
-    return json.data as T;
+    return (json.data ?? null) as T | null;
   } catch {
+    clearTimeout(timeout);
     return null;
   }
 }
