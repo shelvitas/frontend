@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 import { useAuthStore } from "@/store/auth";
+import { useBookStatusStore } from "@/lib/hooks/use-book-status";
 
 const mockFetch = vi.fn();
 vi.stubGlobal("fetch", mockFetch);
@@ -24,6 +25,7 @@ beforeEach(() => {
     profile: null,
     isLoading: false,
   });
+  useBookStatusStore.setState({ statuses: {}, hydrated: {} });
 });
 
 describe("StatusControls", () => {
@@ -56,9 +58,7 @@ describe("StatusControls", () => {
       expect(
         screen.getByRole("button", { name: /^Read$/i }),
       ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /DNF/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /DNF/i })).toBeInTheDocument();
     });
   });
 
@@ -109,9 +109,7 @@ describe("StatusControls", () => {
     render(<StatusControls bookId="book-1" />);
 
     await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: /DNF/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /DNF/i })).toBeInTheDocument();
     });
 
     mockFetch.mockResolvedValueOnce({

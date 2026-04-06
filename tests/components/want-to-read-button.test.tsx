@@ -2,6 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 import { useAuthStore } from "@/store/auth";
+import {
+  useBookStatusStore,
+  fetchingBooks,
+} from "@/lib/hooks/use-book-status";
 
 const mockFetch = vi.fn();
 vi.stubGlobal("fetch", mockFetch);
@@ -25,6 +29,8 @@ beforeEach(() => {
     profile: null,
     isLoading: false,
   });
+  useBookStatusStore.setState({ statuses: {}, hydrated: {} });
+  fetchingBooks.clear();
 });
 
 describe("WantToReadButton", () => {
