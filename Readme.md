@@ -41,6 +41,7 @@ app/
 │   ├── page.tsx            # Homepage — hero, features, book sections
 │   ├── [username]/page.tsx # Public profile page (SSR) — stats, tabs, follow
 │   ├── books/[id]/page.tsx # Book page (SSR) — cover, metadata, histogram, status, reviews, Schema.org
+│   ├── reviews/[id]/page.tsx # Review page (SSR) — full review, like/save, comments, share
 │   ├── logo/page.tsx       # Logo display
 │   └── testing/page.tsx    # API testing page
 ├── (auth)/                 # Auth pages (split-screen layout with book mosaic)
@@ -81,6 +82,10 @@ components/
 │   └── log-modal.tsx        # Full log/review modal (status, dates, rating, format, tags, review, notes)
 ├── diary/
 │   └── diary-entry-card.tsx # Diary entry row (cover, dates, rating, format, tags, reread badge, edit)
+├── review/
+│   ├── review-actions.tsx   # Like + Save buttons with optimistic counts
+│   ├── share-buttons.tsx    # Share to X/Threads links
+│   └── comment-thread.tsx   # Threaded comments with spoiler toggle, reply input
 └── ui/                     # shadcn/ui primitives (Button, Card, Input, etc.)
 
 lib/

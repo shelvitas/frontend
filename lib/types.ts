@@ -142,3 +142,43 @@ export interface DiaryEntry {
     coverUrl: string | null;
   };
 }
+
+// ── Review Page ──────────────────────────────────────────────
+
+export interface ReviewPageData {
+  id: string;
+  bookId: string;
+  body: string;
+  containsSpoilers: boolean;
+  rating: string | null;
+  isDnf: boolean;
+  dnfPage: number | null;
+  likesCount: number;
+  commentsCount: number;
+  savesCount: number;
+  createdAt: string;
+  updatedAt: string;
+  reviewer: {
+    username: string;
+    displayName: string;
+    avatarUrl: string | null;
+  };
+}
+
+export interface CommentData {
+  id: string;
+  reviewId: string | null;
+  listId: string | null;
+  parentId: string | null;
+  body: string;
+  containsSpoilers: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    username: string;
+    displayName: string;
+    avatarUrl: string | null;
+  };
+  replies?: CommentData[];
+}
