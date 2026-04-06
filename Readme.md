@@ -42,6 +42,7 @@ app/
 │   ├── [username]/page.tsx # Public profile page (SSR) — stats, tabs, follow
 │   ├── books/[id]/page.tsx # Book page (SSR) — cover, metadata, histogram, status, reviews, Schema.org
 │   ├── reviews/[id]/page.tsx # Review page (SSR) — full review, like/save, comments, share
+│   ├── lists/[id]/page.tsx  # List page (SSR) — ranked books, % read, like/clone/share, comments
 │   ├── logo/page.tsx       # Logo display
 │   └── testing/page.tsx    # API testing page
 ├── (auth)/                 # Auth pages (split-screen layout with book mosaic)
@@ -86,6 +87,8 @@ components/
 │   ├── review-actions.tsx   # Like + Save buttons with optimistic counts
 │   ├── share-buttons.tsx    # Share to X/Threads links
 │   └── comment-thread.tsx   # Threaded comments with spoiler toggle, reply input
+├── list/
+│   └── list-actions.tsx     # Like/Clone/Share buttons for lists
 └── ui/                     # shadcn/ui primitives (Button, Card, Input, etc.)
 
 lib/

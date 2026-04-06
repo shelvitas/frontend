@@ -8,6 +8,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { RatingHistogram } from "@/components/book/rating-histogram";
 import { StatusControls } from "@/components/book/status-controls";
+import { WantToReadButton } from "@/components/book/want-to-read-button";
 import { ReviewCard } from "@/components/book/review-card";
 import type { BookPageData } from "@/lib/types";
 
@@ -193,8 +194,16 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
               {book.isbn13 && <span>ISBN {book.isbn13}</span>}
             </div>
 
-            {/* Status controls */}
+            {/* Want to Read — primary CTA */}
             <div className="mt-6">
+              <WantToReadButton
+                bookId={book.id}
+                initialWanted={book.userStatus?.status === "want_to_read"}
+              />
+            </div>
+
+            {/* Status controls */}
+            <div className="mt-3">
               <StatusControls
                 bookId={book.id}
                 initialStatus={book.userStatus}

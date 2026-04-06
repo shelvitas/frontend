@@ -182,3 +182,31 @@ export interface CommentData {
   };
   replies?: CommentData[];
 }
+
+// ── List Page ────────────────────────────────────────────────
+
+export interface ListBookItem {
+  id: string;
+  bookId: string;
+  title: string;
+  coverUrl: string | null;
+  position: number;
+  notes: string | null;
+  addedAt: string;
+}
+
+export interface ListPageData {
+  id: string;
+  userId: string;
+  title: string;
+  description: string | null;
+  isPrivate: boolean;
+  isRanked: boolean;
+  likesCount: number;
+  bookCount: number;
+  createdAt: string;
+  updatedAt: string;
+  books: ListBookItem[];
+  percentRead: number | null;
+  isLiked: boolean;
+}
