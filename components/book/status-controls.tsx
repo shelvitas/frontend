@@ -104,7 +104,10 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
         toast("Marked as Did Not Finish");
       } else {
         await api.post(`/v1/books/${bookId}/status`, { status });
-        const labels: Record<string, string> = { currently_reading: "Marked as Reading", read: "Marked as Read" };
+        const labels: Record<string, string> = {
+          currently_reading: "Marked as Reading",
+          read: "Marked as Read",
+        };
         toast(labels[status] ?? "Status updated");
       }
     } catch {
@@ -125,23 +128,28 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
         const isThisLoading = loadingStatus === status;
 
         return (
-          <Tooltip key={status} content={isActive ? `Remove ${config.label}` : `Mark as ${config.label}`}>
-          <Button
-            variant={isActive ? "default" : "outline"}
-            size="sm"
-            className={`flex-1 gap-1.5 text-xs transition-all ${
-              isActive ? `${config.color} border-secondary bg-secondary` : ""
-            }`}
-            onClick={() => handleStatusChange(status)}
-            disabled={!!loadingStatus}
+          <Tooltip
+            key={status}
+            content={
+              isActive ? `Remove ${config.label}` : `Mark as ${config.label}`
+            }
           >
-            {isThisLoading ? (
-              <Spinner className="h-3.5 w-3.5" />
-            ) : (
-              <Icon className="h-3.5 w-3.5" />
-            )}
-            {config.label}
-          </Button>
+            <Button
+              variant={isActive ? "default" : "outline"}
+              size="sm"
+              className={`flex-1 gap-1.5 text-xs transition-all ${
+                isActive ? `${config.color} border-secondary bg-secondary` : ""
+              }`}
+              onClick={() => handleStatusChange(status)}
+              disabled={!!loadingStatus}
+            >
+              {isThisLoading ? (
+                <Spinner className="h-3.5 w-3.5" />
+              ) : (
+                <Icon className="h-3.5 w-3.5" />
+              )}
+              {config.label}
+            </Button>
           </Tooltip>
         );
       })}

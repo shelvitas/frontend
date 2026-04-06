@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo, createContext, useContext } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  createContext,
+  useContext,
+} from "react";
 import { CheckCircle, AlertTriangle, X, Info } from "lucide-react";
 
 type ToastType = "success" | "error" | "info";
@@ -28,7 +35,8 @@ const icons = {
 };
 
 const colors = {
-  success: "border-shelvitas-green/30 bg-shelvitas-green/10 text-shelvitas-green",
+  success:
+    "border-shelvitas-green/30 bg-shelvitas-green/10 text-shelvitas-green",
   error: "border-red-500/30 bg-red-500/10 text-red-400",
   info: "border-shelvitas-blue/30 bg-shelvitas-blue/10 text-shelvitas-blue",
 };
@@ -67,10 +75,13 @@ const ToastItem = ({
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const addToast = useCallback((message: string, type: ToastType = "success") => {
-    const id = crypto.randomUUID();
-    setToasts((prev) => [...prev, { id, message, type }]);
-  }, []);
+  const addToast = useCallback(
+    (message: string, type: ToastType = "success") => {
+      const id = crypto.randomUUID();
+      setToasts((prev) => [...prev, { id, message, type }]);
+    },
+    [],
+  );
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
