@@ -59,7 +59,9 @@ describe("StatusControls", () => {
     });
 
     // Want to Read is handled by WantToReadButton, not here
-    expect(screen.queryByRole("button", { name: /Want to Read/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Want to Read/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("should call API when clicking a status", async () => {
