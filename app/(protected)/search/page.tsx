@@ -2,15 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import {
-  Search,
-  X,
-  Loader2,
-  BookOpen,
-  Users,
-  List,
-  User,
-} from "lucide-react";
+import { Search, X, Loader2, BookOpen, Users, List, User } from "lucide-react";
 
 import { api } from "@/lib/api";
 import { Input } from "@/components/ui/input";
@@ -75,9 +67,7 @@ const BookResultCard = ({ book }: { book: BookResult }) => {
         )}
         <div className="flex items-center gap-2 text-[10px] text-muted-foreground/60">
           {book.publishedDate && <span>{book.publishedDate}</span>}
-          {book.genre && (
-            <span className="capitalize">{book.genre}</span>
-          )}
+          {book.genre && <span className="capitalize">{book.genre}</span>}
           {book.isbn13 && <span>ISBN {book.isbn13}</span>}
         </div>
       </div>
@@ -238,16 +228,14 @@ const SearchPage = () => {
         )}
 
         {/* Placeholder for other tabs */}
-        {!isLoading &&
-          activeTab !== "books" &&
-          hasSearched && (
-            <div className="mt-12 text-center">
-              <p className="text-sm text-muted-foreground">
-                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} search
-                coming soon
-              </p>
-            </div>
-          )}
+        {!isLoading && activeTab !== "books" && hasSearched && (
+          <div className="mt-12 text-center">
+            <p className="text-sm text-muted-foreground">
+              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} search
+              coming soon
+            </p>
+          </div>
+        )}
 
         {/* No results */}
         {!isLoading &&

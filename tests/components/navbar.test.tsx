@@ -8,16 +8,22 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("next/image", () => ({
-  default: (props: Record<string, unknown>) =>
+  default: (props: Record<string, unknown>) => (
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-    <img {...props} />,
+    <img {...props} />
+  ),
 }));
 
 const { Navbar } = await import("@/components/layout/navbar");
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useAuthStore.setState({ session: null, user: null, profile: null, isLoading: false });
+  useAuthStore.setState({
+    session: null,
+    user: null,
+    profile: null,
+    isLoading: false,
+  });
 });
 
 describe("Navbar", () => {
