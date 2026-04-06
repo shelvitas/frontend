@@ -68,7 +68,7 @@ app/
 
 components/
 ├── layout/
-│   ├── navbar.tsx          # Sticky navbar with auth state, transparent on homepage
+│   ├── navbar.tsx          # Desktop top nav (5 destinations) + mobile bottom nav bar
 │   └── footer.tsx          # Site footer
 ├── auth/
 │   └── oauth-buttons.tsx   # Google OAuth button
