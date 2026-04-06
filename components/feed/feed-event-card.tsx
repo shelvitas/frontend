@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Star, BookOpen, BookCheck, BookMarked, BookX, List, MessageCircle } from "lucide-react";
+import {
+  Star,
+  BookOpen,
+  BookCheck,
+  BookMarked,
+  BookX,
+  List,
+  MessageCircle,
+} from "lucide-react";
 
 import type { FeedEvent } from "@/lib/types";
 
@@ -33,11 +41,14 @@ function getStatusLabel(metadata: Record<string, unknown> | null): string {
 }
 
 export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
-  const metadata = (event.metadata ?? {}) as Record<string, string | number | boolean | null>;
+  const metadata = (event.metadata ?? {}) as Record<
+    string,
+    string | number | boolean | null
+  >;
   const { book } = event;
   const StatusIcon =
     event.eventType === "status_update"
-      ? statusIcons[(metadata.status as string) ?? ""] ?? BookOpen
+      ? (statusIcons[(metadata.status as string) ?? ""] ?? BookOpen)
       : null;
 
   // Determine display text
@@ -62,7 +73,7 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
       )}
 
       {/* Content */}
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         {/* User + action */}
         <div className="flex items-center gap-2">
           {event.user && (
@@ -87,7 +98,9 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
             </>
           )}
           <span className="text-xs text-muted-foreground">{actionText}</span>
-          {StatusIcon && <StatusIcon className="h-3.5 w-3.5 text-muted-foreground" />}
+          {StatusIcon && (
+            <StatusIcon className="h-3.5 w-3.5 text-muted-foreground" />
+          )}
         </div>
 
         {/* Book title */}

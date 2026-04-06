@@ -28,9 +28,7 @@ const FeedPage = () => {
       try {
         const endpoint =
           activeTab === "following" ? "/v1/feed" : "/v1/feed/discover";
-        const params = cursor
-          ? `?limit=20&cursor=${cursor}`
-          : "?limit=20";
+        const params = cursor ? `?limit=20&cursor=${cursor}` : "?limit=20";
         const data = await api.get<FeedResponse>(`${endpoint}${params}`);
         if (cursor) {
           setEvents((prev) => [...prev, ...data.events]);
@@ -136,8 +134,8 @@ const FeedPage = () => {
                           {rec.book.title}
                         </p>
                         <p className="text-[10px] text-muted-foreground">
-                          {rec.recommenderCount} friend{rec.recommenderCount !== 1 ? "s" : ""} rated
-                          this
+                          {rec.recommenderCount} friend
+                          {rec.recommenderCount !== 1 ? "s" : ""} rated this
                         </p>
                       </div>
                     </Link>
@@ -178,9 +176,7 @@ const FeedPage = () => {
         {!isLoading && events.length === 0 && activeTab === "following" && (
           <div className="mt-12 text-center">
             <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" />
-            <p className="mt-3 text-sm font-medium">
-              Your feed is empty
-            </p>
+            <p className="mt-3 text-sm font-medium">Your feed is empty</p>
             <p className="mt-1 text-xs text-muted-foreground">
               Follow readers to see their activity here.
             </p>
