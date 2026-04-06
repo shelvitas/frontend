@@ -56,6 +56,7 @@ app/
 │   ├── layout.tsx          # Auth guard (redirects to /sign-in)
 │   ├── profile/page.tsx    # User profile with stats
 │   ├── diary/page.tsx      # Reading diary — chronological logs, year filter, edit inline
+│   ├── feed/page.tsx       # Home feed — Following + Discover tabs, social recs, empty states
 │   └── search/page.tsx     # Book search (Typesense + external APIs)
 ├── auth/callback/page.tsx  # OAuth callback handler
 ├── layout.tsx              # Root layout (Inter font, providers, metadata)
@@ -89,6 +90,8 @@ components/
 │   └── comment-thread.tsx   # Threaded comments with spoiler toggle, reply input
 ├── list/
 │   └── list-actions.tsx     # Like/Clone/Share buttons for lists
+├── feed/
+│   └── feed-event-card.tsx  # Activity feed event card (status, rating, review, list, progress)
 └── ui/                     # shadcn/ui primitives (Button, Card, Input, etc.)
 
 lib/

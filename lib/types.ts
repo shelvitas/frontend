@@ -210,3 +210,51 @@ export interface ListPageData {
   percentRead: number | null;
   isLiked: boolean;
 }
+
+// ── Feed ─────────────────────────────────────────────────────
+
+export interface FeedEvent {
+  id: string;
+  eventType: string;
+  metadata: Record<string, unknown> | null;
+  createdAt: string;
+  user: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatarUrl: string | null;
+  } | null;
+  book: {
+    id: string;
+    title: string;
+    coverUrl: string | null;
+  } | null;
+  reviewId: string | null;
+  listId: string | null;
+  userBookId: string | null;
+}
+
+export interface FeedResponse {
+  events: FeedEvent[];
+  nextCursor: string | null;
+}
+
+export interface SocialRec {
+  book: {
+    id: string;
+    title: string;
+    coverUrl: string | null;
+    avgRating: string | null;
+    ratingsCount: number;
+    genre: string | null;
+    author: string | null;
+  } | null;
+  recommenderCount: number;
+  networkAvgRating: string;
+  recommenders: {
+    username: string;
+    displayName: string;
+    avatarUrl: string | null;
+    rating: string | null;
+  }[];
+}
