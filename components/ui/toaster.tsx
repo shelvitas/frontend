@@ -94,7 +94,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
 
       {/* Toast container */}
-      <div className="fixed bottom-20 right-4 z-[200] flex flex-col gap-2 md:bottom-4">
+      <div className="fixed right-4 top-16 z-[200] flex flex-col gap-2">
         {toasts.map((t) => (
           <ToastItem key={t.id} toast={t} onDismiss={removeToast} />
         ))}

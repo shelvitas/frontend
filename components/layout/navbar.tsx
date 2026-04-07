@@ -20,6 +20,11 @@ export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
   const profile = useAuthStore((s) => s.profile);
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!transparent) return undefined;
@@ -74,9 +79,10 @@ export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
             })}
           </nav>
 
-          {/* Right side — auth */}
+          {/* Right side — auth (only after mount to avoid hydration mismatch) */}
           <div className="flex items-center gap-2">
-            {session ? (
+            {!mounted && <div className="h-8 w-8" />}
+            {mounted && session && (
               <Link href="/profile">
                 {profile?.avatarUrl ? (
                   <Image
@@ -92,7 +98,8 @@ export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
                   </div>
                 )}
               </Link>
-            ) : (
+            )}
+            {mounted && !session && (
               <>
                 <Link href="/sign-in">
                   <Button
@@ -118,7 +125,7 @@ export const Navbar = ({ transparent = false }: { transparent?: boolean }) => {
       </header>
 
       {/* ── Mobile Bottom Nav ── */}
-      {session && (
+      {mounted && session && (
         <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-secondary bg-background/95 backdrop-blur md:hidden">
           <div className="flex items-center justify-around py-2">
             {navItems.map((item) => {

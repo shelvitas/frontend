@@ -1,5 +1,5 @@
 export const PageLoader = () => (
-  <div className="mt-24 flex w-full flex-col items-center">
+  <div className="flex w-full flex-col items-center">
     <div
       className="relative ml-16 h-[160px] w-[130px]"
       style={{ perspective: "800px" }}
