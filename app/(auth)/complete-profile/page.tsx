@@ -99,7 +99,13 @@ const CompleteProfilePage = () => {
           className="w-full gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           disabled={isLoading}
         >
-          {isLoading ? <><Spinner /> Creating profile...</> : "Continue"}
+          {isLoading ? (
+            <>
+              <Spinner /> Creating profile...
+            </>
+          ) : (
+            "Continue"
+          )}
         </Button>
       </form>
     </div>

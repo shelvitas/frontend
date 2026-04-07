@@ -75,7 +75,13 @@ const ResetPasswordPage = () => {
           className="w-full gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           disabled={isLoading}
         >
-          {isLoading ? <><Spinner /> Updating...</> : "Update password"}
+          {isLoading ? (
+            <>
+              <Spinner /> Updating...
+            </>
+          ) : (
+            "Update password"
+          )}
         </Button>
       </form>
     </div>

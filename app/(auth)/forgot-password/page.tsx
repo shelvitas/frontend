@@ -84,7 +84,13 @@ const ForgotPasswordPage = () => {
           className="w-full gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           disabled={isLoading}
         >
-          {isLoading ? <><Spinner /> Sending...</> : "Send reset link"}
+          {isLoading ? (
+            <>
+              <Spinner /> Sending...
+            </>
+          ) : (
+            "Send reset link"
+          )}
         </Button>
       </form>
 

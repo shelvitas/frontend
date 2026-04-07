@@ -80,7 +80,13 @@ const SignInPage = () => {
           className="w-full gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           disabled={isLoading}
         >
-          {isLoading ? <><Spinner /> Signing in...</> : "Sign in"}
+          {isLoading ? (
+            <>
+              <Spinner /> Signing in...
+            </>
+          ) : (
+            "Sign in"
+          )}
         </Button>
       </form>
 

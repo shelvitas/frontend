@@ -56,7 +56,9 @@ export const OAuthButtons = () => {
         disabled={isLoading}
       >
         {isLoading ? (
-          <><Spinner /> Connecting...</>
+          <>
+            <Spinner /> Connecting...
+          </>
         ) : (
           <>
             <GoogleIcon />

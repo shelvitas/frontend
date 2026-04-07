@@ -161,7 +161,13 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
               disabled={isSubmitting || !title.trim()}
             >
               {isSubmitting && <Spinner />}
-              {isSubmitting ? <><Spinner /> Creating...</> : "Create list"}
+              {isSubmitting ? (
+                <>
+                  <Spinner /> Creating...
+                </>
+              ) : (
+                "Create list"
+              )}
             </Button>
           </div>
         </div>

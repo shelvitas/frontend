@@ -165,7 +165,13 @@ export const WriteReviewModal = ({
               disabled={isSubmitting || !body.trim()}
             >
               {isSubmitting && <Spinner />}
-              {isSubmitting ? <><Spinner /> Publishing...</> : "Publish review"}
+              {isSubmitting ? (
+                <>
+                  <Spinner /> Publishing...
+                </>
+              ) : (
+                "Publish review"
+              )}
             </Button>
           </div>
         </div>
