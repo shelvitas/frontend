@@ -8,7 +8,9 @@ vi.stubGlobal("fetch", mockFetch);
 
 vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({
-    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+    },
   }),
 }));
 
@@ -16,7 +18,12 @@ const { ReviewActions } = await import("@/components/review/review-actions");
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useAuthStore.setState({ session: null, user: null, profile: null, isLoading: false });
+  useAuthStore.setState({
+    session: null,
+    user: null,
+    profile: null,
+    isLoading: false,
+  });
 });
 
 describe("ReviewActions", () => {
@@ -31,7 +38,9 @@ describe("ReviewActions", () => {
 
     mockFetch.mockResolvedValueOnce({ ok: true, status: 204 });
 
-    render(<ReviewActions reviewId="rev-42" initialLikes={5} initialSaves={1} />);
+    render(
+      <ReviewActions reviewId="rev-42" initialLikes={5} initialSaves={1} />,
+    );
 
     fireEvent.click(screen.getByText("5"));
 
@@ -78,7 +87,9 @@ describe("ReviewActions", () => {
 
     mockFetch.mockResolvedValueOnce({ ok: true, status: 204 });
 
-    render(<ReviewActions reviewId="rev-42" initialLikes={5} initialSaves={1} />);
+    render(
+      <ReviewActions reviewId="rev-42" initialLikes={5} initialSaves={1} />,
+    );
 
     fireEvent.click(screen.getByText("1"));
 
