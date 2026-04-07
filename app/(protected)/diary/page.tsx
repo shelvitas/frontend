@@ -81,7 +81,7 @@ const DiaryPage = () => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
-      <main className="container max-w-3xl flex-1 py-10">
+      <main className="container flex max-w-3xl flex-1 flex-col py-10">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -123,7 +123,7 @@ const DiaryPage = () => {
 
         {/* Empty state */}
         {!isLoading && entries.length === 0 && (
-          <div className="mt-12 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
             <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">
               Your reading diary is empty

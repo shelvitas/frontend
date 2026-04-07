@@ -174,7 +174,7 @@ const FeedPage = () => {
 
         {/* Empty state — Following tab */}
         {!isLoading && events.length === 0 && activeTab === "following" && (
-          <div className="mt-12 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
             <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">Your feed is empty</p>
             <p className="mt-1 text-xs text-muted-foreground">
@@ -194,7 +194,7 @@ const FeedPage = () => {
 
         {/* Empty state — Discover tab */}
         {!isLoading && events.length === 0 && activeTab === "discover" && (
-          <div className="mt-12 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
             <Compass className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">Nothing here yet</p>
             <p className="mt-1 text-xs text-muted-foreground">

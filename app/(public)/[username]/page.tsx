@@ -99,7 +99,7 @@ const ProfilePage = async ({
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
-      <main className="container max-w-3xl flex-1 py-10">
+      <main className="container max-w-3xl flex flex-1 flex-col py-10">
         {/* ── Profile Header ── */}
         <div className="flex items-start gap-5">
           {/* Avatar */}
@@ -197,7 +197,7 @@ const ProfilePage = async ({
 
         {/* ── Private Profile Gate ── */}
         {!full && (
-          <div className="mt-12 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
             <Lock className="mx-auto h-8 w-8 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">This account is private</p>
             <p className="mt-1 text-xs text-muted-foreground">

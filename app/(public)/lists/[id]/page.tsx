@@ -67,7 +67,7 @@ const ListPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
-      <main className="container max-w-3xl flex-1 py-10">
+      <main className="container max-w-3xl flex flex-1 flex-col py-10">
         {/* ── Header ── */}
         <div className="flex items-start justify-between">
           <div>
@@ -167,7 +167,7 @@ const ListPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             ))}
           </div>
         ) : (
-          <div className="mt-12 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
             <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">This list is empty</p>
             <p className="mt-1 text-xs text-muted-foreground">
