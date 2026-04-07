@@ -150,6 +150,59 @@ describe("api client", () => {
     });
   });
 
+  describe("content-type", () => {
+    it("should set Content-Type when body is provided", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 201,
+        json: () => Promise.resolve({ data: { id: "1" } }),
+      });
+
+      await api.post("/v1/test", { name: "Test" });
+
+      const [, options] = mockFetch.mock.calls[0];
+      expect(options.headers["Content-Type"]).toBe("application/json");
+    });
+
+    it("should NOT set Content-Type when no body (avoids Fastify empty JSON error)", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 201,
+        json: () => Promise.resolve({ data: { id: "1" } }),
+      });
+
+      await api.post("/v1/test");
+
+      const [, options] = mockFetch.mock.calls[0];
+      expect(options.headers["Content-Type"]).toBeUndefined();
+    });
+
+    it("should NOT set Content-Type on DELETE requests", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 204,
+      });
+
+      await api.delete("/v1/test/1");
+
+      const [, options] = mockFetch.mock.calls[0];
+      expect(options.headers["Content-Type"]).toBeUndefined();
+    });
+
+    it("should NOT set Content-Type on GET requests", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({ data: {} }),
+      });
+
+      await api.get("/v1/test");
+
+      const [, options] = mockFetch.mock.calls[0];
+      expect(options.headers["Content-Type"]).toBeUndefined();
+    });
+  });
+
   describe("error handling", () => {
     it("should throw with error message from response body", async () => {
       mockFetch.mockResolvedValueOnce({

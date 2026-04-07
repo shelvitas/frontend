@@ -8,10 +8,14 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     ? { Authorization: `Bearer ${session.access_token}` }
     : {};
 
+  const contentHeaders: Record<string, string> = options.body
+    ? { "Content-Type": "application/json" }
+    : {};
+
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...contentHeaders,
       ...authHeaders,
       ...options.headers,
     },
