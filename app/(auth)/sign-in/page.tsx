@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Input } from "@/components/ui/input";
 import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { useAuth } from "@/lib/hooks/use-auth";
@@ -76,10 +77,10 @@ const SignInPage = () => {
 
         <Button
           type="submit"
-          className="w-full bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+          className="w-full gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           disabled={isLoading}
         >
-          {isLoading ? "Signing in..." : "Sign in"}
+          {isLoading ? <><Spinner /> Signing in...</> : "Sign in"}
         </Button>
       </form>
 

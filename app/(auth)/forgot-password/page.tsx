@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Mail, ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/hooks/use-auth";
 
@@ -80,10 +81,10 @@ const ForgotPasswordPage = () => {
 
         <Button
           type="submit"
-          className="w-full bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+          className="w-full gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           disabled={isLoading}
         >
-          {isLoading ? "Sending..." : "Send reset link"}
+          {isLoading ? <><Spinner /> Sending...</> : "Send reset link"}
         </Button>
       </form>
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AlertTriangle, MessageCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { CommentData } from "@/lib/types";
@@ -147,11 +148,12 @@ export const CommentThread = ({
         />
         <Button
           size="sm"
-          className="self-end bg-shelvitas-green text-background hover:bg-shelvitas-green/90"
+          className="gap-1.5 self-end bg-shelvitas-green text-background hover:bg-shelvitas-green/90"
           onClick={() => handleSubmit()}
           disabled={isSubmitting || !newComment.trim()}
         >
-          Post
+          {isSubmitting ? <Spinner className="h-3.5 w-3.5" /> : null}
+          {isSubmitting ? "Posting..." : "Post"}
         </Button>
       </div>
 
@@ -186,11 +188,12 @@ export const CommentThread = ({
               <div className="flex flex-col gap-1 self-end">
                 <Button
                   size="sm"
-                  className="h-7 bg-shelvitas-green text-xs text-background hover:bg-shelvitas-green/90"
+                  className="h-7 gap-1 bg-shelvitas-green text-xs text-background hover:bg-shelvitas-green/90"
                   onClick={() => handleSubmit(comment.id)}
                   disabled={isSubmitting || !replyBody.trim()}
                 >
-                  Reply
+                  {isSubmitting && <Spinner className="h-3 w-3" />}
+                  {isSubmitting ? "Replying..." : "Reply"}
                 </Button>
                 <Button
                   variant="ghost"

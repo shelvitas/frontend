@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/lib/hooks/use-auth";
 
 const GoogleIcon = () => (
@@ -55,7 +56,7 @@ export const OAuthButtons = () => {
         disabled={isLoading}
       >
         {isLoading ? (
-          "Connecting..."
+          <><Spinner /> Connecting...</>
         ) : (
           <>
             <GoogleIcon />
