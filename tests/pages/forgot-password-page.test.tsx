@@ -31,9 +31,8 @@ vi.mock("@/lib/supabase/client", () => ({
   }),
 }));
 
-const ForgotPasswordPageModule = await import(
-  "@/app/(auth)/forgot-password/page"
-);
+const ForgotPasswordPageModule =
+  await import("@/app/(auth)/forgot-password/page");
 const ForgotPasswordPage = ForgotPasswordPageModule.default;
 
 beforeEach(() => {
@@ -75,9 +74,7 @@ describe("ForgotPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Email address"), {
       target: { value: "alice@example.com" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Send reset link/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Send reset link/i }));
 
     await waitFor(() => {
       expect(mockResetPassword).toHaveBeenCalledWith("alice@example.com");
@@ -91,9 +88,7 @@ describe("ForgotPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Email address"), {
       target: { value: "alice@example.com" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Send reset link/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Send reset link/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Check your email")).toBeInTheDocument();
@@ -112,9 +107,7 @@ describe("ForgotPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Email address"), {
       target: { value: "alice@example.com" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Send reset link/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Send reset link/i }));
 
     await waitFor(() => {
       expect(screen.getByText("User not found")).toBeInTheDocument();
@@ -128,12 +121,12 @@ describe("ForgotPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Email address"), {
       target: { value: "alice@example.com" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Send reset link/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Send reset link/i }));
 
     await waitFor(() => {
-      expect(screen.getByText("Failed to send reset email")).toBeInTheDocument();
+      expect(
+        screen.getByText("Failed to send reset email"),
+      ).toBeInTheDocument();
     });
   });
 
@@ -150,9 +143,7 @@ describe("ForgotPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Email address"), {
       target: { value: "alice@example.com" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Send reset link/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Send reset link/i }));
 
     await waitFor(() => {
       const btn = screen.getByRole("button", { name: /Sending/i });

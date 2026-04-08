@@ -47,7 +47,9 @@ describe("SignInPage", () => {
     expect(screen.getByText("Welcome back")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Email address")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Sign in/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Sign in/i }),
+    ).toBeInTheDocument();
   });
 
   it("renders the forgot password link and sign-up link", () => {

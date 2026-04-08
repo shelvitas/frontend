@@ -2,21 +2,19 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 vi.mock("next/image", () => ({
-  default: (props: Record<string, unknown>) => 
+  default: (props: Record<string, unknown>) => (
     // Render everything including unoptimized so tests can assert on it.
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-     (
-      <img
-        data-testid="next-image"
-        data-unoptimized={props.unoptimized ? "true" : "false"}
-        src={props.src as string}
-        alt={props.alt as string}
-        width={props.width as number}
-        height={props.height as number}
-        className={props.className as string}
-      />
-    )
-  ,
+    <img
+      data-testid="next-image"
+      data-unoptimized={props.unoptimized ? "true" : "false"}
+      src={props.src as string}
+      alt={props.alt as string}
+      width={props.width as number}
+      height={props.height as number}
+      className={props.className as string}
+    />
+  ),
 }));
 
 const { RemoteImage } = await import("@/components/ui/remote-image");

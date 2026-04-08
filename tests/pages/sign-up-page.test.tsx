@@ -47,9 +47,7 @@ describe("SignUpPage", () => {
     expect(screen.getByText("Create your account")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Email address")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText("Confirm password"),
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Confirm password")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /Create account/i }),
     ).toBeInTheDocument();
@@ -90,9 +88,7 @@ describe("SignUpPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
       target: { value: "different456" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Create account/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Create account/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Passwords do not match")).toBeInTheDocument();
@@ -113,9 +109,7 @@ describe("SignUpPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
       target: { value: "password123" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Create account/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Create account/i }));
 
     await waitFor(() => {
       expect(mockSignUpWithEmail).toHaveBeenCalledWith(
@@ -138,9 +132,7 @@ describe("SignUpPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
       target: { value: "password123" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Create account/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Create account/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Check your email")).toBeInTheDocument();
@@ -163,9 +155,7 @@ describe("SignUpPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
       target: { value: "password123" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Create account/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Create account/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Email already registered")).toBeInTheDocument();
@@ -191,9 +181,7 @@ describe("SignUpPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
       target: { value: "password123" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Create account/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Create account/i }));
 
     await waitFor(() => {
       const btn = screen.getByRole("button", { name: /Creating account/i });

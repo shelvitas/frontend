@@ -31,7 +31,8 @@ vi.mock("@/lib/supabase/client", () => ({
   }),
 }));
 
-const ResetPasswordPageModule = await import("@/app/(auth)/reset-password/page");
+const ResetPasswordPageModule =
+  await import("@/app/(auth)/reset-password/page");
 const ResetPasswordPage = ResetPasswordPageModule.default;
 
 // Stub window.location so the successful update doesn't actually navigate.
@@ -87,9 +88,7 @@ describe("ResetPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm new password"), {
       target: { value: "different456" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Update password/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Passwords do not match")).toBeInTheDocument();
@@ -107,9 +106,7 @@ describe("ResetPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm new password"), {
       target: { value: "newPassword123" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Update password/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
 
     await waitFor(() => {
       expect(mockUpdatePassword).toHaveBeenCalledWith("newPassword123");
@@ -129,9 +126,7 @@ describe("ResetPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm new password"), {
       target: { value: "newPassword123" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Update password/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Token expired")).toBeInTheDocument();
@@ -148,9 +143,7 @@ describe("ResetPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm new password"), {
       target: { value: "newPassword123" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Update password/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Failed to update password")).toBeInTheDocument();
@@ -173,9 +166,7 @@ describe("ResetPasswordPage", () => {
     fireEvent.change(screen.getByPlaceholderText("Confirm new password"), {
       target: { value: "newPassword123" },
     });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Update password/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
 
     await waitFor(() => {
       const btn = screen.getByRole("button", { name: /Updating/i });

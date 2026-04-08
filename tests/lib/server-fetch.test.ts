@@ -180,13 +180,16 @@ describe("serverFetch", () => {
 
   it("returns null when the AbortController fires (timeout)", async () => {
     // Simulate a fetch that rejects with an abort-style error
-    mockFetch.mockImplementationOnce((_url, opts) => new Promise((_resolve, reject) => {
-        opts.signal.addEventListener("abort", () => {
-          const err = new Error("The operation was aborted.");
-          err.name = "AbortError";
-          reject(err);
-        });
-      }));
+    mockFetch.mockImplementationOnce(
+      (_url, opts) =>
+        new Promise((_resolve, reject) => {
+          opts.signal.addEventListener("abort", () => {
+            const err = new Error("The operation was aborted.");
+            err.name = "AbortError";
+            reject(err);
+          });
+        }),
+    );
 
     vi.useFakeTimers();
     const { serverFetch } = await import("@/lib/server-fetch");
