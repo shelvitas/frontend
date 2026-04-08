@@ -83,9 +83,7 @@ describe("OAuthButtons", () => {
     });
 
     const [args] = mockSignInWithOAuth.mock.calls[0];
-    expect(args.options.redirectTo).toBe(
-      "http://localhost:3000/auth/callback",
-    );
+    expect(args.options.redirectTo).toBe("http://localhost:3000/auth/callback");
   });
 
   it("should show a loading indicator and disable the button while connecting", async () => {

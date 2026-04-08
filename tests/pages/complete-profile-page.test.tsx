@@ -8,7 +8,9 @@ vi.stubGlobal("fetch", mockFetch);
 
 vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({
-    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+    },
   }),
 }));
 
@@ -23,7 +25,8 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-const CompleteProfilePageModule = await import("@/app/(auth)/complete-profile/page");
+const CompleteProfilePageModule =
+  await import("@/app/(auth)/complete-profile/page");
 const CompleteProfilePage = CompleteProfilePageModule.default;
 
 beforeEach(() => {
@@ -51,13 +54,17 @@ describe("CompleteProfilePage — Step 1 (username + name)", () => {
 
   it("prefills displayName from user metadata", () => {
     render(<CompleteProfilePage />);
-    const displayName = screen.getByPlaceholderText("Your name") as HTMLInputElement;
+    const displayName = screen.getByPlaceholderText(
+      "Your name",
+    ) as HTMLInputElement;
     expect(displayName.value).toBe("Alice Tester");
   });
 
   it("strips invalid characters from username as user types", () => {
     render(<CompleteProfilePage />);
-    const username = screen.getByPlaceholderText("e.g. booklover42") as HTMLInputElement;
+    const username = screen.getByPlaceholderText(
+      "e.g. booklover42",
+    ) as HTMLInputElement;
     fireEvent.change(username, { target: { value: "Alice 123!" } });
     // Spaces, capitals, and special chars stripped
     expect(username.value).toBe("alice123");
@@ -66,11 +73,17 @@ describe("CompleteProfilePage — Step 1 (username + name)", () => {
   it("rejects username shorter than 3 characters with an error", () => {
     render(<CompleteProfilePage />);
 
-    fireEvent.change(screen.getByPlaceholderText("e.g. booklover42"), { target: { value: "ab" } });
-    fireEvent.change(screen.getByPlaceholderText("Your name"), { target: { value: "Alice" } });
+    fireEvent.change(screen.getByPlaceholderText("e.g. booklover42"), {
+      target: { value: "ab" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Your name"), {
+      target: { value: "Alice" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Next" }));
 
-    expect(screen.getByText("Username must be at least 3 characters")).toBeInTheDocument();
+    expect(
+      screen.getByText("Username must be at least 3 characters"),
+    ).toBeInTheDocument();
     // Should still be on step 1
     expect(screen.queryByText("Pick your top 4 books")).not.toBeInTheDocument();
   });
@@ -131,7 +144,9 @@ describe("CompleteProfilePage — Step 2 (favourite books)", () => {
     fireEvent.click(slotButtons[0]);
 
     // Search input appears
-    expect(screen.getByPlaceholderText("Search for a book...")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Search for a book..."),
+    ).toBeInTheDocument();
     // Cancel link appears
     expect(screen.getByText("Cancel")).toBeInTheDocument();
   });

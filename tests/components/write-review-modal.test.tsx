@@ -18,9 +18,8 @@ vi.mock("@/components/ui/toaster", () => ({
   useToast: () => ({ toast: vi.fn() }),
 }));
 
-const { WriteReviewModal } = await import(
-  "@/components/book/write-review-modal"
-);
+const { WriteReviewModal } =
+  await import("@/components/book/write-review-modal");
 
 // Preserve original window.location so we can restore between tests
 const originalLocation = window.location;
@@ -60,9 +59,7 @@ describe("WriteReviewModal", () => {
   it("should open the modal and show the form when trigger is clicked", () => {
     render(<WriteReviewModal bookId="book-1" bookTitle="Dune" />);
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /write a review/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /write a review/i }));
 
     // Dialog title
     expect(screen.getByText("Write a Review")).toBeInTheDocument();
@@ -85,9 +82,7 @@ describe("WriteReviewModal", () => {
   it("should disable the Publish button until body is non-empty", () => {
     render(<WriteReviewModal bookId="book-1" bookTitle="Dune" />);
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /write a review/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /write a review/i }));
 
     const publishButton = screen.getByRole("button", {
       name: /publish review/i,
@@ -105,9 +100,7 @@ describe("WriteReviewModal", () => {
   it("should toggle the spoiler checkbox when clicked", () => {
     render(<WriteReviewModal bookId="book-1" bookTitle="Dune" />);
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /write a review/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /write a review/i }));
 
     const spoilerCheckbox = screen.getByRole("checkbox", {
       name: /this review contains spoilers/i,
@@ -126,9 +119,7 @@ describe("WriteReviewModal", () => {
     });
 
     render(<WriteReviewModal bookId="book-42" bookTitle="Dune" />);
-    fireEvent.click(
-      screen.getByRole("button", { name: /write a review/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /write a review/i }));
 
     // Fill body
     fireEvent.change(
@@ -173,9 +164,7 @@ describe("WriteReviewModal", () => {
     });
 
     render(<WriteReviewModal bookId="book-1" bookTitle="Dune" />);
-    fireEvent.click(
-      screen.getByRole("button", { name: /write a review/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /write a review/i }));
     fireEvent.change(
       screen.getByPlaceholderText("What did you think of this book?"),
       { target: { value: "Nice" } },
@@ -200,16 +189,10 @@ describe("WriteReviewModal", () => {
     });
 
     render(
-      <WriteReviewModal
-        bookId="book-1"
-        bookTitle="Dune"
-        onSaved={onSaved}
-      />,
+      <WriteReviewModal bookId="book-1" bookTitle="Dune" onSaved={onSaved} />,
     );
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /write a review/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /write a review/i }));
     fireEvent.change(
       screen.getByPlaceholderText("What did you think of this book?"),
       { target: { value: "Fantastic read." } },
@@ -225,14 +208,11 @@ describe("WriteReviewModal", () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 400,
-      json: () =>
-        Promise.resolve({ error: { message: "Validation failed" } }),
+      json: () => Promise.resolve({ error: { message: "Validation failed" } }),
     });
 
     render(<WriteReviewModal bookId="book-1" bookTitle="Dune" />);
-    fireEvent.click(
-      screen.getByRole("button", { name: /write a review/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /write a review/i }));
     fireEvent.change(
       screen.getByPlaceholderText("What did you think of this book?"),
       { target: { value: "Review body" } },
@@ -254,9 +234,7 @@ describe("WriteReviewModal", () => {
 
     render(<WriteReviewModal bookId="book-1" bookTitle="Dune" />);
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /write a review/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /write a review/i }));
 
     expect(window.location.href).toBe("/sign-in");
   });

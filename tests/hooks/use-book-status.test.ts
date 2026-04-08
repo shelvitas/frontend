@@ -15,9 +15,8 @@ vi.mock("@/lib/supabase/client", () => ({
 }));
 
 // Import after mocks
-const { useBookStatus, useBookStatusStore, fetchingBooks } = await import(
-  "@/lib/hooks/use-book-status"
-);
+const { useBookStatus, useBookStatusStore, fetchingBooks } =
+  await import("@/lib/hooks/use-book-status");
 
 beforeEach(() => {
   vi.clearAllMocks();

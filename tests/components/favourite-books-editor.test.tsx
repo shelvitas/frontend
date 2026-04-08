@@ -24,9 +24,8 @@ vi.mock("@/components/ui/toaster", () => ({
   useToast: () => ({ toast: vi.fn() }),
 }));
 
-const { FavouriteBooksEditor } = await import(
-  "@/components/profile/favourite-books-editor"
-);
+const { FavouriteBooksEditor } =
+  await import("@/components/profile/favourite-books-editor");
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -45,9 +44,7 @@ afterEach(() => {
 
 describe("FavouriteBooksEditor", () => {
   it("should render 4 slots — all empty (+) when no initial books", () => {
-    render(
-      <FavouriteBooksEditor username="alice" initialBooks={[]} />,
-    );
+    render(<FavouriteBooksEditor username="alice" initialBooks={[]} />);
 
     // Each empty slot is a button containing a Plus icon; expect 4 of them
     const buttons = screen.getAllByRole("button");
@@ -71,9 +68,7 @@ describe("FavouriteBooksEditor", () => {
   });
 
   it("should open the search panel when an empty slot is clicked", () => {
-    render(
-      <FavouriteBooksEditor username="alice" initialBooks={[]} />,
-    );
+    render(<FavouriteBooksEditor username="alice" initialBooks={[]} />);
 
     const emptySlots = screen.getAllByRole("button");
     fireEvent.click(emptySlots[0]);
@@ -90,16 +85,12 @@ describe("FavouriteBooksEditor", () => {
       json: () =>
         Promise.resolve({
           data: {
-            results: [
-              { id: "b1", title: "Dune", coverUrl: null, authors: [] },
-            ],
+            results: [{ id: "b1", title: "Dune", coverUrl: null, authors: [] }],
           },
         }),
     });
 
-    render(
-      <FavouriteBooksEditor username="alice" initialBooks={[]} />,
-    );
+    render(<FavouriteBooksEditor username="alice" initialBooks={[]} />);
 
     const emptySlots = screen.getAllByRole("button");
     fireEvent.click(emptySlots[0]);
@@ -120,9 +111,7 @@ describe("FavouriteBooksEditor", () => {
     });
 
     const [url, options] = mockFetch.mock.calls[0];
-    expect(url).toBe(
-      "http://localhost:4000/v1/books/search?q=dune&per_page=5",
-    );
+    expect(url).toBe("http://localhost:4000/v1/books/search?q=dune&per_page=5");
     expect(options?.method).toBeUndefined(); // GET
   });
 
@@ -152,17 +141,14 @@ describe("FavouriteBooksEditor", () => {
       json: () => Promise.resolve({ data: { username: "alice" } }),
     });
 
-    render(
-      <FavouriteBooksEditor username="alice" initialBooks={[]} />,
-    );
+    render(<FavouriteBooksEditor username="alice" initialBooks={[]} />);
 
     const emptySlots = screen.getAllByRole("button");
     fireEvent.click(emptySlots[0]);
 
-    fireEvent.change(
-      screen.getByPlaceholderText("Search for a book..."),
-      { target: { value: "new" } },
-    );
+    fireEvent.change(screen.getByPlaceholderText("Search for a book..."), {
+      target: { value: "new" },
+    });
 
     await act(async () => {
       await vi.advanceTimersByTimeAsync(450);
@@ -237,9 +223,7 @@ describe("FavouriteBooksEditor", () => {
   });
 
   it("should close the search panel when Cancel is clicked", () => {
-    render(
-      <FavouriteBooksEditor username="alice" initialBooks={[]} />,
-    );
+    render(<FavouriteBooksEditor username="alice" initialBooks={[]} />);
 
     const emptySlots = screen.getAllByRole("button");
     fireEvent.click(emptySlots[0]);
