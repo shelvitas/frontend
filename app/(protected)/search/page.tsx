@@ -164,7 +164,7 @@ const SearchPage = () => {
     <div className="flex min-h-screen flex-col pb-16 md:pb-0">
       <Navbar />
 
-      <main className="container max-w-3xl flex-1 py-8">
+      <main className="container flex max-w-3xl flex-1 flex-col py-8">
         {/* Search input */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
