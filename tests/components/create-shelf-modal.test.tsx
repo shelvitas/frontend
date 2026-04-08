@@ -18,7 +18,8 @@ vi.mock("@/components/ui/toaster", () => ({
   useToast: () => ({ toast: vi.fn() }),
 }));
 
-const { CreateShelfModal } = await import("@/components/shelf/create-shelf-modal");
+const { CreateShelfModal } =
+  await import("@/components/shelf/create-shelf-modal");
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -42,8 +43,12 @@ describe("CreateShelfModal", () => {
     fireEvent.click(screen.getByText("Create shelf"));
 
     expect(screen.getByText("Create a Shelf")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("e.g. Best sci-fi of 2024")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("What's this shelf about?")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("e.g. Best sci-fi of 2024"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("What's this shelf about?"),
+    ).toBeInTheDocument();
     expect(screen.getByText("Ranked")).toBeInTheDocument();
     expect(screen.getByText("Private")).toBeInTheDocument();
   });
@@ -167,7 +172,12 @@ describe("CreateShelfModal", () => {
   });
 
   it("should redirect to /sign-in (not /sign-up) when not authenticated", () => {
-    useAuthStore.setState({ session: null, user: null, profile: null, isLoading: false });
+    useAuthStore.setState({
+      session: null,
+      user: null,
+      profile: null,
+      isLoading: false,
+    });
 
     const originalLocation = window.location;
     const locationStub = { href: "" };

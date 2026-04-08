@@ -136,7 +136,9 @@ describe("Protected ShelvesPage", () => {
       expect(screen.getByText("No shelves yet")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("Create a shelf to start curating books.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Create a shelf to start curating books."),
+    ).toBeInTheDocument();
   });
 
   it("should link each shelf to /shelves/:id (not /lists/:id)", async () => {
