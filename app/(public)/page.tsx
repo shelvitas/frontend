@@ -535,14 +535,10 @@ const HomePage = () => (
       </div>
     </section>
 
-    {/* Popular lists */}
+    {/* Popular shelves */}
     <section>
       <div className="container py-12">
-        <SectionHeader
-          label="Popular lists"
-          href="/lists/popular"
-          linkText="More"
-        />
+        <SectionHeader label="Popular shelves" href="/shelves" linkText="More" />
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {POPULAR_LISTS.map((l) => (
             <ListCard

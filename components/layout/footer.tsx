@@ -41,7 +41,7 @@ export const Footer = () => (
           </h4>
           <ul className="space-y-2">
             <FooterLink href="/books">Books</FooterLink>
-            <FooterLink href="/lists">Lists</FooterLink>
+            <FooterLink href="/shelves">Shelves</FooterLink>
             <FooterLink href="/members">Members</FooterLink>
             <FooterLink href="/journal">Journal</FooterLink>
           </ul>

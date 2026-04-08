@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { List } from "lucide-react";
+import { Library } from "lucide-react";
 
 import {
   Dialog,
@@ -18,12 +18,12 @@ import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
-interface CreateListModalProps {
+interface CreateShelfModalProps {
   trigger?: React.ReactNode;
-  onSaved?: (listId: string) => void;
+  onSaved?: (shelfId: string) => void;
 }
 
-export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
+export const CreateShelfModal = ({ trigger, onSaved }: CreateShelfModalProps) => {
   const session = useAuthStore((s) => s.session);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -40,7 +40,7 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
     setError(null);
 
     try {
-      const list = await api.post<{ id: string }>("/v1/lists", {
+      const shelf = await api.post<{ id: string }>("/v1/shelves", {
         title: title.trim(),
         description: description.trim() || undefined,
         isRanked,
@@ -51,15 +51,15 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
       setDescription("");
       setIsRanked(false);
       setIsPrivate(false);
-      toast("List created!");
+      toast("Shelf created!");
       if (onSaved) {
-        onSaved(list.id);
+        onSaved(shelf.id);
       } else {
-        window.location.href = `/lists/${list.id}`;
+        window.location.href = `/shelves/${shelf.id}`;
       }
     } catch (err) {
-      toast("Failed to create list", "error");
-      setError(err instanceof Error ? err.message : "Failed to create list");
+      toast("Failed to create shelf", "error");
+      setError(err instanceof Error ? err.message : "Failed to create shelf");
     } finally {
       setIsSubmitting(false);
     }
@@ -81,8 +81,8 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
             size="sm"
             className="gap-1.5 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
           >
-            <List className="h-3.5 w-3.5" />
-            Create list
+            <Library className="h-3.5 w-3.5" />
+            Create shelf
           </Button>
         )}
       </DialogTrigger>
@@ -90,10 +90,10 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
         <DialogHeader>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-shelvitas-green/10">
-              <List className="h-5 w-5 text-shelvitas-green" />
+              <Library className="h-5 w-5 text-shelvitas-green" />
             </div>
             <div>
-              <DialogTitle>Create a List</DialogTitle>
+              <DialogTitle>Create a Shelf</DialogTitle>
               <p className="text-xs text-muted-foreground">
                 Curate books for yourself or share with others
               </p>
@@ -105,13 +105,13 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
           <div>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label
-              htmlFor="list-modal-title"
+              htmlFor="shelf-modal-title"
               className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-muted-foreground"
             >
               Title
             </label>
             <Input
-              id="list-modal-title"
+              id="shelf-modal-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Best sci-fi of 2024"
@@ -127,32 +127,20 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
-              placeholder="What's this list about?"
+              placeholder="What's this shelf about?"
               className="w-full rounded-sm border border-secondary bg-secondary/50 px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
             />
           </div>
 
           <div className="flex gap-4">
-            <Checkbox
-              checked={isRanked}
-              onChange={setIsRanked}
-              label="Ranked"
-            />
-            <Checkbox
-              checked={isPrivate}
-              onChange={setIsPrivate}
-              label="Private"
-            />
+            <Checkbox checked={isRanked} onChange={setIsRanked} label="Ranked" />
+            <Checkbox checked={isPrivate} onChange={setIsPrivate} label="Private" />
           </div>
 
           {error && <p className="text-sm text-red-400">{error}</p>}
 
           <div className="flex gap-2 pt-2">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => setOpen(false)}
-            >
+            <Button variant="outline" className="flex-1" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button
@@ -160,13 +148,12 @@ export const CreateListModal = ({ trigger, onSaved }: CreateListModalProps) => {
               onClick={handleCreate}
               disabled={isSubmitting || !title.trim()}
             >
-              {isSubmitting && <Spinner />}
               {isSubmitting ? (
                 <>
                   <Spinner /> Creating...
                 </>
               ) : (
-                "Create list"
+                "Create shelf"
               )}
             </Button>
           </div>

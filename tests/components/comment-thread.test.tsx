@@ -30,7 +30,7 @@ beforeEach(() => {
 const baseComment: CommentData = {
   id: "c1",
   reviewId: "r1",
-  listId: null,
+  shelfId: null,
   parentId: null,
   body: "This is a great review!",
   containsSpoilers: false,
@@ -72,7 +72,7 @@ describe("CommentThread", () => {
         {
           id: "c2",
           reviewId: "r1",
-          listId: null,
+          shelfId: null,
           parentId: "c1",
           body: "I agree!",
           containsSpoilers: false,

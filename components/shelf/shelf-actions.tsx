@@ -9,19 +9,19 @@ import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
-interface ListActionsProps {
-  listId: string;
+interface ShelfActionsProps {
+  shelfId: string;
   initialLikes: number;
   initialIsLiked: boolean;
-  listTitle: string;
+  shelfTitle: string;
 }
 
-export const ListActions = ({
-  listId,
+export const ShelfActions = ({
+  shelfId,
   initialLikes,
   initialIsLiked,
-  listTitle,
-}: ListActionsProps) => {
+  shelfTitle,
+}: ShelfActionsProps) => {
   const session = useAuthStore((s) => s.session);
   const { toast } = useToast();
   const [likes, setLikes] = useState(initialLikes);
@@ -42,10 +42,10 @@ export const ListActions = ({
 
     try {
       if (wasLiked) {
-        await api.delete(`/v1/lists/${listId}/like`);
+        await api.delete(`/v1/shelves/${shelfId}/like`);
       } else {
-        await api.post(`/v1/lists/${listId}/like`);
-        toast("List liked");
+        await api.post(`/v1/shelves/${shelfId}/like`);
+        toast("Shelf liked");
       }
     } catch {
       setLiked(wasLiked);
@@ -62,19 +62,17 @@ export const ListActions = ({
     }
     setCloneLoading(true);
     try {
-      const cloned = await api.post<{ id: string }>(
-        `/v1/lists/${listId}/clone`,
-      );
-      toast("List cloned!");
-      window.location.href = `/lists/${cloned.id}`;
+      const cloned = await api.post<{ id: string }>(`/v1/shelves/${shelfId}/clone`);
+      toast("Shelf cloned!");
+      window.location.href = `/shelves/${cloned.id}`;
     } catch {
       setCloneLoading(false);
     }
   };
 
   const handleShare = () => {
-    const url = `${window.location.origin}/lists/${listId}`;
-    const text = encodeURIComponent(`${listTitle} on Shelvitas`);
+    const url = `${window.location.origin}/shelves/${shelfId}`;
+    const text = encodeURIComponent(`${shelfTitle} on Shelvitas`);
     window.open(
       `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`,
       "_blank",
@@ -106,11 +104,7 @@ export const ListActions = ({
         onClick={handleClone}
         disabled={cloneLoading}
       >
-        {cloneLoading ? (
-          <Spinner className="h-4 w-4" />
-        ) : (
-          <Copy className="h-4 w-4" />
-        )}
+        {cloneLoading ? <Spinner className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
         Clone
       </Button>
       <Button

@@ -21,7 +21,7 @@ const baseEvent: FeedEvent = {
     coverUrl: "/gatsby.jpg",
   },
   reviewId: null,
-  listId: null,
+  shelfId: null,
   userBookId: null,
 };
 
@@ -89,18 +89,18 @@ describe("FeedEventCard", () => {
     expect(screen.getByText("Read review")).toBeInTheDocument();
   });
 
-  it("should show list link when listId present", () => {
+  it("should show shelf link when shelfId present", () => {
     render(
       <FeedEventCard
         event={{
           ...baseEvent,
-          eventType: "list_created",
-          listId: "list-1",
+          eventType: "shelf_created",
+          shelfId: "shelf-1",
         }}
       />,
     );
 
-    expect(screen.getByText("View list")).toBeInTheDocument();
+    expect(screen.getByText("View shelf")).toBeInTheDocument();
   });
 
   it("should show progress milestone", () => {

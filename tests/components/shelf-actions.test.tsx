@@ -14,7 +14,7 @@ vi.mock("@/lib/supabase/client", () => ({
   }),
 }));
 
-const { ListActions } = await import("@/components/list/list-actions");
+const { ShelfActions } = await import("@/components/shelf/shelf-actions");
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -26,14 +26,14 @@ beforeEach(() => {
   });
 });
 
-describe("ListActions", () => {
+describe("ShelfActions", () => {
   it("should render like count and action buttons", () => {
     render(
-      <ListActions
-        listId="l1"
+      <ShelfActions
+        shelfId="s1"
         initialLikes={5}
         initialIsLiked={false}
-        listTitle="My List"
+        shelfTitle="My Shelf"
       />,
     );
 
@@ -48,11 +48,11 @@ describe("ListActions", () => {
     mockFetch.mockResolvedValueOnce({ ok: true, status: 204 });
 
     render(
-      <ListActions
-        listId="l1"
+      <ShelfActions
+        shelfId="s1"
         initialLikes={5}
         initialIsLiked={false}
-        listTitle="My List"
+        shelfTitle="My Shelf"
       />,
     );
 
@@ -60,7 +60,7 @@ describe("ListActions", () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining("/v1/lists/l1/like"),
+        expect.stringContaining("/v1/shelves/s1/like"),
         expect.objectContaining({ method: "POST" }),
       );
     });
@@ -72,11 +72,11 @@ describe("ListActions", () => {
     mockFetch.mockResolvedValueOnce({ ok: true, status: 204 });
 
     render(
-      <ListActions
-        listId="l1"
+      <ShelfActions
+        shelfId="s1"
         initialLikes={5}
         initialIsLiked
-        listTitle="My List"
+        shelfTitle="My Shelf"
       />,
     );
 
@@ -84,7 +84,7 @@ describe("ListActions", () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining("/v1/lists/l1/like"),
+        expect.stringContaining("/v1/shelves/s1/like"),
         expect.objectContaining({ method: "DELETE" }),
       );
     });
@@ -96,15 +96,15 @@ describe("ListActions", () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 201,
-      json: () => Promise.resolve({ data: { id: "l-cloned" } }),
+      json: () => Promise.resolve({ data: { id: "s-cloned" } }),
     });
 
     render(
-      <ListActions
-        listId="l1"
+      <ShelfActions
+        shelfId="s1"
         initialLikes={5}
         initialIsLiked={false}
-        listTitle="My List"
+        shelfTitle="My Shelf"
       />,
     );
 
@@ -112,7 +112,7 @@ describe("ListActions", () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining("/v1/lists/l1/clone"),
+        expect.stringContaining("/v1/shelves/s1/clone"),
         expect.objectContaining({ method: "POST" }),
       );
     });

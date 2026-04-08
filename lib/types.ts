@@ -168,7 +168,7 @@ export interface ReviewPageData {
 export interface CommentData {
   id: string;
   reviewId: string | null;
-  listId: string | null;
+  shelfId: string | null;
   parentId: string | null;
   body: string;
   containsSpoilers: boolean;
@@ -183,9 +183,9 @@ export interface CommentData {
   replies?: CommentData[];
 }
 
-// ── List Page ────────────────────────────────────────────────
+// ── Shelf Page ───────────────────────────────────────────────
 
-export interface ListBookItem {
+export interface ShelfBookItem {
   id: string;
   bookId: string;
   title: string;
@@ -195,7 +195,7 @@ export interface ListBookItem {
   addedAt: string;
 }
 
-export interface ListPageData {
+export interface ShelfPageData {
   id: string;
   userId: string;
   title: string;
@@ -206,7 +206,7 @@ export interface ListPageData {
   bookCount: number;
   createdAt: string;
   updatedAt: string;
-  books: ListBookItem[];
+  books: ShelfBookItem[];
   percentRead: number | null;
   isLiked: boolean;
 }
@@ -230,7 +230,7 @@ export interface FeedEvent {
     coverUrl: string | null;
   } | null;
   reviewId: string | null;
-  listId: string | null;
+  shelfId: string | null;
   userBookId: string | null;
 }
 

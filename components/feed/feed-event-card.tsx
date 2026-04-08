@@ -7,7 +7,7 @@ import {
   BookCheck,
   BookMarked,
   BookX,
-  List,
+  Library,
   MessageCircle,
 } from "lucide-react";
 
@@ -19,8 +19,8 @@ const eventLabels: Record<string, string> = {
   rating: "rated",
   review: "reviewed",
   progress_update: "is reading",
-  list_created: "created a list",
-  list_updated: "updated a list",
+  shelf_created: "created a shelf",
+  shelf_updated: "updated a shelf",
 };
 
 const statusIcons: Record<string, typeof BookOpen> = {
@@ -152,14 +152,14 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
           </Link>
         )}
 
-        {/* List link */}
-        {event.listId && (
+        {/* Shelf link */}
+        {event.shelfId && (
           <Link
-            href={`/lists/${event.listId}`}
+            href={`/shelves/${event.shelfId}`}
             className="mt-1 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
-            <List className="h-3 w-3" />
-            View list
+            <Library className="h-3 w-3" />
+            View shelf
           </Link>
         )}
 

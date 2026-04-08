@@ -2,18 +2,18 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { BookOpen, BookMarked, Star, List, BookCheck } from "lucide-react";
+import { BookOpen, BookMarked, Star, Library, BookCheck } from "lucide-react";
 
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
-import { CreateListModal } from "@/components/list/create-list-modal";
+import { CreateShelfModal } from "@/components/shelf/create-shelf-modal";
 import { RemoteImage } from "@/components/ui/remote-image";
 
 const tabs = [
   { id: "read", label: "Read", icon: BookCheck },
   { id: "reading", label: "Currently Reading", icon: BookOpen },
   { id: "reviews", label: "Reviews", icon: Star },
-  { id: "lists", label: "Lists", icon: List },
+  { id: "shelves", label: "Shelves", icon: Library },
   { id: "want", label: "Want to Read", icon: BookMarked },
 ] as const;
 
@@ -36,7 +36,7 @@ interface Review {
   createdAt: string;
 }
 
-interface UserList {
+interface UserShelf {
   id: string;
   title: string;
   bookCount: number;
@@ -48,7 +48,7 @@ export const ProfileTabs = ({ username }: { username: string }) => {
   const [activeTab, setActiveTab] = useState<TabId>("read");
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [lists, setLists] = useState<UserList[]>([]);
+  const [shelves, setShelves] = useState<UserShelf[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -69,9 +69,9 @@ export const ProfileTabs = ({ username }: { username: string }) => {
         } else if (activeTab === "reviews") {
           const data = await api.get<Review[]>("/v1/reviews?limit=20&offset=0");
           setReviews(data);
-        } else if (activeTab === "lists") {
-          const data = await api.get<UserList[]>("/v1/lists?limit=20&offset=0");
-          setLists(data);
+        } else if (activeTab === "shelves") {
+          const data = await api.get<UserShelf[]>("/v1/shelves?limit=20&offset=0");
+          setShelves(data);
         }
       } catch {
         // handle silently
@@ -215,42 +215,42 @@ export const ProfileTabs = ({ username }: { username: string }) => {
         </div>
       )}
 
-      {/* Lists */}
-      {!isLoading && activeTab === "lists" && (
+      {/* Shelves */}
+      {!isLoading && activeTab === "shelves" && (
         <div>
-          {lists.length > 0 ? (
+          {shelves.length > 0 ? (
             <div className="mt-4 space-y-2">
-              {lists.map((list) => (
+              {shelves.map((shelf) => (
                 <Link
-                  key={list.id}
-                  href={`/lists/${list.id}`}
+                  key={shelf.id}
+                  href={`/shelves/${shelf.id}`}
                   className="flex items-center justify-between rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20"
                 >
                   <div>
-                    <p className="text-sm font-medium">{list.title}</p>
+                    <p className="text-sm font-medium">{shelf.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {list.bookCount} book{list.bookCount !== 1 ? "s" : ""}{" "}
-                      &middot; {list.likesCount} like
-                      {list.likesCount !== 1 ? "s" : ""}
+                      {shelf.bookCount} book{shelf.bookCount !== 1 ? "s" : ""}{" "}
+                      &middot; {shelf.likesCount} like
+                      {shelf.likesCount !== 1 ? "s" : ""}
                     </p>
                   </div>
-                  <List className="h-4 w-4 text-muted-foreground" />
+                  <Library className="h-4 w-4 text-muted-foreground" />
                 </Link>
               ))}
             </div>
           ) : (
             <div className="py-8 text-center">
               <p className="text-xs text-muted-foreground">
-                {username} hasn&apos;t created any lists yet.
+                {username} hasn&apos;t created any shelves yet.
               </p>
               <div className="mt-3">
-                <CreateListModal
+                <CreateShelfModal
                   trigger={
                     <button
                       type="button"
                       className="text-xs text-shelvitas-green hover:underline"
                     >
-                      Create your first list
+                      Create your first shelf
                     </button>
                   }
                 />

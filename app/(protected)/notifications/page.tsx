@@ -32,7 +32,7 @@ const typeIcons: Record<string, typeof Bell> = {
   review_save: Heart,
   comment: MessageCircle,
   comment_reply: MessageCircle,
-  list_like: Heart,
+  shelf_like: Heart,
 };
 
 const typeLabels: Record<string, string> = {
@@ -43,7 +43,7 @@ const typeLabels: Record<string, string> = {
   review_save: "saved your review",
   comment: "commented on your review",
   comment_reply: "replied to your comment",
-  list_like: "liked your list",
+  shelf_like: "liked your shelf",
 };
 
 const NotificationsPage = () => {

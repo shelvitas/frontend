@@ -40,7 +40,7 @@ describe("ProfileTabs", () => {
     expect(screen.getByText("Read")).toBeInTheDocument();
     expect(screen.getByText("Currently Reading")).toBeInTheDocument();
     expect(screen.getByText("Reviews")).toBeInTheDocument();
-    expect(screen.getByText("Lists")).toBeInTheDocument();
+    expect(screen.getByText("Shelves")).toBeInTheDocument();
     expect(screen.getByText("Want to Read")).toBeInTheDocument();
   });
 
@@ -86,7 +86,7 @@ describe("ProfileTabs", () => {
     });
   });
 
-  it("should fetch lists when Lists tab is clicked", async () => {
+  it("should fetch shelves when Shelves tab is clicked", async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 200,
@@ -101,11 +101,11 @@ describe("ProfileTabs", () => {
       json: () => Promise.resolve({ data: [] }),
     });
 
-    fireEvent.click(screen.getByText("Lists"));
+    fireEvent.click(screen.getByText("Shelves"));
 
     await waitFor(() => {
       expect(
-        screen.getByText("testuser hasn't created any lists yet."),
+        screen.getByText("testuser hasn't created any shelves yet."),
       ).toBeInTheDocument();
     });
   });

@@ -87,13 +87,13 @@ const CommentItem = ({
 
 interface CommentThreadProps {
   reviewId?: string;
-  listId?: string;
+  shelfId?: string;
   comments: CommentData[];
 }
 
 export const CommentThread = ({
   reviewId,
-  listId,
+  shelfId,
   comments,
 }: CommentThreadProps) => {
   const session = useAuthStore((s) => s.session);
@@ -115,7 +115,7 @@ export const CommentThread = ({
     try {
       await api.post("/v1/comments", {
         ...(reviewId && { reviewId }),
-        ...(listId && { listId }),
+        ...(shelfId && { shelfId }),
         ...(parentId && { parentId }),
         body: body.trim(),
       });
