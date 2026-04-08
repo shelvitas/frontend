@@ -228,7 +228,7 @@ const SearchPage = () => {
 
         {/* Placeholder for other tabs */}
         {!isLoading && activeTab !== "books" && hasSearched && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
+          <div className="flex flex-1 flex-col items-center justify-center py-20 text-center">
             <p className="text-sm text-muted-foreground">
               {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} search
               coming soon
@@ -241,7 +241,7 @@ const SearchPage = () => {
           hasSearched &&
           activeTab === "books" &&
           results.length === 0 && (
-            <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
+            <div className="flex flex-1 flex-col items-center justify-center py-20 text-center">
               <BookOpen className="mx-auto h-10 w-10 text-muted-foreground/30" />
               <p className="mt-3 text-sm text-muted-foreground">
                 No books found for &ldquo;{query}&rdquo;
@@ -254,7 +254,7 @@ const SearchPage = () => {
 
         {/* Empty state */}
         {!isLoading && !hasSearched && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
+          <div className="flex flex-1 flex-col items-center justify-center py-20 text-center">
             <Search className="mx-auto h-10 w-10 text-muted-foreground/30" />
             <p className="mt-3 text-sm text-muted-foreground">
               Search across books, authors, members, and lists

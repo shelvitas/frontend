@@ -76,7 +76,7 @@ const FeedPage = () => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
-      <main className="container max-w-2xl flex-1 py-10">
+      <main className="container flex max-w-2xl flex-1 flex-col py-10">
         {/* Tabs */}
         <div className="flex gap-1 border-b border-secondary">
           <button
@@ -174,7 +174,7 @@ const FeedPage = () => {
 
         {/* Empty state — Following tab */}
         {!isLoading && events.length === 0 && activeTab === "following" && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
+          <div className="flex flex-1 flex-col items-center justify-center py-20 text-center">
             <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">Your feed is empty</p>
             <p className="mt-1 text-xs text-muted-foreground">
@@ -194,7 +194,7 @@ const FeedPage = () => {
 
         {/* Empty state — Discover tab */}
         {!isLoading && events.length === 0 && activeTab === "discover" && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
+          <div className="flex flex-1 flex-col items-center justify-center py-20 text-center">
             <Compass className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">Nothing here yet</p>
             <p className="mt-1 text-xs text-muted-foreground">

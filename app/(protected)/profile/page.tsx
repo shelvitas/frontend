@@ -25,9 +25,9 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { PageLoader } from "@/components/ui/page-loader";
 import { ProfileTabs } from "@/components/profile/profile-tabs";
+import { FavouriteBooksEditor } from "@/components/profile/favourite-books-editor";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { RemoteImage } from "@/components/ui/remote-image";
 
 interface ProfileData {
   id: string;
@@ -214,48 +214,20 @@ const ProfilePage = () => {
           <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             Favourite books
           </h2>
-          <div className="mt-3 grid grid-cols-4 gap-3">
-            {p?.favouriteBooks && p.favouriteBooks.length > 0
-              ? p.favouriteBooks.map((book) => (
-                  <Link
-                    key={book.id}
-                    href={`/books/${book.id}`}
-                    className="group"
-                  >
-                    {book.coverUrl ? (
-                      <RemoteImage
-                        src={book.coverUrl}
-                        alt={book.title}
-                        width={44}
-                        height={64}
-                        className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
-                      />
-                    ) : (
-                      <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-xs text-muted-foreground">
-                        <BookOpen className="h-5 w-5" />
-                      </div>
-                    )}
-                  </Link>
-                ))
-              : Array.from({ length: 4 }).map((_, i) => (
-                  <div
-                    key={`empty-fav-${i + 1}`}
-                    className="aspect-[2/3] rounded-sm border border-dashed border-secondary bg-secondary/10"
-                  />
-                ))}
+          <div className="mt-3">
+            <FavouriteBooksEditor
+              username={authProfile.username}
+              initialBooks={p?.favouriteBooks ?? []}
+              onUpdate={() => {
+                if (authProfile?.username) {
+                  api
+                    .get<ProfileData>(`/v1/profile/${authProfile.username}`)
+                    .then(setProfileData)
+                    .catch(() => {});
+                }
+              }}
+            />
           </div>
-          {(!p?.favouriteBooks || p.favouriteBooks.length === 0) && (
-            <p className="mt-2 text-xs text-muted-foreground">
-              Add your 4 favourite books in{" "}
-              <Link
-                href="/settings"
-                className="text-shelvitas-green hover:underline"
-              >
-                settings
-              </Link>
-              .
-            </p>
-          )}
         </div>
 
         {/* ── Quick Actions ── */}

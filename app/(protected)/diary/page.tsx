@@ -123,7 +123,7 @@ const DiaryPage = () => {
 
         {/* Empty state */}
         {!isLoading && entries.length === 0 && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
+          <div className="flex flex-1 flex-col items-center justify-center py-20 text-center">
             <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">
               Your reading diary is empty

@@ -66,7 +66,7 @@ const MembersPage = () => {
         {isLoading && <PageLoader />}
 
         {!isLoading && otherMembers.length === 0 && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center py-20">
+          <div className="flex flex-1 flex-col items-center justify-center py-20 text-center">
             <Users className="mx-auto h-10 w-10 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">No members yet</p>
             <p className="mt-1 text-xs text-muted-foreground">
