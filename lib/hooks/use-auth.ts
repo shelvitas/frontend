@@ -81,7 +81,16 @@ export const useAuth = () => {
   );
 
   const registerProfile = useCallback(
-    async (username: string, displayName: string) => {
+    async (
+      username: string,
+      displayName: string,
+      favourites: {
+        favouriteBook1Id: string;
+        favouriteBook2Id: string;
+        favouriteBook3Id: string;
+        favouriteBook4Id: string;
+      },
+    ) => {
       const newProfile = await api.post<{
         id: string;
         email: string;
@@ -90,7 +99,11 @@ export const useAuth = () => {
         bio: string | null;
         avatarUrl: string | null;
         profileVisibility: "public" | "private";
-      }>("/v1/auth/register", { username, displayName });
+      }>("/v1/auth/register", {
+        username,
+        displayName,
+        ...favourites,
+      });
       setProfile(newProfile);
       router.push("/profile");
       router.refresh();
