@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
@@ -14,11 +15,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 const ExportPage = () => {
   const { session } = useAuthStore();
+  const { toast } = useToast();
   const [exportId, setExportId] = useState<string | null>(null);
   const [status, setStatus] = useState<
     "idle" | "processing" | "done" | "failed"
   >("idle");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   if (!session && typeof window !== "undefined") {
     window.location.href = "/sign-in";
@@ -58,9 +61,30 @@ const ExportPage = () => {
     }
   };
 
-  const handleDownload = () => {
-    if (!downloadUrl || !exportId) return;
-    window.open(`${API_URL}${downloadUrl}`, "_blank");
+  const handleDownload = async () => {
+    if (!downloadUrl || !exportId || !session?.access_token) return;
+    setIsDownloading(true);
+    try {
+      const res = await fetch(`${API_URL}${downloadUrl}`, {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (!res.ok) {
+        throw new Error(`Download failed: ${res.status}`);
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "shelvitas-export.zip";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      toast("Failed to download export. Please try again.", "error");
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -140,9 +164,18 @@ const ExportPage = () => {
               <Button
                 className="gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
                 onClick={handleDownload}
+                disabled={isDownloading}
               >
-                <Download className="h-4 w-4" />
-                Download ZIP
+                {isDownloading ? (
+                  <>
+                    <Spinner /> Downloading...
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-4 w-4" />
+                    Download ZIP
+                  </>
+                )}
               </Button>
             </div>
           )}
