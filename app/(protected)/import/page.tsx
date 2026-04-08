@@ -154,7 +154,7 @@ const ImportPage = () => {
     <div className="flex min-h-screen flex-col pb-16 md:pb-0">
       <Navbar />
 
-      <main className="container max-w-2xl flex-1 py-10">
+      <main className="container flex max-w-2xl flex-1 flex-col py-10">
         <h1 className="text-2xl font-bold">Import from Goodreads</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Import your reading history from a Goodreads CSV export.

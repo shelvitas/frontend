@@ -58,7 +58,7 @@ const SettingsPage = () => {
   return (
     <div className="flex min-h-screen flex-col pb-16 md:pb-0">
       <Navbar />
-      <main className="container max-w-xl flex-1 py-10">
+      <main className="container flex max-w-xl flex-1 flex-col py-10">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-shelvitas-green" />
           <h1 className="text-2xl font-bold">Settings</h1>

@@ -92,7 +92,7 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="container max-w-4xl flex-1 py-10">
+      <main className="container flex max-w-4xl flex-1 flex-col py-10">
         {/* ── Hero: Cover + Metadata ── */}
         <div className="flex flex-col gap-8 sm:flex-row">
           {/* Cover */}

@@ -93,7 +93,7 @@ const NotificationsPage = () => {
   return (
     <div className="flex min-h-screen flex-col pb-16 md:pb-0">
       <Navbar />
-      <main className="container max-w-2xl flex-1 py-10">
+      <main className="container flex max-w-2xl flex-1 flex-col py-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Bell className="h-5 w-5 text-shelvitas-green" />

@@ -90,7 +90,7 @@ const ProfilePage = () => {
     <div className="flex min-h-screen flex-col pb-16 md:pb-0">
       <Navbar />
 
-      <main className="container max-w-2xl flex-1 py-10">
+      <main className="container flex max-w-2xl flex-1 flex-col py-10">
         {/* ── Header ── */}
         <div className="flex items-start gap-5">
           {authProfile.avatarUrl ? (

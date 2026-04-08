@@ -75,7 +75,7 @@ const ReviewPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
-      <main className="container max-w-3xl flex-1 py-10">
+      <main className="container flex max-w-3xl flex-1 flex-col py-10">
         {/* ── Reviewer Header ── */}
         <div className="flex items-center gap-3">
           {review.reviewer.avatarUrl ? (
