@@ -23,7 +23,10 @@ interface CreateShelfModalProps {
   onSaved?: (shelfId: string) => void;
 }
 
-export const CreateShelfModal = ({ trigger, onSaved }: CreateShelfModalProps) => {
+export const CreateShelfModal = ({
+  trigger,
+  onSaved,
+}: CreateShelfModalProps) => {
   const session = useAuthStore((s) => s.session);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -133,14 +136,26 @@ export const CreateShelfModal = ({ trigger, onSaved }: CreateShelfModalProps) =>
           </div>
 
           <div className="flex gap-4">
-            <Checkbox checked={isRanked} onChange={setIsRanked} label="Ranked" />
-            <Checkbox checked={isPrivate} onChange={setIsPrivate} label="Private" />
+            <Checkbox
+              checked={isRanked}
+              onChange={setIsRanked}
+              label="Ranked"
+            />
+            <Checkbox
+              checked={isPrivate}
+              onChange={setIsPrivate}
+              label="Private"
+            />
           </div>
 
           {error && <p className="text-sm text-red-400">{error}</p>}
 
           <div className="flex gap-2 pt-2">
-            <Button variant="outline" className="flex-1" onClick={() => setOpen(false)}>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button

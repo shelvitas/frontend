@@ -84,7 +84,7 @@ const ShelvesPage = () => {
               className="flex items-center gap-3 rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/30"
             >
               <BookOpen className="h-5 w-5 text-muted-foreground" />
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <p className="truncate text-sm font-medium">{shelf.title}</p>
                   {shelf.isPrivate && (
@@ -97,7 +97,9 @@ const ShelvesPage = () => {
                   )}
                 </div>
                 {shelf.description && (
-                  <p className="truncate text-xs text-muted-foreground">{shelf.description}</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {shelf.description}
+                  </p>
                 )}
                 <div className="mt-1 flex items-center gap-3 text-[10px] text-muted-foreground">
                   <span>

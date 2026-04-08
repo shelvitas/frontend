@@ -18,9 +18,12 @@ async function getShelf(id: string) {
 
 async function getComments(shelfId: string): Promise<CommentData[]> {
   try {
-    const res = await fetch(`${SERVER_API_URL}/v1/shelves/${shelfId}/comments?limit=50`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `${SERVER_API_URL}/v1/shelves/${shelfId}/comments?limit=50`,
+      {
+        cache: "no-store",
+      },
+    );
     if (!res.ok) return [];
     const json = await res.json();
     return json.data as CommentData[];
@@ -41,7 +44,8 @@ export async function generateMetadata({
 
   return {
     title: shelf.title,
-    description: shelf.description ?? `A shelf of ${shelf.bookCount} books on Shelvitas`,
+    description:
+      shelf.description ?? `A shelf of ${shelf.bookCount} books on Shelvitas`,
     openGraph: {
       title: shelf.title,
       description: shelf.description ?? `${shelf.bookCount} books`,
@@ -52,7 +56,10 @@ export async function generateMetadata({
 
 const ShelfPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const [shelf, shelfComments] = await Promise.all([getShelf(id), getComments(id)]);
+  const [shelf, shelfComments] = await Promise.all([
+    getShelf(id),
+    getComments(id),
+  ]);
 
   if (!shelf) notFound();
 
@@ -67,10 +74,14 @@ const ShelfPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             <div className="flex items-center gap-2">
               <Library className="h-5 w-5 text-shelvitas-green" />
               <h1 className="text-2xl font-bold">{shelf.title}</h1>
-              {shelf.isPrivate && <Lock className="h-4 w-4 text-muted-foreground" />}
+              {shelf.isPrivate && (
+                <Lock className="h-4 w-4 text-muted-foreground" />
+              )}
             </div>
             {shelf.description && (
-              <p className="mt-2 text-sm text-foreground/80">{shelf.description}</p>
+              <p className="mt-2 text-sm text-foreground/80">
+                {shelf.description}
+              </p>
             )}
             <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
               <span>
@@ -86,7 +97,9 @@ const ShelfPage = async ({ params }: { params: Promise<{ id: string }> }) => {
           {/* % read badge */}
           {shelf.percentRead !== null && (
             <div className="flex flex-col items-center rounded-sm bg-secondary px-3 py-2">
-              <span className="text-lg font-bold text-shelvitas-green">{shelf.percentRead}%</span>
+              <span className="text-lg font-bold text-shelvitas-green">
+                {shelf.percentRead}%
+              </span>
               <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 read
               </span>
@@ -145,7 +158,9 @@ const ShelfPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                     {book.title}
                   </Link>
                   {book.notes && (
-                    <p className="mt-1 text-xs text-foreground/70">{book.notes}</p>
+                    <p className="mt-1 text-xs text-foreground/70">
+                      {book.notes}
+                    </p>
                   )}
                 </div>
               </div>

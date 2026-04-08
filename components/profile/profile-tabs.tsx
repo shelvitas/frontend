@@ -70,7 +70,9 @@ export const ProfileTabs = ({ username }: { username: string }) => {
           const data = await api.get<Review[]>("/v1/reviews?limit=20&offset=0");
           setReviews(data);
         } else if (activeTab === "shelves") {
-          const data = await api.get<UserShelf[]>("/v1/shelves?limit=20&offset=0");
+          const data = await api.get<UserShelf[]>(
+            "/v1/shelves?limit=20&offset=0",
+          );
           setShelves(data);
         }
       } catch {

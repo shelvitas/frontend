@@ -62,7 +62,9 @@ export const ShelfActions = ({
     }
     setCloneLoading(true);
     try {
-      const cloned = await api.post<{ id: string }>(`/v1/shelves/${shelfId}/clone`);
+      const cloned = await api.post<{ id: string }>(
+        `/v1/shelves/${shelfId}/clone`,
+      );
       toast("Shelf cloned!");
       window.location.href = `/shelves/${cloned.id}`;
     } catch {
@@ -104,7 +106,11 @@ export const ShelfActions = ({
         onClick={handleClone}
         disabled={cloneLoading}
       >
-        {cloneLoading ? <Spinner className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        {cloneLoading ? (
+          <Spinner className="h-4 w-4" />
+        ) : (
+          <Copy className="h-4 w-4" />
+        )}
         Clone
       </Button>
       <Button
