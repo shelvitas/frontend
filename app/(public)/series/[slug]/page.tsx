@@ -10,6 +10,7 @@ import { RemoteImage } from "@/components/ui/remote-image";
 
 interface SeriesBook {
   id: string;
+  slug?: string;
   title: string;
   coverUrl: string | null;
   positionInSeries: string | null;
@@ -21,6 +22,7 @@ interface SeriesBook {
 
 interface SeriesPageData {
   id: string;
+  slug: string;
   name: string;
   description: string | null;
   books: SeriesBook[];
@@ -28,17 +30,17 @@ interface SeriesPageData {
   nextToRead: string | null;
 }
 
-async function getSeries(id: string) {
-  return serverFetch<SeriesPageData>(`/v1/series/${id}`);
+async function getSeries(idOrSlug: string) {
+  return serverFetch<SeriesPageData>(`/v1/series/${idOrSlug}`);
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const s = await getSeries(id);
+  const { slug } = await params;
+  const s = await getSeries(slug);
   if (!s) return { title: "Series not found" };
   return {
     title: `${s.name} Series`,
@@ -47,9 +49,9 @@ export async function generateMetadata({
   };
 }
 
-const SeriesPage = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
-  const series = await getSeries(id);
+const SeriesPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
+  const series = await getSeries(slug);
   if (!series) notFound();
 
   return (
@@ -79,7 +81,7 @@ const SeriesPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             return (
               <Link
                 key={book.id}
-                href={`/books/${book.id}`}
+                href={`/books/${book.slug ?? book.id}`}
                 className={`flex items-center gap-4 rounded-sm border p-3 transition-colors hover:bg-secondary/30 ${
                   isRead ? "border-shelvitas-green/30" : "border-secondary"
                 }`}

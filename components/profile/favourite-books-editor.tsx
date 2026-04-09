@@ -12,12 +12,14 @@ import { api } from "@/lib/api";
 
 interface FavBook {
   id: string;
+  slug?: string;
   title: string;
   coverUrl: string | null;
 }
 
 interface SearchResult {
   id: string;
+  slug?: string;
   title: string;
   coverUrl?: string | null;
   authors?: { name: string }[];
@@ -93,6 +95,7 @@ export const FavouriteBooksEditor = ({
     const updated = [...books];
     updated[editingSlot] = {
       id: book.id,
+      slug: book.slug,
       title: book.title,
       coverUrl: book.coverUrl ?? null,
     };
@@ -117,7 +120,7 @@ export const FavouriteBooksEditor = ({
           <div key={`fav-slot-${book?.id ?? i}`} className="group relative">
             {book ? (
               <>
-                <Link href={`/books/${book.id}`}>
+                <Link href={`/books/${book.slug ?? book.id}`}>
                   {book.coverUrl ? (
                     <RemoteImage
                       src={book.coverUrl}

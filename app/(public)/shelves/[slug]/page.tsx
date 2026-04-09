@@ -12,14 +12,14 @@ import type { ShelfPageData, CommentData } from "@/lib/types";
 import { serverFetch, SERVER_API_URL } from "@/lib/server-fetch";
 import { RemoteImage } from "@/components/ui/remote-image";
 
-async function getShelf(id: string) {
-  return serverFetch<ShelfPageData>(`/v1/shelves/${id}`);
+async function getShelf(idOrSlug: string) {
+  return serverFetch<ShelfPageData>(`/v1/shelves/${idOrSlug}`);
 }
 
-async function getComments(shelfId: string): Promise<CommentData[]> {
+async function getComments(shelfIdOrSlug: string): Promise<CommentData[]> {
   try {
     const res = await fetch(
-      `${SERVER_API_URL}/v1/shelves/${shelfId}/comments?limit=50`,
+      `${SERVER_API_URL}/v1/shelves/${shelfIdOrSlug}/comments?limit=50`,
       {
         cache: "no-store",
       },
@@ -35,10 +35,10 @@ async function getComments(shelfId: string): Promise<CommentData[]> {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const shelf = await getShelf(id);
+  const { slug } = await params;
+  const shelf = await getShelf(slug);
 
   if (!shelf) return { title: "Shelf not found" };
 
@@ -54,11 +54,11 @@ export async function generateMetadata({
   };
 }
 
-const ShelfPage = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
+const ShelfPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
   const [shelf, shelfComments] = await Promise.all([
-    getShelf(id),
-    getComments(id),
+    getShelf(slug),
+    getComments(slug),
   ]);
 
   if (!shelf) notFound();
@@ -133,7 +133,7 @@ const ShelfPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                 )}
 
                 {/* Cover */}
-                <Link href={`/books/${book.bookId}`} className="shrink-0">
+                <Link href={`/books/${book.bookSlug ?? book.bookId}`} className="shrink-0">
                   {book.coverUrl ? (
                     <RemoteImage
                       src={book.coverUrl}
@@ -152,7 +152,7 @@ const ShelfPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                 {/* Info */}
                 <div className="min-w-0 flex-1">
                   <Link
-                    href={`/books/${book.bookId}`}
+                    href={`/books/${book.bookSlug ?? book.bookId}`}
                     className="text-sm font-medium hover:text-shelvitas-green"
                   >
                     {book.title}

@@ -1,5 +1,6 @@
 export interface FavouriteBook {
   id: string;
+  slug?: string;
   title: string;
   coverUrl: string | null;
 }
@@ -51,6 +52,7 @@ export function isFullProfile(profile: ProfileData): profile is PublicProfile {
 
 export interface BookAuthor {
   id: string;
+  slug?: string;
   name: string;
   role: string | null;
   bio: string | null;
@@ -76,6 +78,7 @@ export interface BookReview {
 
 export interface BookSeries {
   id: string;
+  slug?: string;
   name: string;
   position: string | null;
   totalBooks: number;
@@ -92,6 +95,7 @@ export interface UserBookStatus {
 
 export interface BookPageData {
   id: string;
+  slug: string;
   title: string;
   subtitle: string | null;
   description: string | null;
@@ -138,6 +142,7 @@ export interface DiaryEntry {
   updatedAt: string;
   book: {
     id: string;
+    slug?: string;
     title: string;
     coverUrl: string | null;
   };
@@ -188,6 +193,7 @@ export interface CommentData {
 export interface ShelfBookItem {
   id: string;
   bookId: string;
+  bookSlug?: string;
   title: string;
   coverUrl: string | null;
   position: number;
@@ -197,6 +203,7 @@ export interface ShelfBookItem {
 
 export interface ShelfPageData {
   id: string;
+  slug: string;
   userId: string;
   title: string;
   description: string | null;
@@ -226,6 +233,7 @@ export interface FeedEvent {
   } | null;
   book: {
     id: string;
+    slug?: string;
     title: string;
     coverUrl: string | null;
   } | null;
@@ -242,6 +250,7 @@ export interface FeedResponse {
 export interface SocialRec {
   book: {
     id: string;
+    slug?: string;
     title: string;
     coverUrl: string | null;
     avgRating: string | null;

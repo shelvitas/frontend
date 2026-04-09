@@ -117,7 +117,7 @@ const FeedPage = () => {
                   rec.book && (
                     <Link
                       key={rec.book.id}
-                      href={`/books/${rec.book.id}`}
+                      href={`/books/${rec.book.slug ?? rec.book.id}`}
                       className="shrink-0"
                     >
                       <div className="w-28">

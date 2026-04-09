@@ -10,13 +10,19 @@ import { RemoteImage } from "@/components/ui/remote-image";
 
 interface AuthorPageData {
   id: string;
+  slug: string;
   name: string;
   bio: string | null;
   photoUrl: string | null;
   websiteUrl: string | null;
   followerCount: number;
   bibliography: {
-    series: { seriesId: string; seriesName: string; books: BookInSeries[] }[];
+    series: {
+      seriesId: string;
+      seriesSlug: string;
+      seriesName: string;
+      books: BookInSeries[];
+    }[];
     standalone: BookInSeries[];
   };
   userFollow: { isFollowing: boolean; alertOnNewRelease: boolean } | null;
@@ -24,6 +30,7 @@ interface AuthorPageData {
 
 interface BookInSeries {
   id: string;
+  slug?: string;
   title: string;
   coverUrl: string | null;
   publishedDate: string | null;
@@ -31,17 +38,17 @@ interface BookInSeries {
   positionInSeries?: string | null;
 }
 
-async function getAuthor(id: string) {
-  return serverFetch<AuthorPageData>(`/v1/authors/${id}`);
+async function getAuthor(idOrSlug: string) {
+  return serverFetch<AuthorPageData>(`/v1/authors/${idOrSlug}`);
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const author = await getAuthor(id);
+  const { slug } = await params;
+  const author = await getAuthor(slug);
   if (!author) return { title: "Author not found" };
   return {
     title: author.name,
@@ -49,9 +56,9 @@ export async function generateMetadata({
   };
 }
 
-const AuthorPage = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
-  const author = await getAuthor(id);
+const AuthorPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
+  const author = await getAuthor(slug);
   if (!author) notFound();
 
   const allBooks = [
@@ -101,7 +108,7 @@ const AuthorPage = async ({ params }: { params: Promise<{ id: string }> }) => {
               {s.books.map((book) => (
                 <Link
                   key={book.id}
-                  href={`/books/${book.id}`}
+                  href={`/books/${book.slug ?? book.id}`}
                   className="flex items-center gap-3 rounded-sm p-2 hover:bg-secondary/30"
                 >
                   {book.coverUrl ? (
@@ -144,7 +151,7 @@ const AuthorPage = async ({ params }: { params: Promise<{ id: string }> }) => {
               {author.bibliography.standalone.map((book) => (
                 <Link
                   key={book.id}
-                  href={`/books/${book.id}`}
+                  href={`/books/${book.slug ?? book.id}`}
                   className="flex items-center gap-3 rounded-sm p-2 hover:bg-secondary/30"
                 >
                   {book.coverUrl ? (

@@ -24,7 +24,7 @@ interface DiaryEntry {
   bookId: string;
   status: string;
   rating: string | null;
-  book: { id: string; title: string; coverUrl: string | null };
+  book: { id: string; slug?: string; title: string; coverUrl: string | null };
 }
 
 interface Review {
@@ -38,6 +38,7 @@ interface Review {
 
 interface UserShelf {
   id: string;
+  slug?: string;
   title: string;
   bookCount: number;
   likesCount: number;
@@ -139,7 +140,7 @@ export const ProfileTabs = ({ username }: { username: string }) => {
                 {filteredEntries.map((entry) => (
                   <Link
                     key={entry.id}
-                    href={`/books/${entry.book.id}`}
+                    href={`/books/${entry.book.slug ?? entry.book.id}`}
                     className="group"
                   >
                     {entry.book.coverUrl ? (
@@ -225,7 +226,7 @@ export const ProfileTabs = ({ username }: { username: string }) => {
               {shelves.map((shelf) => (
                 <Link
                   key={shelf.id}
-                  href={`/shelves/${shelf.id}`}
+                  href={`/shelves/${shelf.slug ?? shelf.id}`}
                   className="flex items-center justify-between rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20"
                 >
                   <div>

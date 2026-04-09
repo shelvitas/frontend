@@ -15,17 +15,18 @@ import { serverFetch } from "@/lib/server-fetch";
 import type { BookPageData } from "@/lib/types";
 import { RemoteImage } from "@/components/ui/remote-image";
 
-async function getBookPage(id: string) {
-  return serverFetch<BookPageData>(`/v1/books/${id}`);
+async function getBookPage(idOrSlug: string) {
+  // The API accepts both slug and UUID — slugs are preferred for SEO
+  return serverFetch<BookPageData>(`/v1/books/${idOrSlug}`);
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const book = await getBookPage(id);
+  const { slug } = await params;
+  const book = await getBookPage(slug);
 
   if (!book) return { title: "Book not found" };
 
@@ -45,9 +46,9 @@ export async function generateMetadata({
   };
 }
 
-const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
-  const book = await getBookPage(id);
+const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
+  const book = await getBookPage(slug);
 
   if (!book) notFound();
 
@@ -128,7 +129,7 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
               {book.authors.map((author, i) => (
                 <span key={author.id}>
                   <Link
-                    href={`/authors/${author.id}`}
+                    href={`/authors/${author.slug ?? author.id}`}
                     className="font-medium text-shelvitas-green hover:underline"
                   >
                     {author.name}
@@ -141,7 +142,7 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             {/* Series badge */}
             {book.series && (
               <Link
-                href={`/series/${book.series.id}`}
+                href={`/series/${book.series.slug ?? book.series.id}`}
                 className="mt-2 inline-block rounded-sm bg-secondary px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground"
               >
                 <Library className="mr-1 inline h-3 w-3" />
@@ -299,7 +300,7 @@ const BookPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                   )}
                   <div>
                     <Link
-                      href={`/authors/${author.id}`}
+                      href={`/authors/${author.slug ?? author.id}`}
                       className="font-medium hover:text-shelvitas-green"
                     >
                       {author.name}

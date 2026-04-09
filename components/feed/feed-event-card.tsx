@@ -64,7 +64,7 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
     <div className="flex gap-4 rounded-sm border border-secondary p-4">
       {/* Book cover */}
       {book?.coverUrl && (
-        <Link href={`/books/${book.id}`} className="shrink-0">
+        <Link href={`/books/${book.slug ?? book.id}`} className="shrink-0">
           <RemoteImage
             src={book.coverUrl}
             alt={book.title}
@@ -111,7 +111,7 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
         {/* Book title */}
         {book !== null && (
           <Link
-            href={`/books/${book.id}`}
+            href={`/books/${book.slug ?? book.id}`}
             className="mt-1 block text-sm font-medium hover:text-shelvitas-green"
           >
             {book.title}

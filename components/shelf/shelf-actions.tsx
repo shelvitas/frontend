@@ -62,11 +62,11 @@ export const ShelfActions = ({
     }
     setCloneLoading(true);
     try {
-      const cloned = await api.post<{ id: string }>(
+      const cloned = await api.post<{ id: string; slug?: string }>(
         `/v1/shelves/${shelfId}/clone`,
       );
       toast("Shelf cloned!");
-      window.location.href = `/shelves/${cloned.id}`;
+      window.location.href = `/shelves/${cloned.slug ?? cloned.id}`;
     } catch {
       setCloneLoading(false);
     }

@@ -216,7 +216,7 @@ const ProfilePage = async ({
               {profile.favouriteBooks.map((book) => (
                 <Link
                   key={book.id}
-                  href={`/books/${book.id}`}
+                  href={`/books/${book.slug ?? book.id}`}
                   className="group"
                 >
                   {book.coverUrl ? (

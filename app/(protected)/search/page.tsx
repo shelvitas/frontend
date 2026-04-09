@@ -15,13 +15,14 @@ type SearchTab = "books" | "authors" | "members" | "lists";
 
 interface BookResult {
   id: string;
+  slug?: string;
   title: string;
   subtitle?: string | null;
   coverUrl?: string | null;
   isbn13?: string | null;
   genre?: string | null;
   publishedDate?: string | null;
-  authors: { id: string; name: string; role: string | null }[];
+  authors: { id: string; slug?: string; name: string; role: string | null }[];
 }
 
 interface SearchResponse {
@@ -43,7 +44,7 @@ const BookResultCard = ({ book }: { book: BookResult }) => {
 
   return (
     <Link
-      href={`/books/${book.id}`}
+      href={`/books/${book.slug ?? book.id}`}
       className="group flex gap-4 rounded-sm p-3 transition-colors hover:bg-secondary/30"
     >
       {book.coverUrl ? (

@@ -13,6 +13,7 @@ import { useAuthStore } from "@/store/auth";
 
 interface Shelf {
   id: string;
+  slug?: string;
   title: string;
   description: string | null;
   isPrivate: boolean;
@@ -80,7 +81,7 @@ const ShelvesPage = () => {
           {userShelves.map((shelf) => (
             <Link
               key={shelf.id}
-              href={`/shelves/${shelf.id}`}
+              href={`/shelves/${shelf.slug ?? shelf.id}`}
               className="flex items-center gap-3 rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/30"
             >
               <BookOpen className="h-5 w-5 text-muted-foreground" />

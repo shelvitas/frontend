@@ -43,7 +43,7 @@ export const CreateShelfModal = ({
     setError(null);
 
     try {
-      const shelf = await api.post<{ id: string }>("/v1/shelves", {
+      const shelf = await api.post<{ id: string; slug?: string }>("/v1/shelves", {
         title: title.trim(),
         description: description.trim() || undefined,
         isRanked,
@@ -58,7 +58,7 @@ export const CreateShelfModal = ({
       if (onSaved) {
         onSaved(shelf.id);
       } else {
-        window.location.href = `/shelves/${shelf.id}`;
+        window.location.href = `/shelves/${shelf.slug ?? shelf.id}`;
       }
     } catch (err) {
       toast("Failed to create shelf", "error");
