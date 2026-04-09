@@ -65,38 +65,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: stub-publishable-key
           SKIP_ENV_VALIDATION: "1"
 
-  # Playwright e2e tests run as a separate job. They're slower (browser
-  # downloads, multi-browser matrix) and they need a real API to talk to,
-  # so they only run on main + PRs targeting main, not every push.
-  e2e:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
-    needs: ci
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".node-version"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts
-
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Run Playwright e2e tests
-        run: pnpm test:e2e
-        env:
-          NEXT_PUBLIC_APP_URL: http://localhost:3000
-          NEXT_PUBLIC_API_URL: http://localhost:4000
-          SKIP_ENV_VALIDATION: "1"
+# Playwright e2e tests are NOT run in CI here. They need a live API
+# server (and currently a live Supabase) to talk to. Run them locally
+# with `pnpm test:e2e` against a running dev environment, or wire up
+# a separate job later that boots both via Docker compose.
