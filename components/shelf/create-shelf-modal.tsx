@@ -43,12 +43,15 @@ export const CreateShelfModal = ({
     setError(null);
 
     try {
-      const shelf = await api.post<{ id: string; slug?: string }>("/v1/shelves", {
-        title: title.trim(),
-        description: description.trim() || undefined,
-        isRanked,
-        isPrivate,
-      });
+      const shelf = await api.post<{ id: string; slug?: string }>(
+        "/v1/shelves",
+        {
+          title: title.trim(),
+          description: description.trim() || undefined,
+          isRanked,
+          isPrivate,
+        },
+      );
       setOpen(false);
       setTitle("");
       setDescription("");

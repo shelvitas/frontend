@@ -56,7 +56,11 @@ export async function generateMetadata({
   };
 }
 
-const AuthorPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+const AuthorPage = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
   const { slug } = await params;
   const author = await getAuthor(slug);
   if (!author) notFound();

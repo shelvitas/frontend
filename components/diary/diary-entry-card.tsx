@@ -41,7 +41,10 @@ export const DiaryEntryCard = ({ entry, onEdit }: DiaryEntryCardProps) => {
   return (
     <div className="flex gap-4 rounded-sm border border-secondary p-4">
       {/* Cover thumbnail */}
-      <Link href={`/books/${entry.book.slug ?? entry.book.id}`} className="shrink-0">
+      <Link
+        href={`/books/${entry.book.slug ?? entry.book.id}`}
+        className="shrink-0"
+      >
         {entry.book.coverUrl ? (
           <RemoteImage
             src={entry.book.coverUrl}

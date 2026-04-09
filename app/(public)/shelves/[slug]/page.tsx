@@ -133,7 +133,10 @@ const ShelfPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 )}
 
                 {/* Cover */}
-                <Link href={`/books/${book.bookSlug ?? book.bookId}`} className="shrink-0">
+                <Link
+                  href={`/books/${book.bookSlug ?? book.bookId}`}
+                  className="shrink-0"
+                >
                   {book.coverUrl ? (
                     <RemoteImage
                       src={book.coverUrl}

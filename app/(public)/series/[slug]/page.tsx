@@ -49,7 +49,11 @@ export async function generateMetadata({
   };
 }
 
-const SeriesPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+const SeriesPage = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
   const { slug } = await params;
   const series = await getSeries(slug);
   if (!series) notFound();
