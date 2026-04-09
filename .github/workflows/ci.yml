@@ -1,10 +1,16 @@
 name: CI
 
+# Run on every push to any branch and on every PR.
+# Catches regressions before they reach main.
 on:
   push:
-    branches: [main]
   pull_request:
-    branches: [main]
+
+# Cancel in-flight runs for the same branch when a new push lands —
+# saves CI minutes and surfaces results for the latest commit faster.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ci:
@@ -25,11 +31,10 @@ jobs:
           node-version-file: ".node-version"
           cache: "pnpm"
 
+      # --ignore-scripts skips the husky `prepare` hook (no git in the
+      # CI runner image's pnpm context, and we don't need git hooks here).
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Type check
-        run: tsc --noEmit
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Lint
         run: pnpm lint
@@ -37,20 +42,56 @@ jobs:
       - name: Format check
         run: pnpm format
 
+      - name: Type check
+        run: pnpm exec tsc --noEmit
+
+      # Vitest unit + component + hook + page tests
+      # (335 tests across 44 files as of last commit).
       - name: Unit tests
         run: pnpm test
 
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps
-
-      - name: E2E tests
-        run: pnpm test:e2e
-        env:
-          NEXT_PUBLIC_APP_URL: http://localhost:3000
-          SKIP_ENV_VALIDATION: 1
-
+      # Build the production bundle to catch any Next.js compile errors.
+      # SKIP_ENV_VALIDATION lets us build without secrets — Vercel handles
+      # the real production build with the actual env vars.
       - name: Build
         run: pnpm build
         env:
           NEXT_PUBLIC_APP_URL: http://localhost:3000
-          SKIP_ENV_VALIDATION: 1
+          NEXT_PUBLIC_API_URL: http://localhost:4000
+          SKIP_ENV_VALIDATION: "1"
+
+  # Playwright e2e tests run as a separate job. They're slower (browser
+  # downloads, multi-browser matrix) and they need a real API to talk to,
+  # so they only run on main + PRs targeting main, not every push.
+  e2e:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    needs: ci
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".node-version"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Playwright e2e tests
+        run: pnpm test:e2e
+        env:
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          NEXT_PUBLIC_API_URL: http://localhost:4000
+          SKIP_ENV_VALIDATION: "1"
