@@ -23,7 +23,11 @@ interface LegacyReviewLookup {
   book?: { slug: string };
 }
 
-const LegacyReviewPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+const LegacyReviewPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
   const { id } = await params;
   const review = await serverFetch<LegacyReviewLookup>(`/v1/reviews/${id}`);
 
@@ -34,7 +38,9 @@ const LegacyReviewPage = async ({ params }: { params: Promise<{ id: string }> })
   // build the canonical URL from a legacy UUID-only review.
   let bookSlug = review.book?.slug;
   if (!bookSlug && review.bookId) {
-    const book = await serverFetch<{ slug: string }>(`/v1/books/${review.bookId}`);
+    const book = await serverFetch<{ slug: string }>(
+      `/v1/books/${review.bookId}`,
+    );
     bookSlug = book?.slug;
   }
 

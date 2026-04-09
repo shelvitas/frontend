@@ -25,14 +25,19 @@ import { RemoteImage } from "@/components/ui/remote-image";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 async function getReview(username: string, bookSlug: string) {
-  return serverFetch<ReviewPageData>(`/v1/profile/${username}/book/${bookSlug}`);
+  return serverFetch<ReviewPageData>(
+    `/v1/profile/${username}/book/${bookSlug}`,
+  );
 }
 
 async function getComments(reviewId: string): Promise<CommentData[]> {
   try {
-    const res = await fetch(`${SERVER_API_URL}/v1/reviews/${reviewId}/comments?limit=50`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `${SERVER_API_URL}/v1/reviews/${reviewId}/comments?limit=50`,
+      {
+        cache: "no-store",
+      },
+    );
     if (!res.ok) return [];
     const json = await res.json();
     return json.data as CommentData[];
@@ -102,7 +107,7 @@ const UserBookReviewPage = async ({
                 className="h-18 w-12 rounded-sm object-cover"
               />
             ) : (
-              <div className="flex h-18 w-12 items-center justify-center rounded-sm bg-secondary">
+              <div className="h-18 flex w-12 items-center justify-center rounded-sm bg-secondary">
                 <BookOpen className="h-4 w-4 text-muted-foreground" />
               </div>
             )}
@@ -162,7 +167,9 @@ const UserBookReviewPage = async ({
                   }`}
                 />
               ))}
-              <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
+              <span className="ml-1 text-sm font-medium">
+                {rating.toFixed(1)}
+              </span>
             </div>
           )}
           {review.isDnf && (
