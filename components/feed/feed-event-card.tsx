@@ -141,10 +141,14 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
           </p>
         )}
 
-        {/* Review link */}
+        {/* Review link — prefers the canonical /{username}/book/{slug} URL */}
         {event.reviewId && (
           <Link
-            href={`/reviews/${event.reviewId}`}
+            href={
+              event.user?.username && event.book?.slug
+                ? `/${event.user.username}/book/${event.book.slug}`
+                : `/reviews/${event.reviewId}`
+            }
             className="mt-1 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
             <MessageCircle className="h-3 w-3" />

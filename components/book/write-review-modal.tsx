@@ -21,6 +21,7 @@ import { RemoteImage } from "@/components/ui/remote-image";
 
 interface WriteReviewModalProps {
   bookId: string;
+  bookSlug?: string;
   bookTitle: string;
   bookCoverUrl?: string | null;
   trigger?: React.ReactNode;
@@ -29,12 +30,14 @@ interface WriteReviewModalProps {
 
 export const WriteReviewModal = ({
   bookId,
+  bookSlug,
   bookTitle,
   bookCoverUrl,
   trigger,
   onSaved,
 }: WriteReviewModalProps) => {
   const session = useAuthStore((s) => s.session);
+  const profile = useAuthStore((s) => s.profile);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const [body, setBody] = useState("");
@@ -62,7 +65,11 @@ export const WriteReviewModal = ({
       toast("Review published!");
       if (onSaved) {
         onSaved(review.id);
+      } else if (profile?.username && bookSlug) {
+        // Canonical URL: /{username}/book/{book-slug}
+        window.location.href = `/${profile.username}/book/${bookSlug}`;
       } else {
+        // Legacy URL — redirects to canonical
         window.location.href = `/reviews/${review.id}`;
       }
     } catch (err) {

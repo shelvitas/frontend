@@ -330,6 +330,7 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
           <div className="mt-3">
             <WriteReviewModal
               bookId={book.id}
+              bookSlug={book.slug}
               bookTitle={book.title}
               bookCoverUrl={book.coverUrl}
             />

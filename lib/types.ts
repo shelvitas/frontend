@@ -152,7 +152,7 @@ export interface DiaryEntry {
 
 export interface ReviewPageData {
   id: string;
-  bookId: string;
+  bookId?: string;
   body: string;
   containsSpoilers: boolean;
   rating: string | null;
@@ -167,6 +167,13 @@ export interface ReviewPageData {
     username: string;
     displayName: string;
     avatarUrl: string | null;
+  };
+  // Present on the canonical /v1/profile/:username/book/:bookSlug response
+  book?: {
+    id: string;
+    slug: string;
+    title: string;
+    coverUrl: string | null;
   };
 }
 

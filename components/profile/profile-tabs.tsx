@@ -34,6 +34,9 @@ interface Review {
   rating: string | null;
   likesCount: number;
   createdAt: string;
+  // Joined fields for canonical /{username}/book/{slug} URL construction
+  book?: { id: string; slug: string; title: string };
+  reviewerUsername?: string;
 }
 
 interface UserShelf {
@@ -187,7 +190,14 @@ export const ProfileTabs = ({ username }: { username: string }) => {
               {reviews.map((review) => (
                 <Link
                   key={review.id}
-                  href={`/reviews/${review.id}`}
+                  // Canonical URL: /{username}/book/{book-slug}.
+                  // Falls back to legacy /reviews/{id} (which 308-redirects)
+                  // when the joined fields aren't present.
+                  href={
+                    review.reviewerUsername && review.book?.slug
+                      ? `/${review.reviewerUsername}/book/${review.book.slug}`
+                      : `/reviews/${review.id}`
+                  }
                   className="block rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20"
                 >
                   <div className="flex items-center gap-2">
