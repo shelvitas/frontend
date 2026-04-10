@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, MessageCircle } from "lucide-react";
+import {
+  AlertTriangle,
+  MessageCircle,
+  ChevronDown,
+  ChevronUp,
+  ThumbsUp,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -11,73 +17,291 @@ import { useAuthStore } from "@/store/auth";
 import type { CommentData } from "@/lib/types";
 import { RemoteImage } from "@/components/ui/remote-image";
 
-const CommentItem = ({
+function timeAgo(dateStr: string): string {
+  const seconds = Math.floor(
+    (Date.now() - new Date(dateStr).getTime()) / 1000,
+  );
+  if (seconds < 60) return "just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d`;
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
+/* ── Single Comment ── */
+const CommentNode = ({
   comment,
-  onReply,
-  isReply = false,
+  depth,
+  reviewId,
+  shelfId,
+  replyTo,
+  setReplyTo,
+  onCommentAdded,
 }: {
   comment: CommentData;
-  onReply: (parentId: string) => void;
-  isReply?: boolean;
+  depth: number;
+  reviewId?: string;
+  shelfId?: string;
+  replyTo: string | null;
+  setReplyTo: (id: string | null) => void;
+  onCommentAdded: (parentId: string, comment: CommentData) => void;
 }) => {
+  const session = useAuthStore((s) => s.session);
+  const profile = useAuthStore((s) => s.profile);
+  const [collapsed, setCollapsed] = useState(false);
   const [showSpoiler, setShowSpoiler] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [replyBody, setReplyBody] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const hasReplies = (comment.replies?.length ?? 0) > 0;
+  const replyCount = comment.replies?.length ?? 0;
+  const isReplying = replyTo === comment.id;
+
+  const handleReply = () => {
+    if (!session) {
+      window.location.href = "/sign-in";
+      return;
+    }
+    setReplyTo(isReplying ? null : comment.id);
+    setReplyBody("");
+  };
+
+  const submitReply = async () => {
+    if (!replyBody.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const created = await api.post<CommentData>("/v1/comments", {
+        ...(reviewId && { reviewId }),
+        ...(shelfId && { shelfId }),
+        parentId: comment.id,
+        body: replyBody.trim(),
+      });
+      onCommentAdded(comment.id, {
+        ...created,
+        author: {
+          username: profile?.username ?? "",
+          displayName: profile?.displayName ?? "",
+          avatarUrl: profile?.avatarUrl ?? null,
+        },
+        replies: [],
+      });
+      setReplyBody("");
+      setReplyTo(null);
+    } catch {
+      // silent
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <div className={`${isReply ? "ml-8 border-l border-secondary pl-4" : ""}`}>
-      <div className="flex items-start gap-2">
-        {comment.author.avatarUrl ? (
-          <RemoteImage
-            src={comment.author.avatarUrl}
-            alt={comment.author.displayName}
-            width={28}
-            height={28}
-            className="h-7 w-7 rounded-full"
-          />
-        ) : (
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary text-[10px] font-semibold">
-            {comment.author.displayName.charAt(0).toUpperCase()}
-          </div>
+    <div className="group/comment">
+      <div className="flex gap-0">
+        {/* Thread line + collapse */}
+        {depth > 0 && (
+          <button
+            type="button"
+            onClick={() => setCollapsed(!collapsed)}
+            className="flex w-5 shrink-0 cursor-pointer justify-center pt-2"
+            aria-label={collapsed ? "Expand thread" : "Collapse thread"}
+          >
+            <div className="h-full w-px bg-secondary/60 transition-colors hover:w-0.5 hover:bg-shelvitas-green/50" />
+          </button>
         )}
-        <div className="min-w-0 flex-1">
+
+        <div className="min-w-0 flex-1 py-2">
+          {/* Header */}
           <div className="flex items-center gap-2">
+            <Link href={`/${comment.author.username}`} className="shrink-0">
+              {comment.author.avatarUrl ? (
+                <RemoteImage
+                  src={comment.author.avatarUrl}
+                  alt={comment.author.displayName}
+                  width={depth === 0 ? 24 : 20}
+                  height={depth === 0 ? 24 : 20}
+                  className={`rounded-full ${depth === 0 ? "h-6 w-6" : "h-5 w-5"}`}
+                />
+              ) : (
+                <div
+                  className={`flex items-center justify-center rounded-full bg-secondary font-semibold ${
+                    depth === 0 ? "h-6 w-6 text-[9px]" : "h-5 w-5 text-[8px]"
+                  }`}
+                >
+                  {comment.author.displayName.charAt(0).toUpperCase()}
+                </div>
+              )}
+            </Link>
             <Link
               href={`/${comment.author.username}`}
-              className="text-xs font-medium hover:text-shelvitas-green"
+              className="text-xs font-semibold hover:text-shelvitas-green"
             >
               {comment.author.displayName}
             </Link>
             <span className="text-[10px] text-muted-foreground">
-              {new Date(comment.createdAt).toLocaleDateString()}
+              {timeAgo(comment.createdAt)}
             </span>
-            {comment.isDeleted && (
-              <span className="text-[10px] italic text-muted-foreground">
-                deleted
+            {collapsed && hasReplies && (
+              <span className="text-[10px] text-muted-foreground">
+                ({replyCount} {replyCount === 1 ? "reply" : "replies"})
               </span>
             )}
           </div>
 
-          {comment.containsSpoilers && !showSpoiler ? (
-            <button
-              type="button"
-              onClick={() => setShowSpoiler(true)}
-              className="mt-1 flex items-center gap-1 text-xs text-shelvitas-orange hover:underline"
-            >
-              <AlertTriangle className="h-3 w-3" />
-              Show spoiler
-            </button>
-          ) : (
-            <p className="mt-1 text-sm text-foreground/80">{comment.body}</p>
-          )}
+          {/* Body */}
+          {!collapsed && (
+            <>
+              {comment.isDeleted && (
+                <p className="mt-1 text-xs italic text-muted-foreground">
+                  [deleted]
+                </p>
+              )}
+              {!comment.isDeleted &&
+                comment.containsSpoilers &&
+                !showSpoiler && (
+                  <button
+                    type="button"
+                    onClick={() => setShowSpoiler(true)}
+                    className="mt-1 flex items-center gap-1 text-xs text-shelvitas-orange hover:underline"
+                  >
+                    <AlertTriangle className="h-3 w-3" />
+                    Show spoiler
+                  </button>
+                )}
+              {!comment.isDeleted &&
+                (!comment.containsSpoilers || showSpoiler) && (
+                  <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+                    {comment.body}
+                  </p>
+                )}
 
-          {!isReply && !comment.isDeleted && (
-            <button
-              type="button"
-              onClick={() => onReply(comment.id)}
-              className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground"
-            >
-              <MessageCircle className="h-3 w-3" />
-              Reply
-            </button>
+              {/* Actions */}
+              {!comment.isDeleted && (
+                <div className="mt-1.5 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setLiked(!liked)}
+                    className={`flex cursor-pointer items-center gap-1 text-[10px] transition-colors ${
+                      liked
+                        ? "text-shelvitas-green"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <ThumbsUp
+                      className={`h-3 w-3 ${liked ? "fill-shelvitas-green" : ""}`}
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleReply}
+                    className="flex cursor-pointer items-center gap-1 text-[10px] text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <MessageCircle className="h-3 w-3" />
+                    Reply
+                  </button>
+                  {hasReplies && (
+                    <button
+                      type="button"
+                      onClick={() => setCollapsed(!collapsed)}
+                      className="flex cursor-pointer items-center gap-1 text-[10px] text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {collapsed ? (
+                        <ChevronDown className="h-3 w-3" />
+                      ) : (
+                        <ChevronUp className="h-3 w-3" />
+                      )}
+                      {collapsed ? "Show" : "Hide"} replies
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Reply input */}
+              {isReplying && (
+                <div className="mt-2 flex items-start gap-2">
+                  {profile?.avatarUrl ? (
+                    <RemoteImage
+                      src={profile.avatarUrl}
+                      alt={profile.displayName}
+                      width={20}
+                      height={20}
+                      className="h-5 w-5 shrink-0 rounded-full"
+                    />
+                  ) : (
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary text-[8px] font-semibold">
+                      {profile?.displayName?.charAt(0).toUpperCase() ?? "?"}
+                    </div>
+                  )}
+                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                    <textarea
+                      value={replyBody}
+                      onChange={(e) => setReplyBody(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (
+                          e.key === "Enter" &&
+                          !e.shiftKey &&
+                          replyBody.trim()
+                        ) {
+                          e.preventDefault();
+                          submitReply();
+                        }
+                        if (e.key === "Escape") {
+                          setReplyTo(null);
+                        }
+                      }}
+                      placeholder={`Reply to ${comment.author.displayName}...`}
+                      rows={2}
+                      // eslint-disable-next-line jsx-a11y/no-autofocus
+                      autoFocus
+                      className="w-full rounded-sm border border-secondary bg-secondary/30 px-3 py-1.5 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+                    />
+                    <div className="flex gap-1.5">
+                      <Button
+                        size="sm"
+                        className="h-6 gap-1 bg-shelvitas-green px-2.5 text-[10px] text-background hover:bg-shelvitas-green/90"
+                        onClick={submitReply}
+                        disabled={isSubmitting || !replyBody.trim()}
+                      >
+                        {isSubmitting && <Spinner className="h-2.5 w-2.5" />}
+                        Reply
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 px-2 text-[10px] text-muted-foreground"
+                        onClick={() => {
+                          setReplyTo(null);
+                          setReplyBody("");
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Nested replies */}
+              {!collapsed &&
+                comment.replies?.map((reply) => (
+                  <CommentNode
+                    key={reply.id}
+                    comment={reply}
+                    depth={depth + 1}
+                    reviewId={reviewId}
+                    shelfId={shelfId}
+                    replyTo={replyTo}
+                    setReplyTo={setReplyTo}
+                    onCommentAdded={onCommentAdded}
+                  />
+                ))}
+            </>
           )}
         </div>
       </div>
@@ -85,6 +309,7 @@ const CommentItem = ({
   );
 };
 
+/* ── Thread Container ── */
 interface CommentThreadProps {
   reviewId?: string;
   shelfId?: string;
@@ -97,123 +322,127 @@ export const CommentThread = ({
   comments,
 }: CommentThreadProps) => {
   const session = useAuthStore((s) => s.session);
+  const profile = useAuthStore((s) => s.profile);
   const [replyTo, setReplyTo] = useState<string | null>(null);
-  const [replyBody, setReplyBody] = useState("");
   const [newComment, setNewComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [localComments, setLocalComments] = useState<CommentData[]>(comments);
 
-  const handleSubmit = async (parentId?: string) => {
+  const addReply = (parentId: string, reply: CommentData) => {
+    const addToTree = (items: CommentData[]): CommentData[] =>
+      items.map((c) => {
+        if (c.id === parentId) {
+          return { ...c, replies: [...(c.replies ?? []), reply] };
+        }
+        if (c.replies?.length) {
+          return { ...c, replies: addToTree(c.replies) };
+        }
+        return c;
+      });
+    setLocalComments((prev) => addToTree(prev));
+  };
+
+  const handleSubmit = async () => {
     if (!session) {
       window.location.href = "/sign-in";
       return;
     }
-
-    const body = parentId ? replyBody : newComment;
-    if (!body.trim()) return;
-
+    if (!newComment.trim() || isSubmitting) return;
     setIsSubmitting(true);
     try {
-      await api.post("/v1/comments", {
+      const created = await api.post<CommentData>("/v1/comments", {
         ...(reviewId && { reviewId }),
         ...(shelfId && { shelfId }),
-        ...(parentId && { parentId }),
-        body: body.trim(),
+        body: newComment.trim(),
       });
-      if (parentId) {
-        setReplyBody("");
-        setReplyTo(null);
-      } else {
-        setNewComment("");
-      }
-      // Ideally refresh comments here — parent should handle this
-      window.location.reload();
+      setLocalComments((prev) => [
+        ...prev,
+        {
+          ...created,
+          author: {
+            username: profile?.username ?? "",
+            displayName: profile?.displayName ?? "",
+            avatarUrl: profile?.avatarUrl ?? null,
+          },
+          replies: [],
+        },
+      ]);
+      setNewComment("");
     } catch {
-      // Silently handle
+      // silent
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="space-y-4">
-      {/* New comment input */}
-      <div className="flex gap-2">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder={session ? "Write a comment..." : "Sign in to comment"}
-          disabled={!session}
-          rows={2}
-          className="flex-1 rounded-sm border border-secondary bg-secondary/50 px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-        />
-        <Button
-          size="sm"
-          className="gap-1.5 self-end bg-shelvitas-green text-background hover:bg-shelvitas-green/90"
-          onClick={() => handleSubmit()}
-          disabled={isSubmitting || !newComment.trim()}
-        >
-          {isSubmitting ? <Spinner className="h-3.5 w-3.5" /> : null}
-          {isSubmitting ? "Posting..." : "Post"}
-        </Button>
-      </div>
-
-      {/* Comment list */}
-      {comments.map((comment) => (
-        <div key={comment.id} className="space-y-3">
-          <CommentItem
-            comment={comment}
-            onReply={(parentId) => setReplyTo(parentId)}
+    <div>
+      {/* New comment */}
+      <div className="flex items-start gap-2.5 pb-3">
+        {profile?.avatarUrl ? (
+          <RemoteImage
+            src={profile.avatarUrl}
+            alt={profile.displayName}
+            width={24}
+            height={24}
+            className="h-6 w-6 shrink-0 rounded-full"
           />
-
-          {/* Replies */}
-          {comment.replies?.map((reply) => (
-            <CommentItem
-              key={reply.id}
-              comment={reply}
-              onReply={() => {}}
-              isReply
-            />
-          ))}
-
-          {/* Reply input */}
-          {replyTo === comment.id && (
-            <div className="ml-8 flex gap-2">
-              <textarea
-                value={replyBody}
-                onChange={(e) => setReplyBody(e.target.value)}
-                placeholder="Write a reply..."
-                rows={2}
-                className="flex-1 rounded-sm border border-secondary bg-secondary/50 px-3 py-2 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              />
-              <div className="flex flex-col gap-1 self-end">
-                <Button
-                  size="sm"
-                  className="h-7 gap-1 bg-shelvitas-green text-xs text-background hover:bg-shelvitas-green/90"
-                  onClick={() => handleSubmit(comment.id)}
-                  disabled={isSubmitting || !replyBody.trim()}
-                >
-                  {isSubmitting && <Spinner className="h-3 w-3" />}
-                  {isSubmitting ? "Replying..." : "Reply"}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 text-xs"
-                  onClick={() => {
-                    setReplyTo(null);
-                    setReplyBody("");
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
+        ) : (
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-[9px] font-semibold">
+            {profile?.displayName?.charAt(0).toUpperCase() ?? "?"}
+          </div>
+        )}
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey && newComment.trim()) {
+                e.preventDefault();
+                handleSubmit();
+              }
+            }}
+            placeholder={
+              session ? "What are your thoughts?" : "Sign in to comment"
+            }
+            disabled={!session}
+            rows={2}
+            className="w-full rounded-sm border border-secondary bg-secondary/30 px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+          />
+          {newComment.trim() && (
+            <div>
+              <Button
+                size="sm"
+                className="h-7 gap-1 bg-shelvitas-green text-xs text-background hover:bg-shelvitas-green/90"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+              >
+                {isSubmitting && <Spinner className="h-3 w-3" />}
+                Comment
+              </Button>
             </div>
           )}
         </div>
-      ))}
+      </div>
 
-      {comments.length === 0 && (
-        <p className="text-center text-xs text-muted-foreground">
+      {/* Thread */}
+      <div className="divide-y divide-secondary/20">
+        {localComments.map((comment) => (
+          <CommentNode
+            key={comment.id}
+            comment={comment}
+            depth={0}
+            reviewId={reviewId}
+            shelfId={shelfId}
+            replyTo={replyTo}
+            setReplyTo={setReplyTo}
+            onCommentAdded={addReply}
+          />
+        ))}
+      </div>
+
+      {localComments.length === 0 && (
+        <p className="py-6 text-center text-xs text-muted-foreground">
           No comments yet. Be the first to share your thoughts.
         </p>
       )}

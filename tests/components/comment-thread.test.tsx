@@ -117,10 +117,7 @@ describe("CommentThread", () => {
 
     render(<CommentThread reviewId="r1" comments={[deletedComment]} />);
 
-    expect(
-      screen.getByText("[This comment has been deleted]"),
-    ).toBeInTheDocument();
-    expect(screen.getByText("deleted")).toBeInTheDocument();
+    expect(screen.getByText("[deleted]")).toBeInTheDocument();
   });
 
   it("should show sign-in prompt in placeholder when not authenticated", () => {
@@ -137,7 +134,7 @@ describe("CommentThread", () => {
     render(<CommentThread reviewId="r1" comments={[]} />);
 
     expect(
-      screen.getByPlaceholderText("Write a comment..."),
+      screen.getByPlaceholderText("What are your thoughts?"),
     ).toBeInTheDocument();
   });
 });
