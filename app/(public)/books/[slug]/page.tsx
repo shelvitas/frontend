@@ -93,7 +93,11 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
       <main className="container flex max-w-4xl flex-1 flex-col py-10">
         {/* ── Hero: Cover + Metadata ── */}
-        <div className="flex flex-col gap-8 sm:flex-row">
+        <div className="relative flex flex-col gap-8 sm:flex-row">
+          {/* Status — top right */}
+          <div className="absolute right-0 top-0">
+            <StatusControls bookId={book.id} />
+          </div>
           {/* Cover */}
           <div className="shrink-0">
             {book.coverUrl ? (
@@ -185,10 +189,6 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
               {book.isbn13 && <span>ISBN {book.isbn13}</span>}
             </div>
 
-            {/* Reading status */}
-            <div className="mt-6">
-              <StatusControls bookId={book.id} />
-            </div>
           </div>
         </div>
 
