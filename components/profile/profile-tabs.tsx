@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { BookOpen, BookMarked, Star, Library, BookCheck } from "lucide-react";
+import { BookOpen, BookMarked, Star, Library, BookCheck, BookX } from "lucide-react";
 
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
@@ -41,6 +41,12 @@ const tabs = [
     label: "Want to Read",
     icon: BookMarked,
     color: "border-shelvitas-blue text-shelvitas-blue",
+  },
+  {
+    id: "dnf",
+    label: "DNF",
+    icon: BookX,
+    color: "border-shelvitas-red text-shelvitas-red",
   },
 ] as const;
 
@@ -93,7 +99,8 @@ export const ProfileTabs = ({ username }: { username: string }) => {
         if (
           activeTab === "read" ||
           activeTab === "reading" ||
-          activeTab === "want"
+          activeTab === "want" ||
+          activeTab === "dnf"
         ) {
           const data = await api.get<DiaryEntry[]>(
             "/v1/diary?limit=50&offset=0",
@@ -122,10 +129,14 @@ export const ProfileTabs = ({ username }: { username: string }) => {
     read: "read",
     reading: "currently_reading",
     want: "want_to_read",
+    dnf: "did_not_finish",
   };
 
   const filteredEntries =
-    activeTab === "read" || activeTab === "reading" || activeTab === "want"
+    activeTab === "read" ||
+    activeTab === "reading" ||
+    activeTab === "want" ||
+    activeTab === "dnf"
       ? entries.filter((e) => e.status === statusMap[activeTab])
       : [];
 
@@ -134,7 +145,6 @@ export const ProfileTabs = ({ username }: { username: string }) => {
       {/* Tab bar */}
       <div className="flex gap-0 border-b border-secondary">
         {tabs.map((tab) => {
-          const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           return (
             <button
@@ -147,8 +157,7 @@ export const ProfileTabs = ({ username }: { username: string }) => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Icon className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{tab.label}</span>
+              {tab.label}
             </button>
           );
         })}
@@ -165,7 +174,8 @@ export const ProfileTabs = ({ username }: { username: string }) => {
       {!isLoading &&
         (activeTab === "read" ||
           activeTab === "reading" ||
-          activeTab === "want") && (
+          activeTab === "want" ||
+          activeTab === "dnf") && (
           <div>
             {filteredEntries.length > 0 ? (
               <div className="mt-4 grid grid-cols-5 gap-3 sm:grid-cols-6 md:grid-cols-8">
@@ -206,6 +216,8 @@ export const ProfileTabs = ({ username }: { username: string }) => {
                 {activeTab === "reading" &&
                   `${username} isn't reading anything right now.`}
                 {activeTab === "want" && `${username}'s reading list is empty.`}
+                {activeTab === "dnf" &&
+                  `${username} hasn't marked any books as DNF.`}
               </p>
             )}
           </div>

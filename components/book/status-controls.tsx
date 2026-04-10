@@ -11,6 +11,13 @@ import {
 } from "lucide-react";
 
 import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useBookStatus } from "@/lib/hooks/use-book-status";
@@ -59,6 +66,14 @@ const allStatuses: ReadingStatus[] = [
   "did_not_finish",
 ];
 
+const dnfReasons = [
+  { value: "boring", label: "Too boring" },
+  { value: "too_dense", label: "Too dense / hard to follow" },
+  { value: "wrong_mood", label: "Wrong mood / wrong time" },
+  { value: "life", label: "Life got in the way" },
+  { value: "not_for_me", label: "Just not for me" },
+] as const;
+
 interface StatusControlsProps {
   bookId: string;
 }
@@ -72,10 +87,11 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
     setStatus,
     clear,
   } = useBookStatus(bookId);
-  const [loadingStatus, setLoadingStatus] = useState<ReadingStatus | null>(
-    null,
-  );
+  const [loadingStatus, setLoadingStatus] = useState<ReadingStatus | null>(null);
   const [open, setOpen] = useState(false);
+  const [dnfOpen, setDnfOpen] = useState(false);
+  const [dnfReason, setDnfReason] = useState<string>("not_for_me");
+  const [dnfPage, setDnfPage] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
   // Close on outside click
@@ -101,18 +117,41 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
     setOpen(false);
     if (loadingStatus) return;
 
+    if (status === "did_not_finish") {
+      setDnfReason("not_for_me");
+      setDnfPage("");
+      setDnfOpen(true);
+      return;
+    }
+
     const prev = activeStatus;
     setStatus(status);
     setLoadingStatus(status);
 
     try {
-      if (status === "did_not_finish") {
-        await api.post(`/v1/books/${bookId}/dnf`, { reason: "not_for_me" });
-        toast("Marked as Did Not Finish");
-      } else {
-        await api.post(`/v1/books/${bookId}/status`, { status });
-        toast(`Marked as ${statusConfig[status].label}`);
-      }
+      await api.post(`/v1/books/${bookId}/status`, { status });
+      toast(`Marked as ${statusConfig[status].label}`);
+    } catch {
+      if (prev) setStatus(prev);
+      else clear();
+      toast("Failed to update status", "error");
+    } finally {
+      setLoadingStatus(null);
+    }
+  };
+
+  const handleDnfSubmit = async () => {
+    const prev = activeStatus;
+    setStatus("did_not_finish");
+    setLoadingStatus("did_not_finish");
+    setDnfOpen(false);
+
+    try {
+      await api.post(`/v1/books/${bookId}/dnf`, {
+        reason: dnfReason,
+        ...(dnfPage && { pageStopped: parseInt(dnfPage, 10) }),
+      });
+      toast("Marked as Did Not Finish");
     } catch {
       if (prev) setStatus(prev);
       else clear();
@@ -219,6 +258,78 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
           })}
         </div>
       )}
+
+      {/* DNF Modal */}
+      <Dialog open={dnfOpen} onOpenChange={setDnfOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-shelvitas-red">
+              <BookX className="h-4 w-4" />
+              Did Not Finish
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div>
+              <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Why did you stop?
+              </p>
+              <div className="space-y-1.5">
+                {dnfReasons.map((r) => (
+                  <button
+                    key={r.value}
+                    type="button"
+                    onClick={() => setDnfReason(r.value)}
+                    className={`flex w-full cursor-pointer items-center rounded-sm px-3 py-2 text-xs transition-colors ${
+                      dnfReason === r.value
+                        ? "bg-shelvitas-red/10 font-medium text-shelvitas-red"
+                        : "text-foreground/70 hover:bg-secondary/30"
+                    }`}
+                  >
+                    {r.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Page stopped at (optional)
+              </p>
+              <input
+                type="number"
+                value={dnfPage}
+                onChange={(e) => setDnfPage(e.target.value)}
+                placeholder="e.g. 85"
+                min={0}
+                className="w-full rounded-sm border border-secondary bg-secondary/30 px-3 py-1.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+              />
+            </div>
+
+            <div className="flex gap-2 pt-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1"
+                onClick={() => setDnfOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                className="flex-1 gap-1.5 bg-shelvitas-red text-background hover:bg-shelvitas-red/90"
+                onClick={handleDnfSubmit}
+                disabled={!!loadingStatus}
+              >
+                {loadingStatus === "did_not_finish" && (
+                  <Spinner className="h-3 w-3" />
+                )}
+                Mark as DNF
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
