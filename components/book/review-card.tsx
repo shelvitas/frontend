@@ -31,7 +31,7 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
   const [likeLoading, setLikeLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(true);
   const [comments, setComments] = useState<CommentData[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [showSpoiler, setShowSpoiler] = useState(false);

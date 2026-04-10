@@ -323,6 +323,7 @@ export const CommentThread = ({
   const profile = useAuthStore((s) => s.profile);
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [newComment, setNewComment] = useState("");
+  const [showInput, setShowInput] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [localComments, setLocalComments] = useState<CommentData[]>(comments);
 
@@ -366,6 +367,7 @@ export const CommentThread = ({
         },
       ]);
       setNewComment("");
+      setShowInput(false);
     } catch {
       // silent
     } finally {
@@ -376,52 +378,76 @@ export const CommentThread = ({
   return (
     <div>
       {/* New comment */}
-      <div className="flex items-start gap-2.5 pb-3">
-        {profile?.avatarUrl ? (
-          <RemoteImage
-            src={profile.avatarUrl}
-            alt={profile.displayName}
-            width={24}
-            height={24}
-            className="h-6 w-6 shrink-0 rounded-full"
-          />
-        ) : (
-          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-[9px] font-semibold">
-            {profile?.displayName?.charAt(0).toUpperCase() ?? "?"}
-          </div>
-        )}
-        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey && newComment.trim()) {
-                e.preventDefault();
-                handleSubmit();
-              }
-            }}
-            placeholder={
-              session ? "What are your thoughts?" : "Sign in to comment"
-            }
-            disabled={!session}
-            rows={2}
-            className="w-full rounded-sm border border-secondary bg-secondary/30 px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          />
-          {newComment.trim() && (
-            <div>
-              <Button
-                size="sm"
-                className="h-7 gap-1 bg-shelvitas-green text-xs text-background hover:bg-shelvitas-green/90"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-              >
-                {isSubmitting && <Spinner className="h-3 w-3" />}
-                Comment
-              </Button>
+      {!showInput && (
+        <button
+          type="button"
+          onClick={() => {
+            if (!session) { window.location.href = "/sign-in"; return; }
+            setShowInput(true);
+          }}
+          className="mb-3 flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <MessageCircle className="h-3.5 w-3.5" />
+          Write a comment...
+        </button>
+      )}
+      {showInput && (
+        <div className="flex items-start gap-2.5 pb-3">
+          {profile?.avatarUrl ? (
+            <RemoteImage
+              src={profile.avatarUrl}
+              alt={profile.displayName}
+              width={24}
+              height={24}
+              className="h-6 w-6 shrink-0 rounded-full"
+            />
+          ) : (
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-[9px] font-semibold">
+              {profile?.displayName?.charAt(0).toUpperCase() ?? "?"}
             </div>
           )}
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey && newComment.trim()) {
+                  e.preventDefault();
+                  handleSubmit();
+                }
+                if (e.key === "Escape") {
+                  setShowInput(false);
+                  setNewComment("");
+                }
+              }}
+              placeholder="What are your thoughts?"
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+              rows={2}
+              className="w-full rounded-sm border border-secondary bg-secondary/30 px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            />
+            <div className="flex gap-1.5">
+              <Button
+                size="sm"
+                className="h-6 gap-1 bg-shelvitas-green px-2.5 text-[10px] text-background hover:bg-shelvitas-green/90"
+                onClick={handleSubmit}
+                disabled={isSubmitting || !newComment.trim()}
+              >
+                {isSubmitting && <Spinner className="h-2.5 w-2.5" />}
+                Comment
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 px-2 text-[10px] text-muted-foreground"
+                onClick={() => { setShowInput(false); setNewComment(""); }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Thread */}
       <div className="divide-y divide-secondary/20">
