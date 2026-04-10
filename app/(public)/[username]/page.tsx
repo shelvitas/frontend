@@ -215,12 +215,13 @@ const ProfilePage = async ({
             </h2>
             <div className="mt-3 grid grid-cols-4 gap-3">
               {profile.favouriteBooks.map((book) => (
-                <Tooltip key={book.id} content={book.title} side="bottom">
-                  <Link
-                    href={`/books/${book.slug ?? book.id}`}
-                    className="group cursor-pointer"
-                  >
-                    <div className="rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
+                <Link
+                  key={book.id}
+                  href={`/books/${book.slug ?? book.id}`}
+                  className="group cursor-pointer"
+                >
+                  <Tooltip content={book.title} side="bottom">
+                    <div className="w-full rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                       {book.coverUrl ? (
                         <RemoteImage
                           src={book.coverUrl}
@@ -235,8 +236,8 @@ const ProfilePage = async ({
                         </div>
                       )}
                     </div>
-                  </Link>
-                </Tooltip>
+                  </Tooltip>
+                </Link>
               ))}
             </div>
           </div>

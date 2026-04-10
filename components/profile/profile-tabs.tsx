@@ -143,16 +143,13 @@ export const ProfileTabs = ({ username }: { username: string }) => {
             {filteredEntries.length > 0 ? (
               <div className="mt-4 grid grid-cols-5 gap-3 sm:grid-cols-6 md:grid-cols-8">
                 {filteredEntries.map((entry) => (
-                  <Tooltip
+                  <Link
                     key={entry.id}
-                    content={entry.book.title}
-                    side="bottom"
+                    href={`/books/${entry.book.slug ?? entry.book.id}`}
+                    className="group cursor-pointer"
                   >
-                    <Link
-                      href={`/books/${entry.book.slug ?? entry.book.id}`}
-                      className="group cursor-pointer"
-                    >
-                      <div className="rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
+                    <Tooltip content={entry.book.title} side="bottom">
+                      <div className="w-full rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                         {entry.book.coverUrl ? (
                           <RemoteImage
                             src={entry.book.coverUrl}
@@ -175,8 +172,8 @@ export const ProfileTabs = ({ username }: { username: string }) => {
                           </span>
                         </div>
                       )}
-                    </Link>
-                  </Tooltip>
+                    </Tooltip>
+                  </Link>
                 ))}
               </div>
             ) : (
