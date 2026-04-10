@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Settings, BookOpen, Library, Download, Import } from "lucide-react";
+import { Settings } from "lucide-react";
 
 import { Tooltip } from "@/components/ui/tooltip";
 import { useAuthStore } from "@/store/auth";
@@ -155,48 +155,6 @@ const ProfilePage = () => {
               }}
             />
           </div>
-        </div>
-
-        {/* ── Quick Links ── */}
-        <div className="mt-8 flex items-center justify-center gap-6">
-          {[
-            {
-              href: "/diary",
-              icon: BookOpen,
-              label: "Diary",
-              color: "text-shelvitas-green",
-            },
-            {
-              href: "/shelves",
-              icon: Library,
-              label: "Shelves",
-              color: "text-shelvitas-orange",
-            },
-            {
-              href: "/import",
-              icon: Import,
-              label: "Import",
-              color: "text-shelvitas-blue",
-            },
-            {
-              href: "/export",
-              icon: Download,
-              label: "Export",
-              color: "text-muted-foreground",
-            },
-          ].map((item) => (
-            <Tooltip key={item.href} content={item.label}>
-              <Link
-                href={item.href}
-                className="flex flex-col items-center gap-1 rounded-sm px-3 py-2 transition-colors hover:bg-secondary/30"
-              >
-                <item.icon className={`h-5 w-5 ${item.color}`} />
-                <span className="text-[10px] text-muted-foreground">
-                  {item.label}
-                </span>
-              </Link>
-            </Tooltip>
-          ))}
         </div>
 
         {/* ── Activity Tabs ── */}

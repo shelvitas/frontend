@@ -10,6 +10,8 @@ interface UserProfile {
   displayName: string;
   bio: string | null;
   avatarUrl: string | null;
+  websiteUrl?: string | null;
+  location?: string | null;
   profileVisibility: "public" | "private";
 }
 
