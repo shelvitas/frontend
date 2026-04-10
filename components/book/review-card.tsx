@@ -17,7 +17,7 @@ import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
-export const ReviewCard = ({ review }: { review: BookReview }) => {
+export const ReviewCard = ({ review, bookSlug }: { review: BookReview; bookSlug?: string }) => {
   const session = useAuthStore((s) => s.session);
   const { toast } = useToast();
   const [likes, setLikes] = useState(review.likesCount);
@@ -153,8 +153,8 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
 
         <Link
           href={
-            review.reviewer.username
-              ? `/${review.reviewer.username}/book/${review.id}`
+            review.reviewer.username && bookSlug
+              ? `/${review.reviewer.username}/book/${bookSlug}`
               : `/reviews/${review.id}`
           }
           className="flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"

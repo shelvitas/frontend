@@ -270,7 +270,7 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             </h2>
             <div className="mt-3 divide-y divide-secondary/40">
               {book.topReviews.map((review) => (
-                <ReviewCard key={review.id} review={review} />
+                <ReviewCard key={review.id} review={review} bookSlug={book.slug} />
               ))}
             </div>
           </div>
