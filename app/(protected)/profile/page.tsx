@@ -43,7 +43,12 @@ interface ProfileData {
   followerCount: number;
   followingCount: number;
   booksReadCount: number;
-  favouriteBooks: { id: string; slug?: string; title: string; coverUrl: string | null }[];
+  favouriteBooks: {
+    id: string;
+    slug?: string;
+    title: string;
+    coverUrl: string | null;
+  }[];
   isFollowing: boolean | null;
   isOwnProfile: boolean;
 }
@@ -158,25 +163,23 @@ const ProfilePage = () => {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-1.5">
             <Link href="/settings">
               <Button
                 variant="outline"
-                size="sm"
-                className="w-full gap-1.5 text-xs"
+                size="icon"
+                className="h-8 w-8"
               >
-                <Settings className="h-3 w-3" />
-                Edit
+                <Settings className="h-3.5 w-3.5" />
               </Button>
             </Link>
             <Button
               variant="ghost"
-              size="sm"
-              className="gap-1.5 text-xs text-muted-foreground"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground"
               onClick={handleSignOut}
             >
-              <LogOut className="h-3 w-3" />
-              Sign out
+              <LogOut className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
