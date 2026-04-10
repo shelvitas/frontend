@@ -8,8 +8,6 @@ import {
   MessageCircle,
   AlertTriangle,
   Bookmark,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 
 import type { BookReview, CommentData } from "@/lib/types";
@@ -31,7 +29,7 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
   const [likeLoading, setLikeLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
-  const [showComments, setShowComments] = useState(true);
+  const showComments = true;
   const [comments, setComments] = useState<CommentData[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [showSpoiler, setShowSpoiler] = useState(false);
@@ -81,9 +79,6 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
     }
   };
 
-  const toggleComments = () => {
-    setShowComments(!showComments);
-  };
 
   const mountedRef = useRef(true);
   useEffect(
@@ -199,23 +194,10 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
           {likes}
         </button>
 
-        <button
-          type="button"
-          onClick={toggleComments}
-          className={`flex cursor-pointer items-center gap-1 text-xs transition-colors ${
-            showComments
-              ? "text-shelvitas-green"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
+        <span className="flex items-center gap-1 text-xs text-muted-foreground">
           <MessageCircle className="h-3.5 w-3.5" />
           {review.commentsCount}
-          {showComments ? (
-            <ChevronUp className="h-3 w-3" />
-          ) : (
-            <ChevronDown className="h-3 w-3" />
-          )}
-        </button>
+        </span>
 
         <button
           type="button"
