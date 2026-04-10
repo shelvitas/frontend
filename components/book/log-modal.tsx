@@ -57,10 +57,30 @@ interface LogModalProps {
 }
 
 const statusOptions = [
-  { value: "want_to_read" as const, label: "Want to Read", icon: BookMarked, color: "text-shelvitas-blue" },
-  { value: "currently_reading" as const, label: "Reading", icon: BookOpen, color: "text-shelvitas-yellow" },
-  { value: "read" as const, label: "Read", icon: BookCheck, color: "text-shelvitas-green" },
-  { value: "did_not_finish" as const, label: "DNF", icon: BookX, color: "text-shelvitas-red" },
+  {
+    value: "want_to_read" as const,
+    label: "Want to Read",
+    icon: BookMarked,
+    color: "text-shelvitas-blue",
+  },
+  {
+    value: "currently_reading" as const,
+    label: "Reading",
+    icon: BookOpen,
+    color: "text-shelvitas-yellow",
+  },
+  {
+    value: "read" as const,
+    label: "Read",
+    icon: BookCheck,
+    color: "text-shelvitas-green",
+  },
+  {
+    value: "did_not_finish" as const,
+    label: "DNF",
+    icon: BookX,
+    color: "text-shelvitas-red",
+  },
 ];
 
 const formatOptions = [
@@ -212,7 +232,9 @@ export const LogModal = ({
                     }`}
                     onClick={() => setStatus(opt.value)}
                   >
-                    <Icon className={`h-3.5 w-3.5 ${status === opt.value ? opt.color : ""}`} />
+                    <Icon
+                      className={`h-3.5 w-3.5 ${status === opt.value ? opt.color : ""}`}
+                    />
                     {opt.label}
                   </Button>
                 );

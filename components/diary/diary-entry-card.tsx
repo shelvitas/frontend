@@ -87,7 +87,9 @@ export const DiaryEntryCard = ({ entry, onEdit }: DiaryEntryCardProps) => {
                   Reread
                 </span>
               )}
-              <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-medium ${statusBadgeColors[entry.status] ?? "bg-secondary text-muted-foreground"}`}>
+              <span
+                className={`rounded-sm px-1.5 py-0.5 text-[10px] font-medium ${statusBadgeColors[entry.status] ?? "bg-secondary text-muted-foreground"}`}
+              >
                 {statusLabels[entry.status] ?? entry.status}
               </span>
               {entry.format && (

@@ -52,7 +52,6 @@ const ProfilePage = () => {
       .finally(() => setIsLoading(false));
   }, [authProfile?.username]);
 
-
   if (authLoading || isLoading) {
     return (
       <div className="flex min-h-screen flex-col">
@@ -133,9 +132,7 @@ const ProfilePage = () => {
           </p>
 
           {authProfile.bio && (
-            <p className="mt-2 text-sm text-foreground/80">
-              {authProfile.bio}
-            </p>
+            <p className="mt-2 text-sm text-foreground/80">{authProfile.bio}</p>
           )}
         </div>
 
@@ -163,10 +160,30 @@ const ProfilePage = () => {
         {/* ── Quick Links ── */}
         <div className="mt-8 flex items-center justify-center gap-6">
           {[
-            { href: "/diary", icon: BookOpen, label: "Diary", color: "text-shelvitas-green" },
-            { href: "/shelves", icon: Library, label: "Shelves", color: "text-shelvitas-orange" },
-            { href: "/import", icon: Import, label: "Import", color: "text-shelvitas-blue" },
-            { href: "/export", icon: Download, label: "Export", color: "text-muted-foreground" },
+            {
+              href: "/diary",
+              icon: BookOpen,
+              label: "Diary",
+              color: "text-shelvitas-green",
+            },
+            {
+              href: "/shelves",
+              icon: Library,
+              label: "Shelves",
+              color: "text-shelvitas-orange",
+            },
+            {
+              href: "/import",
+              icon: Import,
+              label: "Import",
+              color: "text-shelvitas-blue",
+            },
+            {
+              href: "/export",
+              icon: Download,
+              label: "Export",
+              color: "text-muted-foreground",
+            },
           ].map((item) => (
             <Tooltip key={item.href} content={item.label}>
               <Link

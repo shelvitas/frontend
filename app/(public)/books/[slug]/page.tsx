@@ -230,7 +230,9 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         {/* ── Reading Stats ── */}
         <div className="mt-8 flex items-center justify-around rounded-sm border border-secondary bg-secondary/20 px-4 py-4">
           <div className="text-center">
-            <p className="text-lg font-bold text-shelvitas-green">{book.readingStats.read ?? 0}</p>
+            <p className="text-lg font-bold text-shelvitas-green">
+              {book.readingStats.read ?? 0}
+            </p>
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
               Read
             </p>
