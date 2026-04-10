@@ -154,13 +154,13 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
         className={`flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-2 text-xs font-medium transition-all ${
           active
             ? `${active.bg} ${active.border} ${active.color}`
-            : "border-secondary bg-secondary/30 text-muted-foreground hover:text-foreground"
+            : "border-shelvitas-green bg-shelvitas-green text-background hover:bg-shelvitas-green/90"
         }`}
       >
         {isLoading && <Spinner className="h-3.5 w-3.5" />}
         {!isLoading && ActiveIcon && <ActiveIcon className="h-3.5 w-3.5" />}
         {!isLoading && !ActiveIcon && <BookMarked className="h-3.5 w-3.5" />}
-        {active ? active.label : "Set status"}
+        {active ? active.label : "Add to your books"}
         <ChevronDown
           className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`}
         />

@@ -35,7 +35,7 @@ describe("StatusControls", () => {
     expect(container.innerHTML).toBe("");
   });
 
-  it("should show Set status dropdown trigger after hydration", async () => {
+  it("should show 'Add to your books' dropdown trigger after hydration", async () => {
     useAuthStore.setState({ session: { access_token: "token" } as never });
 
     mockFetch.mockResolvedValueOnce({
@@ -47,7 +47,7 @@ describe("StatusControls", () => {
     render(<StatusControls bookId="book-1" />);
 
     await waitFor(() => {
-      expect(screen.getByText("Set status")).toBeInTheDocument();
+      expect(screen.getByText("Add to your books")).toBeInTheDocument();
     });
   });
 
@@ -63,10 +63,10 @@ describe("StatusControls", () => {
     render(<StatusControls bookId="book-1" />);
 
     await waitFor(() => {
-      expect(screen.getByText("Set status")).toBeInTheDocument();
+      expect(screen.getByText("Add to your books")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText("Set status"));
+    fireEvent.click(screen.getByText("Add to your books"));
 
     expect(screen.getByText("Want to Read")).toBeInTheDocument();
     expect(screen.getByText("Reading")).toBeInTheDocument();
@@ -102,7 +102,7 @@ describe("StatusControls", () => {
     render(<StatusControls bookId="book-42" />);
 
     await waitFor(() => {
-      expect(screen.getByText("Set status")).toBeInTheDocument();
+      expect(screen.getByText("Add to your books")).toBeInTheDocument();
     });
 
     mockFetch.mockResolvedValueOnce({
@@ -111,7 +111,7 @@ describe("StatusControls", () => {
       json: () => Promise.resolve({ data: { status: "read" } }),
     });
 
-    fireEvent.click(screen.getByText("Set status"));
+    fireEvent.click(screen.getByText("Add to your books"));
     fireEvent.click(screen.getByText("Read"));
 
     await waitFor(() => {
