@@ -100,7 +100,7 @@ describe("CompleteProfilePage — Step 1 (username + name)", () => {
   });
 });
 
-describe("CompleteProfilePage — Step 2 (favourite books)", () => {
+describe("CompleteProfilePage — Step 2 (top 4 books)", () => {
   function advanceToStep2() {
     render(<CompleteProfilePage />);
     fireEvent.change(screen.getByPlaceholderText("e.g. booklover42"), {

@@ -58,6 +58,8 @@ const config: Config = {
           green: "hsl(var(--shelvitas-green))",
           orange: "hsl(var(--shelvitas-orange))",
           blue: "hsl(var(--shelvitas-blue))",
+          yellow: "hsl(var(--shelvitas-yellow))",
+          red: "hsl(var(--shelvitas-red))",
           body: "#14181c",
           header: "#0d1117",
           surface: "#1c2028",
@@ -77,6 +79,7 @@ const config: Config = {
           "Roboto",
           "sans-serif",
         ],
+        serif: ["var(--font-merriweather)", "Georgia", "serif"],
       },
       keyframes: {
         "accordion-down": {

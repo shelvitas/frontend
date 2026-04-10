@@ -29,13 +29,13 @@ const statusConfig = {
   currently_reading: {
     label: "Reading",
     icon: BookOpen,
-    color: "text-shelvitas-green",
+    color: "text-shelvitas-yellow",
   },
   read: { label: "Read", icon: BookCheck, color: "text-shelvitas-green" },
   did_not_finish: {
     label: "DNF",
     icon: BookX,
-    color: "text-shelvitas-orange",
+    color: "text-shelvitas-red",
   },
 } as const;
 

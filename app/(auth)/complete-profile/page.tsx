@@ -225,7 +225,11 @@ const CompleteProfilePage = () => {
               >
                 {book ? (
                   <>
-                    <Tooltip content={book.title} side="bottom" className="w-full">
+                    <Tooltip
+                      content={book.title}
+                      side="bottom"
+                      className="w-full"
+                    >
                       <div className="rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                         {book.coverUrl ? (
                           <RemoteImage

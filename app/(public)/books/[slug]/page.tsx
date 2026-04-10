@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BookOpen, Users, Star, Library } from "lucide-react";
+import { Users, Star, Library } from "lucide-react";
 
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -230,14 +230,13 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         {/* ── Reading Stats ── */}
         <div className="mt-8 flex items-center justify-around rounded-sm border border-secondary bg-secondary/20 px-4 py-4">
           <div className="text-center">
-            <p className="text-lg font-bold">{book.readingStats.read ?? 0}</p>
+            <p className="text-lg font-bold text-shelvitas-green">{book.readingStats.read ?? 0}</p>
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-              <BookOpen className="mr-0.5 inline h-3 w-3" />
               Read
             </p>
           </div>
           <div className="text-center">
-            <p className="text-lg font-bold">
+            <p className="text-lg font-bold text-shelvitas-yellow">
               {book.readingStats.currently_reading ?? 0}
             </p>
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -245,7 +244,7 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             </p>
           </div>
           <div className="text-center">
-            <p className="text-lg font-bold">
+            <p className="text-lg font-bold text-shelvitas-blue">
               {book.readingStats.want_to_read ?? 0}
             </p>
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -253,7 +252,7 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             </p>
           </div>
           <div className="text-center">
-            <p className="text-lg font-bold">
+            <p className="text-lg font-bold text-shelvitas-red">
               {book.readingStats.did_not_finish ?? 0}
             </p>
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">

@@ -12,11 +12,36 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { Tooltip } from "@/components/ui/tooltip";
 
 const tabs = [
-  { id: "read", label: "Read", icon: BookCheck },
-  { id: "reading", label: "Currently Reading", icon: BookOpen },
-  { id: "reviews", label: "Reviews", icon: Star },
-  { id: "shelves", label: "Shelves", icon: Library },
-  { id: "want", label: "Want to Read", icon: BookMarked },
+  {
+    id: "read",
+    label: "Read",
+    icon: BookCheck,
+    color: "border-shelvitas-green text-shelvitas-green",
+  },
+  {
+    id: "reading",
+    label: "Currently Reading",
+    icon: BookOpen,
+    color: "border-shelvitas-yellow text-shelvitas-yellow",
+  },
+  {
+    id: "reviews",
+    label: "Reviews",
+    icon: Star,
+    color: "border-shelvitas-orange text-shelvitas-orange",
+  },
+  {
+    id: "shelves",
+    label: "Shelves",
+    icon: Library,
+    color: "border-shelvitas-green text-shelvitas-green",
+  },
+  {
+    id: "want",
+    label: "Want to Read",
+    icon: BookMarked,
+    color: "border-shelvitas-blue text-shelvitas-blue",
+  },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
@@ -36,9 +61,10 @@ interface Review {
   rating: string | null;
   likesCount: number;
   createdAt: string;
-  // Joined fields for canonical /{username}/book/{slug} URL construction
-  book?: { id: string; slug: string; title: string };
+  book?: { id: string; slug: string; title: string; coverUrl?: string | null };
   reviewerUsername?: string;
+  reviewerAvatarUrl?: string | null;
+  reviewerDisplayName?: string;
 }
 
 interface UserShelf {
@@ -47,6 +73,7 @@ interface UserShelf {
   title: string;
   bookCount: number;
   likesCount: number;
+  previewCovers?: string[];
 }
 
 export const ProfileTabs = ({ username }: { username: string }) => {
@@ -105,7 +132,7 @@ export const ProfileTabs = ({ username }: { username: string }) => {
   return (
     <div>
       {/* Tab bar */}
-      <div className="flex gap-1 border-b border-secondary">
+      <div className="flex gap-0 border-b border-secondary">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -116,7 +143,7 @@ export const ProfileTabs = ({ username }: { username: string }) => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors ${
                 isActive
-                  ? "border-b-2 border-shelvitas-green text-foreground"
+                  ? `border-b-2 ${tab.color}`
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -148,7 +175,11 @@ export const ProfileTabs = ({ username }: { username: string }) => {
                     href={`/books/${entry.book.slug ?? entry.book.id}`}
                     className="group cursor-pointer"
                   >
-                    <Tooltip content={entry.book.title} side="bottom" className="w-full">
+                    <Tooltip
+                      content={entry.book.title}
+                      side="bottom"
+                      className="w-full"
+                    >
                       <div className="w-full rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                         {entry.book.coverUrl ? (
                           <RemoteImage
@@ -164,14 +195,6 @@ export const ProfileTabs = ({ username }: { username: string }) => {
                           </div>
                         )}
                       </div>
-                      {entry.rating && (
-                        <div className="mt-0.5 flex items-center gap-0.5">
-                          <Star className="h-2.5 w-2.5 fill-shelvitas-orange text-shelvitas-orange" />
-                          <span className="text-[10px] text-muted-foreground">
-                            {entry.rating}
-                          </span>
-                        </div>
-                      )}
                     </Tooltip>
                   </Link>
                 ))}
@@ -192,37 +215,79 @@ export const ProfileTabs = ({ username }: { username: string }) => {
       {!isLoading && activeTab === "reviews" && (
         <div>
           {reviews.length > 0 ? (
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 divide-y divide-secondary/40">
               {reviews.map((review) => (
                 <Link
                   key={review.id}
-                  // Canonical URL: /{username}/book/{book-slug}.
-                  // Falls back to legacy /reviews/{id} (which 308-redirects)
-                  // when the joined fields aren't present.
                   href={
                     review.reviewerUsername && review.book?.slug
                       ? `/${review.reviewerUsername}/book/${review.book.slug}`
                       : `/reviews/${review.id}`
                   }
-                  className="block rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20"
+                  className="group relative flex gap-5 overflow-hidden py-5 transition-colors hover:bg-secondary/5"
                 >
-                  <div className="flex items-center gap-2">
-                    {review.rating && (
-                      <div className="flex items-center gap-0.5">
-                        <Star className="h-3 w-3 fill-shelvitas-orange text-shelvitas-orange" />
-                        <span className="text-xs">{review.rating}</span>
+                  {/* Decorative quote mark background */}
+                  <span className="pointer-events-none absolute -right-4 -top-6 select-none font-serif text-[120px] leading-none text-shelvitas-green/[0.04]">
+                    &ldquo;
+                  </span>
+
+                  {/* Book cover */}
+                  <div className="shrink-0">
+                    {review.book?.coverUrl ? (
+                      <RemoteImage
+                        src={review.book.coverUrl}
+                        alt={review.book.title ?? "Book"}
+                        width={64}
+                        height={96}
+                        className="h-28 w-[4.5rem] rounded-sm object-cover transition-transform group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      <div className="flex h-28 w-[4.5rem] items-center justify-center rounded-sm bg-secondary text-[10px] text-muted-foreground">
+                        <BookOpen className="h-4 w-4" />
                       </div>
                     )}
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(review.createdAt).toLocaleDateString()}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {review.likesCount} likes
-                    </span>
                   </div>
-                  <p className="mt-1 line-clamp-2 text-sm text-foreground/80">
-                    {review.body}
-                  </p>
+
+                  {/* Quote card */}
+                  <div className="flex min-w-0 flex-1 flex-col justify-between">
+                    <div>
+                      <p className="mb-1.5 text-xs font-bold uppercase tracking-widest text-shelvitas-green/70">
+                        {review.book?.title ?? "Untitled"}
+                      </p>
+                      <p className="font-serif text-sm italic leading-relaxed text-foreground/75">
+                        <span className="not-italic text-shelvitas-green/60">
+                          &ldquo;
+                        </span>
+                        {review.body}
+                        <span className="not-italic text-shelvitas-green/60">
+                          &rdquo;
+                        </span>
+                      </p>
+                    </div>
+                    <div className="mt-2 flex items-center justify-end gap-1.5">
+                      <span className="text-xs text-muted-foreground">
+                        &mdash;
+                      </span>
+                      {review.reviewerAvatarUrl ? (
+                        <RemoteImage
+                          src={review.reviewerAvatarUrl}
+                          alt={review.reviewerDisplayName ?? username}
+                          width={16}
+                          height={16}
+                          className="h-4 w-4 rounded-full"
+                        />
+                      ) : (
+                        <div className="flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[8px] font-semibold">
+                          {(review.reviewerDisplayName ?? username)
+                            .charAt(0)
+                            .toUpperCase()}
+                        </div>
+                      )}
+                      <span className="text-xs text-muted-foreground">
+                        @{review.reviewerUsername ?? username}
+                      </span>
+                    </div>
+                  </div>
                 </Link>
               ))}
             </div>
@@ -238,22 +303,59 @@ export const ProfileTabs = ({ username }: { username: string }) => {
       {!isLoading && activeTab === "shelves" && (
         <div>
           {shelves.length > 0 ? (
-            <div className="mt-4 space-y-2">
+            <div className="mt-4 grid gap-5 sm:grid-cols-2">
               {shelves.map((shelf) => (
                 <Link
                   key={shelf.id}
                   href={`/shelves/${shelf.slug ?? shelf.id}`}
-                  className="flex items-center justify-between rounded-sm border border-secondary p-3 transition-colors hover:bg-secondary/20"
+                  className="group"
                 >
-                  <div>
-                    <p className="text-sm font-medium">{shelf.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {shelf.bookCount} book{shelf.bookCount !== 1 ? "s" : ""}{" "}
-                      &middot; {shelf.likesCount} like
-                      {shelf.likesCount !== 1 ? "s" : ""}
-                    </p>
+                  {/* Stacked covers */}
+                  <div className="relative mb-3 h-28">
+                    {(() => {
+                      const covers = shelf.previewCovers ?? [];
+                      const placeholderColors = [
+                        "bg-emerald-700/40",
+                        "bg-amber-700/40",
+                        "bg-sky-700/40",
+                        "bg-rose-700/40",
+                        "bg-violet-700/40",
+                        "bg-teal-700/40",
+                      ];
+                      const slots = Array.from({ length: 4 }).map(
+                        (_, i) => covers[i] ?? null,
+                      );
+                      return slots.map((cover, i) => (
+                        <div
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={`${shelf.id}-slot-${i}`}
+                          className="absolute top-0 h-28 w-[4.7rem] transition-transform group-hover:translate-x-0.5"
+                          style={{ left: `${i * 50}px`, zIndex: 4 - i }}
+                        >
+                          {cover ? (
+                            <RemoteImage
+                              src={cover}
+                              alt=""
+                              width={75}
+                              height={112}
+                              className="h-full w-full rounded-sm border border-white/10 object-cover"
+                            />
+                          ) : (
+                            <div
+                              className={`h-full w-full rounded-sm border border-white/10 ${placeholderColors[(i + shelf.id.charCodeAt(0)) % placeholderColors.length]}`}
+                            />
+                          )}
+                        </div>
+                      ));
+                    })()}
                   </div>
-                  <Library className="h-4 w-4 text-muted-foreground" />
+                  <p className="text-sm font-semibold transition-colors group-hover:text-shelvitas-green">
+                    {shelf.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    @{username} &middot; {shelf.bookCount} book
+                    {shelf.bookCount !== 1 ? "s" : ""}
+                  </p>
                 </Link>
               ))}
             </div>

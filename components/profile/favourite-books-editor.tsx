@@ -125,7 +125,11 @@ export const FavouriteBooksEditor = ({
                   href={`/books/${book.slug ?? book.id}`}
                   className="block cursor-pointer"
                 >
-                  <Tooltip content={book.title} side="bottom" className="w-full">
+                  <Tooltip
+                    content={book.title}
+                    side="bottom"
+                    className="w-full"
+                  >
                     <div className="w-full rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                       {book.coverUrl ? (
                         <RemoteImage

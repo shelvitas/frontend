@@ -9,7 +9,12 @@ interface TooltipProps {
   className?: string;
 }
 
-export const Tooltip = ({ content, children, side = "top", className }: TooltipProps) => {
+export const Tooltip = ({
+  content,
+  children,
+  side = "top",
+  className,
+}: TooltipProps) => {
   const [show, setShow] = useState(false);
 
   return (

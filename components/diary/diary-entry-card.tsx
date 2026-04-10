@@ -21,6 +21,13 @@ const statusLabels: Record<string, string> = {
   did_not_finish: "DNF",
 };
 
+const statusBadgeColors: Record<string, string> = {
+  want_to_read: "bg-shelvitas-blue/10 text-shelvitas-blue",
+  currently_reading: "bg-shelvitas-yellow/10 text-shelvitas-yellow",
+  read: "bg-shelvitas-green/10 text-shelvitas-green",
+  did_not_finish: "bg-shelvitas-red/10 text-shelvitas-red",
+};
+
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -80,7 +87,7 @@ export const DiaryEntryCard = ({ entry, onEdit }: DiaryEntryCardProps) => {
                   Reread
                 </span>
               )}
-              <span className="rounded-sm bg-secondary px-1.5 py-0.5 text-[10px] text-muted-foreground">
+              <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-medium ${statusBadgeColors[entry.status] ?? "bg-secondary text-muted-foreground"}`}>
                 {statusLabels[entry.status] ?? entry.status}
               </span>
               {entry.format && (

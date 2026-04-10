@@ -76,8 +76,8 @@ export const WantToReadButton = ({ bookId }: WantToReadButtonProps) => {
       size="lg"
       className={`w-full gap-2 font-semibold transition-all ${
         wanted
-          ? "bg-secondary text-shelvitas-green hover:bg-secondary/80"
-          : "bg-shelvitas-green text-background hover:bg-shelvitas-green/90"
+          ? "bg-secondary text-shelvitas-blue hover:bg-secondary/80"
+          : "bg-shelvitas-blue text-background hover:bg-shelvitas-blue/90"
       }`}
       onClick={handleClick}
       disabled={isLoading}

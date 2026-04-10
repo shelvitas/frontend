@@ -30,6 +30,13 @@ const statusIcons: Record<string, typeof BookOpen> = {
   did_not_finish: BookX,
 };
 
+const statusColors: Record<string, string> = {
+  want_to_read: "text-shelvitas-blue",
+  currently_reading: "text-shelvitas-yellow",
+  read: "text-shelvitas-green",
+  did_not_finish: "text-shelvitas-red",
+};
+
 function getStatusLabel(metadata: Record<string, unknown> | null): string {
   const status = metadata?.status as string | undefined;
   const labels: Record<string, string> = {
@@ -47,10 +54,12 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
     string | number | boolean | null
   >;
   const { book } = event;
+  const statusKey = (metadata.status as string) ?? "";
   const StatusIcon =
     event.eventType === "status_update"
-      ? (statusIcons[(metadata.status as string) ?? ""] ?? BookOpen)
+      ? (statusIcons[statusKey] ?? BookOpen)
       : null;
+  const statusColor = statusColors[statusKey] ?? "text-muted-foreground";
 
   // Determine display text
   let actionText = eventLabels[event.eventType] ?? "interacted with";
@@ -104,7 +113,7 @@ export const FeedEventCard = ({ event }: { event: FeedEvent }) => {
           )}
           <span className="text-xs text-muted-foreground">{actionText}</span>
           {StatusIcon && (
-            <StatusIcon className="h-3.5 w-3.5 text-muted-foreground" />
+            <StatusIcon className={`h-3.5 w-3.5 ${statusColor}`} />
           )}
         </div>
 

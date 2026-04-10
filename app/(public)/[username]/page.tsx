@@ -207,11 +207,11 @@ const ProfilePage = async ({
           </div>
         )}
 
-        {/* ── Favourite Books ── */}
+        {/* ── Top 4 Books ── */}
         {full && profile.favouriteBooks.length > 0 && (
           <div className="mt-8">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Favourite books
+              Top 4 books
             </h2>
             <div className="mt-3 grid grid-cols-4 gap-3">
               {profile.favouriteBooks.map((book) => (
@@ -220,7 +220,11 @@ const ProfilePage = async ({
                   href={`/books/${book.slug ?? book.id}`}
                   className="group cursor-pointer"
                 >
-                  <Tooltip content={book.title} side="bottom" className="w-full">
+                  <Tooltip
+                    content={book.title}
+                    side="bottom"
+                    className="w-full"
+                  >
                     <div className="w-full rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                       {book.coverUrl ? (
                         <RemoteImage
@@ -248,7 +252,7 @@ const ProfilePage = async ({
           profile.isOwnProfile && (
             <div className="mt-8">
               <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                Favourite books
+                Top 4 books
               </h2>
               <div className="mt-3 grid grid-cols-4 gap-3">
                 {Array.from({ length: 4 }).map((_, i) => (
@@ -259,7 +263,7 @@ const ProfilePage = async ({
                 ))}
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                Add your 4 favourite books to show on your profile.
+                Add your top 4 books to show on your profile.
               </p>
             </div>
           )}

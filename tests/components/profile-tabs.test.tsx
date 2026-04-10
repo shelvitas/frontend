@@ -132,7 +132,6 @@ describe("ProfileTabs", () => {
 
     await waitFor(() => {
       expect(screen.getByAltText("Test Book")).toBeInTheDocument();
-      expect(screen.getByText("4.5")).toBeInTheDocument();
     });
   });
 });
