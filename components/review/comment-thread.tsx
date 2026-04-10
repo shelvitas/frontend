@@ -382,7 +382,10 @@ export const CommentThread = ({
         <button
           type="button"
           onClick={() => {
-            if (!session) { window.location.href = "/sign-in"; return; }
+            if (!session) {
+              window.location.href = "/sign-in";
+              return;
+            }
             setShowInput(true);
           }}
           className="mb-3 flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
@@ -440,7 +443,10 @@ export const CommentThread = ({
                 variant="ghost"
                 size="sm"
                 className="h-6 px-2 text-[10px] text-muted-foreground"
-                onClick={() => { setShowInput(false); setNewComment(""); }}
+                onClick={() => {
+                  setShowInput(false);
+                  setNewComment("");
+                }}
               >
                 Cancel
               </Button>

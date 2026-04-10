@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Star,
@@ -85,6 +85,9 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
     setShowComments(!showComments);
   };
 
+  const mountedRef = useRef(true);
+  useEffect(() => () => { mountedRef.current = false; }, []);
+
   // Fetch comments when opened
   useEffect(() => {
     if (!showComments || comments.length > 0) return;
@@ -93,9 +96,9 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
       cache: "no-store",
     })
       .then((res) => (res.ok ? res.json() : { data: [] }))
-      .then((json) => setComments((json.data as CommentData[]) ?? []))
+      .then((json) => { if (mountedRef.current) setComments((json.data as CommentData[]) ?? []); })
       .catch(() => {})
-      .finally(() => setCommentsLoading(false));
+      .finally(() => { if (mountedRef.current) setCommentsLoading(false); });
   }, [showComments, comments.length, review.id]);
 
   return (

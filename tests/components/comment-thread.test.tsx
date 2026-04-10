@@ -123,15 +123,17 @@ describe("CommentThread", () => {
   it("should show write a comment button when not showing input", () => {
     render(<CommentThread reviewId="r1" comments={[]} />);
 
-    expect(
-      screen.getByText("Write a comment..."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Write a comment...")).toBeInTheDocument();
   });
 
   it("should show textarea after clicking write a comment", async () => {
     useAuthStore.setState({
       session: { access_token: "token" } as never,
-      profile: { username: "test", displayName: "Test", avatarUrl: null } as never,
+      profile: {
+        username: "test",
+        displayName: "Test",
+        avatarUrl: null,
+      } as never,
     });
 
     render(<CommentThread reviewId="r1" comments={[]} />);
