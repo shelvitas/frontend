@@ -111,6 +111,7 @@ const ShelfPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         <div className="mt-4 border-t border-secondary pt-4">
           <ShelfActions
             shelfId={shelf.id}
+            shelfSlug={shelf.slug}
             initialLikes={shelf.likesCount}
             initialIsLiked={shelf.isLiked}
             shelfTitle={shelf.title}

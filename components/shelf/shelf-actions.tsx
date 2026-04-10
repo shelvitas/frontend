@@ -11,6 +11,7 @@ import { useAuthStore } from "@/store/auth";
 
 interface ShelfActionsProps {
   shelfId: string;
+  shelfSlug?: string;
   initialLikes: number;
   initialIsLiked: boolean;
   shelfTitle: string;
@@ -18,6 +19,7 @@ interface ShelfActionsProps {
 
 export const ShelfActions = ({
   shelfId,
+  shelfSlug,
   initialLikes,
   initialIsLiked,
   shelfTitle,
@@ -73,7 +75,7 @@ export const ShelfActions = ({
   };
 
   const handleShare = () => {
-    const url = `${window.location.origin}/shelves/${shelfId}`;
+    const url = `${window.location.origin}/shelves/${shelfSlug ?? shelfId}`;
     const text = encodeURIComponent(`${shelfTitle} on Shelvitas`);
     window.open(
       `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`,

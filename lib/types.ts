@@ -246,6 +246,7 @@ export interface FeedEvent {
   } | null;
   reviewId: string | null;
   shelfId: string | null;
+  shelfSlug?: string | null;
   userBookId: string | null;
 }
 
