@@ -7,6 +7,8 @@ import {
   MessageCircle,
   ChevronDown,
   ChevronUp,
+  ArrowBigUp,
+  ArrowBigDown,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -207,23 +209,23 @@ const CommentNode = ({
               {/* Actions */}
               {!comment.isDeleted && (
                 <div className="mt-1.5 flex items-center gap-3">
-                  <div className="flex items-center gap-0.5">
+                  <div className="flex items-center gap-0">
                     <button
                       type="button"
                       onClick={() => handleCommentVote("up")}
-                      className={`cursor-pointer rounded-sm p-0.5 text-[10px] transition-colors ${
+                      className={`cursor-pointer rounded-sm p-0.5 transition-colors ${
                         userVote === "up"
                           ? "text-shelvitas-green"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      <ChevronUp className="h-3.5 w-3.5" />
+                      <ArrowBigUp className={`h-4 w-4 ${userVote === "up" ? "fill-shelvitas-green" : ""}`} />
                     </button>
                     <span
-                      className={`text-[10px] font-bold ${
-                        userVote === "up" && "text-shelvitas-green"
-                      } ${userVote === "down" && "text-shelvitas-red"} ${
-                        !userVote && "text-muted-foreground"
+                      className={`min-w-[1rem] text-center text-[10px] font-bold ${
+                        userVote === "up" ? "text-shelvitas-green" : ""
+                      } ${userVote === "down" ? "text-shelvitas-red" : ""} ${
+                        !userVote ? "text-muted-foreground" : ""
                       }`}
                     >
                       {commentScore}
@@ -231,13 +233,13 @@ const CommentNode = ({
                     <button
                       type="button"
                       onClick={() => handleCommentVote("down")}
-                      className={`cursor-pointer rounded-sm p-0.5 text-[10px] transition-colors ${
+                      className={`cursor-pointer rounded-sm p-0.5 transition-colors ${
                         userVote === "down"
                           ? "text-shelvitas-red"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      <ChevronDown className="h-3.5 w-3.5" />
+                      <ArrowBigDown className={`h-4 w-4 ${userVote === "down" ? "fill-shelvitas-red" : ""}`} />
                     </button>
                   </div>
                   <button

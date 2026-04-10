@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Star,
-  ChevronUp,
-  ChevronDown,
+  ArrowBigUp,
+  ArrowBigDown,
   MessageCircle,
   AlertTriangle,
   Bookmark,
@@ -122,48 +122,7 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
   }, [comments.length, review.id]);
 
   return (
-    <div className="flex gap-3 py-4">
-      {/* Vote column — Reddit style */}
-      <div className="flex shrink-0 flex-col items-center gap-0.5 pt-1">
-        <button
-          type="button"
-          onClick={() => handleVote("up")}
-          disabled={voteLoading}
-          className={`cursor-pointer rounded-sm p-0.5 transition-colors ${
-            userVote === "up"
-              ? "text-shelvitas-green"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <ChevronUp className="h-5 w-5" />
-        </button>
-        <span
-          className={`text-xs font-bold ${
-            // eslint-disable-next-line no-nested-ternary
-            userVote === "up"
-              ? "text-shelvitas-green"
-              : userVote === "down"
-                ? "text-shelvitas-red"
-                : "text-muted-foreground"
-          }`}
-        >
-          {score}
-        </span>
-        <button
-          type="button"
-          onClick={() => handleVote("down")}
-          disabled={voteLoading}
-          className={`cursor-pointer rounded-sm p-0.5 transition-colors ${
-            userVote === "down"
-              ? "text-shelvitas-red"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <ChevronDown className="h-5 w-5" />
-        </button>
-      </div>
-
-      {/* Content */}
+    <div className="py-4">
       <div className="min-w-0 flex-1">
         {/* Reviewer info */}
         <div className="flex items-center gap-2">
@@ -232,6 +191,43 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
 
         {/* Actions */}
         <div className="mt-2 flex items-center gap-4">
+          {/* Upvote / score / Downvote */}
+          <div className="flex items-center gap-0">
+            <button
+              type="button"
+              onClick={() => handleVote("up")}
+              disabled={voteLoading}
+              className={`cursor-pointer rounded-sm p-0.5 transition-colors ${
+                userVote === "up"
+                  ? "text-shelvitas-green"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <ArrowBigUp className={`h-5 w-5 ${userVote === "up" ? "fill-shelvitas-green" : ""}`} />
+            </button>
+            <span
+              className={`min-w-[1.25rem] text-center text-xs font-bold ${
+                userVote === "up" ? "text-shelvitas-green" : ""
+              } ${userVote === "down" ? "text-shelvitas-red" : ""} ${
+                !userVote ? "text-muted-foreground" : ""
+              }`}
+            >
+              {score}
+            </span>
+            <button
+              type="button"
+              onClick={() => handleVote("down")}
+              disabled={voteLoading}
+              className={`cursor-pointer rounded-sm p-0.5 transition-colors ${
+                userVote === "down"
+                  ? "text-shelvitas-red"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <ArrowBigDown className={`h-5 w-5 ${userVote === "down" ? "fill-shelvitas-red" : ""}`} />
+            </button>
+          </div>
+
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <MessageCircle className="h-3.5 w-3.5" />
             {review.commentsCount}
