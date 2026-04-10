@@ -121,9 +121,12 @@ export const FavouriteBooksEditor = ({
           <div key={`fav-slot-${book?.id ?? i}`} className="group relative">
             {book ? (
               <>
-                <Tooltip content={book.title} side="bottom">
-                  <Link href={`/books/${book.slug ?? book.id}`} className="cursor-pointer">
-                    <div className="rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
+                <Link
+                  href={`/books/${book.slug ?? book.id}`}
+                  className="block cursor-pointer"
+                >
+                  <Tooltip content={book.title} side="bottom">
+                    <div className="w-full rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                       {book.coverUrl ? (
                         <RemoteImage
                           src={book.coverUrl}
@@ -138,8 +141,8 @@ export const FavouriteBooksEditor = ({
                         </div>
                       )}
                     </div>
-                  </Link>
-                </Tooltip>
+                  </Tooltip>
+                </Link>
                 <button
                   type="button"
                   onClick={() => removeBook(i)}
