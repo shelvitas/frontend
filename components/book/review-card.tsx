@@ -17,7 +17,13 @@ import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
-export const ReviewCard = ({ review, bookSlug }: { review: BookReview; bookSlug?: string }) => {
+export const ReviewCard = ({
+  review,
+  bookSlug,
+}: {
+  review: BookReview;
+  bookSlug?: string;
+}) => {
   const session = useAuthStore((s) => s.session);
   const { toast } = useToast();
   const [likes, setLikes] = useState(review.likesCount);
