@@ -2,16 +2,18 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Star, Library, PenLine } from "lucide-react";
+import { BookOpen, Users, Star, Library } from "lucide-react";
 
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { RatingHistogram } from "@/components/book/rating-histogram";
 import { StatusControls } from "@/components/book/status-controls";
+import { WantToReadButton } from "@/components/book/want-to-read-button";
 import { ReviewCard } from "@/components/book/review-card";
 import { WriteReviewModal } from "@/components/book/write-review-modal";
 import { serverFetch } from "@/lib/server-fetch";
 import type { BookPageData } from "@/lib/types";
+
 
 async function getBookPage(idOrSlug: string) {
   // The API accepts both slug and UUID — slugs are preferred for SEO
@@ -91,41 +93,39 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="container flex max-w-3xl flex-1 flex-col py-10">
-        {/* ── Hero ── */}
-        <div className="flex gap-6 sm:gap-8">
+      <main className="container flex max-w-4xl flex-1 flex-col py-10">
+        {/* ── Hero: Cover + Metadata ── */}
+        <div className="flex flex-col gap-8 sm:flex-row">
           {/* Cover */}
           <div className="shrink-0">
             {book.coverUrl ? (
               <Image
                 src={book.coverUrl}
                 alt={book.title}
-                width={160}
-                height={240}
-                className="w-28 rounded-sm shadow-xl sm:w-36"
+                width={96}
+                height={144}
+                className="w-20 rounded-sm shadow-lg sm:w-24"
                 priority
               />
             ) : (
-              <div className="flex h-[168px] w-28 items-center justify-center rounded-sm bg-secondary text-xs text-muted-foreground sm:h-[216px] sm:w-36">
+              <div className="flex h-[120px] w-20 items-center justify-center rounded-sm bg-secondary text-xs text-muted-foreground sm:h-36 sm:w-24">
                 No cover
               </div>
             )}
           </div>
 
-          {/* Info + Actions */}
-          <div className="flex flex-1 flex-col">
-            <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
-              {book.title}
-            </h1>
+          {/* Metadata */}
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold leading-tight">{book.title}</h1>
             {book.subtitle && (
-              <p className="mt-0.5 text-sm text-muted-foreground">
+              <p className="mt-1 text-lg text-muted-foreground">
                 {book.subtitle}
               </p>
             )}
 
             {/* Authors */}
-            <div className="mt-1.5 text-sm">
-              <span className="text-muted-foreground">by </span>
+            <div className="mt-2 flex flex-wrap gap-x-2 text-sm">
+              <span className="text-muted-foreground">by</span>
               {book.authors.map((author, i) => (
                 <span key={author.id}>
                   <Link
@@ -139,11 +139,24 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
               ))}
             </div>
 
-            {/* Rating + stats — compact inline */}
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            {/* Series badge */}
+            {book.series && (
+              <Link
+                href={`/series/${book.series.slug ?? book.series.id}`}
+                className="mt-2 inline-block rounded-sm bg-secondary px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <Library className="mr-1 inline h-3 w-3" />
+                {book.series.name}
+                {book.series.position && ` #${book.series.position}`}
+                {` (${book.series.totalBooks} books)`}
+              </Link>
+            )}
+
+            {/* Quick stats */}
+            <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
               {book.avgRating && (
-                <span className="flex items-center gap-1 text-sm font-semibold text-foreground">
-                  <Star className="h-4 w-4 fill-shelvitas-orange text-shelvitas-orange" />
+                <span className="flex items-center gap-1">
+                  <Star className="h-3.5 w-3.5 fill-shelvitas-orange text-shelvitas-orange" />
                   {book.avgRating.toFixed(1)}
                 </span>
               )}
@@ -154,157 +167,107 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 <span>{book.reviewsCount.toLocaleString()} reviews</span>
               )}
               {totalReaders > 0 && (
-                <span>{totalReaders.toLocaleString()} readers</span>
+                <span className="flex items-center gap-1">
+                  <Users className="h-3.5 w-3.5" />
+                  {totalReaders.toLocaleString()} readers
+                </span>
               )}
             </div>
 
-            {/* Series badge */}
-            {book.series && (
-              <Link
-                href={`/series/${book.series.slug ?? book.series.id}`}
-                className="mt-3 inline-flex w-fit items-center gap-1 rounded-sm bg-secondary px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground"
-              >
-                <Library className="h-3 w-3" />
-                {book.series.name}
-                {book.series.position && ` #${book.series.position}`}
-                {` (${book.series.totalBooks} books)`}
-              </Link>
-            )}
+            {/* Meta details */}
+            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-foreground">
+              {book.pageCount && <span>{book.pageCount} pages</span>}
+              {book.publisher && <span>{book.publisher}</span>}
+              {book.publishedDate && <span>{book.publishedDate}</span>}
+              {book.genre && (
+                <span className="rounded-sm bg-secondary px-1.5 py-0.5">
+                  {book.genre}
+                </span>
+              )}
+              {book.isbn13 && <span>ISBN {book.isbn13}</span>}
+            </div>
 
-            {/* ── Actions: Status + Write Review side by side ── */}
-            <div className="mt-auto flex flex-col gap-2 pt-4 sm:flex-row sm:items-center">
-              <div className="flex-1">
-                <StatusControls bookId={book.id} />
-              </div>
-              <WriteReviewModal
-                bookId={book.id}
-                bookSlug={book.slug}
-                bookTitle={book.title}
-                bookCoverUrl={book.coverUrl}
-                trigger={
-                  <button type="button" className="flex w-full items-center justify-center gap-1.5 rounded-sm border border-shelvitas-green/30 bg-shelvitas-green/10 px-4 py-2 text-xs font-semibold text-shelvitas-green transition-colors hover:bg-shelvitas-green/20 sm:w-auto">
-                    <PenLine className="h-3.5 w-3.5" />
-                    Review
-                  </button>
-                }
-              />
+            {/* Want to Read — primary CTA */}
+            <div className="mt-6">
+              <WantToReadButton bookId={book.id} />
+            </div>
+
+            {/* Status controls */}
+            <div className="mt-3">
+              <StatusControls bookId={book.id} />
             </div>
           </div>
-        </div>
-
-        {/* ── Meta pills ── */}
-        <div className="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
-          {book.pageCount && (
-            <span className="rounded-full bg-secondary/60 px-2.5 py-0.5">
-              {book.pageCount} pages
-            </span>
-          )}
-          {book.genre && (
-            <span className="rounded-full bg-secondary/60 px-2.5 py-0.5">
-              {book.genre}
-            </span>
-          )}
-          {book.publisher && (
-            <span className="rounded-full bg-secondary/60 px-2.5 py-0.5">
-              {book.publisher}
-            </span>
-          )}
-          {book.publishedDate && (
-            <span className="rounded-full bg-secondary/60 px-2.5 py-0.5">
-              {book.publishedDate}
-            </span>
-          )}
-          {book.isbn13 && (
-            <span className="rounded-full bg-secondary/60 px-2.5 py-0.5">
-              ISBN {book.isbn13}
-            </span>
-          )}
         </div>
 
         {/* ── Description ── */}
         {book.description && (
-          <p className="mt-6 text-sm leading-relaxed text-foreground/80">
-            {book.description}
-          </p>
-        )}
-
-        {/* ── Community: Rating + Reading Stats side by side ── */}
-        {(book.ratingsCount > 0 || totalReaders > 0) && (
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            {/* Histogram */}
-            {book.ratingsCount > 0 && (
-              <div>
-                <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                  Ratings
-                </h2>
-                <div className="mt-3">
-                  <RatingHistogram
-                    histogram={book.ratingHistogram}
-                    avgRating={book.avgRating}
-                    ratingsCount={book.ratingsCount}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Reading stats */}
-            {totalReaders > 0 && (
-              <div>
-                <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                  Readers
-                </h2>
-                <div className="mt-3 grid grid-cols-2 gap-3">
-                  {[
-                    { label: "Read", value: book.readingStats.read ?? 0 },
-                    {
-                      label: "Reading",
-                      value: book.readingStats.currently_reading ?? 0,
-                    },
-                    {
-                      label: "Want to Read",
-                      value: book.readingStats.want_to_read ?? 0,
-                    },
-                    {
-                      label: "DNF",
-                      value: book.readingStats.did_not_finish ?? 0,
-                    },
-                  ].map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="rounded-sm bg-secondary/30 px-3 py-2.5 text-center"
-                    >
-                      <p className="text-lg font-bold">{stat.value}</p>
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                        {stat.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+          <div className="mt-8">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Description
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-foreground/80">
+              {book.description}
+            </p>
           </div>
         )}
 
-        {/* ── Reviews ── */}
-        {book.topReviews.length > 0 && (
+        {/* ── Rating Histogram ── */}
+        {book.ratingsCount > 0 && (
           <div className="mt-8">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                Reviews
-              </h2>
-              <WriteReviewModal
-                bookId={book.id}
-                bookSlug={book.slug}
-                bookTitle={book.title}
-                bookCoverUrl={book.coverUrl}
-                trigger={
-                  <button type="button" className="flex items-center gap-1 text-xs font-medium text-shelvitas-green hover:underline">
-                    <PenLine className="h-3 w-3" />
-                    Write yours
-                  </button>
-                }
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Community Rating
+            </h2>
+            <div className="mt-3">
+              <RatingHistogram
+                histogram={book.ratingHistogram}
+                avgRating={book.avgRating}
+                ratingsCount={book.ratingsCount}
               />
             </div>
+          </div>
+        )}
+
+        {/* ── Reading Stats ── */}
+        <div className="mt-8 flex items-center justify-around rounded-sm border border-secondary bg-secondary/20 px-4 py-4">
+          <div className="text-center">
+            <p className="text-lg font-bold">{book.readingStats.read ?? 0}</p>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              <BookOpen className="mr-0.5 inline h-3 w-3" />
+              Read
+            </p>
+          </div>
+          <div className="text-center">
+            <p className="text-lg font-bold">
+              {book.readingStats.currently_reading ?? 0}
+            </p>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              Reading
+            </p>
+          </div>
+          <div className="text-center">
+            <p className="text-lg font-bold">
+              {book.readingStats.want_to_read ?? 0}
+            </p>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              Want to Read
+            </p>
+          </div>
+          <div className="text-center">
+            <p className="text-lg font-bold">
+              {book.readingStats.did_not_finish ?? 0}
+            </p>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              DNF
+            </p>
+          </div>
+        </div>
+
+        {/* ── Top Reviews ── */}
+        {book.topReviews.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Top Reviews
+            </h2>
             <div className="mt-3 space-y-3">
               {book.topReviews.map((review) => (
                 <ReviewCard key={review.id} review={review} />
@@ -312,6 +275,22 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             </div>
           </div>
         )}
+
+        {/* ── Write Review CTA ── */}
+        <div className="mt-8 rounded-sm border border-dashed border-secondary p-4 text-center">
+          <p className="text-sm font-medium">Share your thoughts</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Write a review to help other readers discover this book.
+          </p>
+          <div className="mt-3">
+            <WriteReviewModal
+              bookId={book.id}
+              bookSlug={book.slug}
+              bookTitle={book.title}
+              bookCoverUrl={book.coverUrl}
+            />
+          </div>
+        </div>
       </main>
 
       <Footer />
