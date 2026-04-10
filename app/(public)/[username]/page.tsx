@@ -220,7 +220,7 @@ const ProfilePage = async ({
                   href={`/books/${book.slug ?? book.id}`}
                   className="group cursor-pointer"
                 >
-                  <Tooltip content={book.title} side="bottom">
+                  <Tooltip content={book.title} side="bottom" className="w-full">
                     <div className="w-full rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                       {book.coverUrl ? (
                         <RemoteImage

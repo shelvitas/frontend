@@ -148,7 +148,7 @@ export const ProfileTabs = ({ username }: { username: string }) => {
                     href={`/books/${entry.book.slug ?? entry.book.id}`}
                     className="group cursor-pointer"
                   >
-                    <Tooltip content={entry.book.title} side="bottom">
+                    <Tooltip content={entry.book.title} side="bottom" className="w-full">
                       <div className="w-full rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
                         {entry.book.coverUrl ? (
                           <RemoteImage

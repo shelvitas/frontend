@@ -6,14 +6,15 @@ interface TooltipProps {
   content: string;
   children: React.ReactNode;
   side?: "top" | "bottom";
+  className?: string;
 }
 
-export const Tooltip = ({ content, children, side = "top" }: TooltipProps) => {
+export const Tooltip = ({ content, children, side = "top", className }: TooltipProps) => {
   const [show, setShow] = useState(false);
 
   return (
     <div
-      className="relative inline-flex"
+      className={`relative inline-flex ${className ?? ""}`}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
