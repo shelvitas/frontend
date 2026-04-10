@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Input } from "@/components/ui/input";
 import { RemoteImage } from "@/components/ui/remote-image";
+import { Tooltip } from "@/components/ui/tooltip";
 import { useAuth } from "@/lib/hooks/use-auth";
 import { api } from "@/lib/api";
 
@@ -224,19 +225,23 @@ const CompleteProfilePage = () => {
               >
                 {book ? (
                   <>
-                    {book.coverUrl ? (
-                      <RemoteImage
-                        src={book.coverUrl}
-                        alt={book.title}
-                        width={70}
-                        height={105}
-                        className="aspect-[2/3] w-full rounded-sm object-cover"
-                      />
-                    ) : (
-                      <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary p-1 text-center text-[9px] text-muted-foreground">
-                        {book.title.slice(0, 30)}
+                    <Tooltip content={book.title} side="bottom">
+                      <div className="rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
+                        {book.coverUrl ? (
+                          <RemoteImage
+                            src={book.coverUrl}
+                            alt={book.title}
+                            width={70}
+                            height={105}
+                            className="aspect-[2/3] w-full rounded-sm object-cover"
+                          />
+                        ) : (
+                          <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary p-1 text-center text-[9px] text-muted-foreground">
+                            {book.title.slice(0, 30)}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </Tooltip>
                     <button
                       type="button"
                       onClick={() => removeBook(i)}

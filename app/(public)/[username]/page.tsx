@@ -20,6 +20,7 @@ import type { ProfileData } from "@/lib/types";
 import { isFullProfile } from "@/lib/types";
 import { serverFetch } from "@/lib/server-fetch";
 import { RemoteImage } from "@/components/ui/remote-image";
+import { Tooltip } from "@/components/ui/tooltip";
 
 async function getProfile(username: string) {
   return serverFetch<ProfileData>(`/v1/profile/${username}`);
@@ -214,25 +215,28 @@ const ProfilePage = async ({
             </h2>
             <div className="mt-3 grid grid-cols-4 gap-3">
               {profile.favouriteBooks.map((book) => (
-                <Link
-                  key={book.id}
-                  href={`/books/${book.slug ?? book.id}`}
-                  className="group"
-                >
-                  {book.coverUrl ? (
-                    <RemoteImage
-                      src={book.coverUrl}
-                      alt={book.title}
-                      width={44}
-                      height={64}
-                      className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
-                    />
-                  ) : (
-                    <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-xs text-muted-foreground">
-                      {book.title}
+                <Tooltip key={book.id} content={book.title} side="bottom">
+                  <Link
+                    href={`/books/${book.slug ?? book.id}`}
+                    className="group cursor-pointer"
+                  >
+                    <div className="rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
+                      {book.coverUrl ? (
+                        <RemoteImage
+                          src={book.coverUrl}
+                          alt={book.title}
+                          width={44}
+                          height={64}
+                          className="aspect-[2/3] w-full rounded-sm object-cover"
+                        />
+                      ) : (
+                        <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-xs text-muted-foreground">
+                          {book.title}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </Link>
+                  </Link>
+                </Tooltip>
               ))}
             </div>
           </div>

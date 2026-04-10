@@ -8,6 +8,8 @@ import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import { CreateShelfModal } from "@/components/shelf/create-shelf-modal";
 import { RemoteImage } from "@/components/ui/remote-image";
+import { PageLoader } from "@/components/ui/page-loader";
+import { Tooltip } from "@/components/ui/tooltip";
 
 const tabs = [
   { id: "read", label: "Read", icon: BookCheck },
@@ -127,8 +129,8 @@ export const ProfileTabs = ({ username }: { username: string }) => {
 
       {/* Loading */}
       {isLoading && (
-        <div className="py-8 text-center text-xs text-muted-foreground">
-          Loading...
+        <div className="py-8">
+          <PageLoader />
         </div>
       )}
 
@@ -141,33 +143,40 @@ export const ProfileTabs = ({ username }: { username: string }) => {
             {filteredEntries.length > 0 ? (
               <div className="mt-4 grid grid-cols-5 gap-3 sm:grid-cols-6 md:grid-cols-8">
                 {filteredEntries.map((entry) => (
-                  <Link
+                  <Tooltip
                     key={entry.id}
-                    href={`/books/${entry.book.slug ?? entry.book.id}`}
-                    className="group"
+                    content={entry.book.title}
+                    side="bottom"
                   >
-                    {entry.book.coverUrl ? (
-                      <RemoteImage
-                        src={entry.book.coverUrl}
-                        alt={entry.book.title}
-                        width={44}
-                        height={64}
-                        className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
-                      />
-                    ) : (
-                      <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-[10px] text-muted-foreground">
-                        <BookOpen className="h-4 w-4" />
+                    <Link
+                      href={`/books/${entry.book.slug ?? entry.book.id}`}
+                      className="group cursor-pointer"
+                    >
+                      <div className="rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
+                        {entry.book.coverUrl ? (
+                          <RemoteImage
+                            src={entry.book.coverUrl}
+                            alt={entry.book.title}
+                            width={44}
+                            height={64}
+                            className="aspect-[2/3] w-full rounded-sm object-cover"
+                          />
+                        ) : (
+                          <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-[10px] text-muted-foreground">
+                            <BookOpen className="h-4 w-4" />
+                          </div>
+                        )}
                       </div>
-                    )}
-                    {entry.rating && (
-                      <div className="mt-0.5 flex items-center gap-0.5">
-                        <Star className="h-2.5 w-2.5 fill-shelvitas-orange text-shelvitas-orange" />
-                        <span className="text-[10px] text-muted-foreground">
-                          {entry.rating}
-                        </span>
-                      </div>
-                    )}
-                  </Link>
+                      {entry.rating && (
+                        <div className="mt-0.5 flex items-center gap-0.5">
+                          <Star className="h-2.5 w-2.5 fill-shelvitas-orange text-shelvitas-orange" />
+                          <span className="text-[10px] text-muted-foreground">
+                            {entry.rating}
+                          </span>
+                        </div>
+                      )}
+                    </Link>
+                  </Tooltip>
                 ))}
               </div>
             ) : (

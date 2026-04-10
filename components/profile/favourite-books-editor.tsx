@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { RemoteImage } from "@/components/ui/remote-image";
 import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/components/ui/toaster";
+import { Tooltip } from "@/components/ui/tooltip";
 import { api } from "@/lib/api";
 
 interface FavBook {
@@ -120,21 +121,25 @@ export const FavouriteBooksEditor = ({
           <div key={`fav-slot-${book?.id ?? i}`} className="group relative">
             {book ? (
               <>
-                <Link href={`/books/${book.slug ?? book.id}`}>
-                  {book.coverUrl ? (
-                    <RemoteImage
-                      src={book.coverUrl}
-                      alt={book.title}
-                      width={44}
-                      height={64}
-                      className="aspect-[2/3] w-full rounded-sm object-cover transition-opacity group-hover:opacity-80"
-                    />
-                  ) : (
-                    <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-[10px] text-muted-foreground">
-                      {book.title.slice(0, 20)}
+                <Tooltip content={book.title} side="bottom">
+                  <Link href={`/books/${book.slug ?? book.id}`} className="cursor-pointer">
+                    <div className="rounded-sm ring-shelvitas-green transition-all group-hover:ring-2">
+                      {book.coverUrl ? (
+                        <RemoteImage
+                          src={book.coverUrl}
+                          alt={book.title}
+                          width={44}
+                          height={64}
+                          className="aspect-[2/3] w-full rounded-sm object-cover"
+                        />
+                      ) : (
+                        <div className="flex aspect-[2/3] w-full items-center justify-center rounded-sm bg-secondary text-[10px] text-muted-foreground">
+                          {book.title.slice(0, 20)}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </Link>
+                  </Link>
+                </Tooltip>
                 <button
                   type="button"
                   onClick={() => removeBook(i)}

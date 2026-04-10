@@ -171,7 +171,6 @@ export const WriteReviewModal = ({
               onClick={handleSubmit}
               disabled={isSubmitting || !body.trim()}
             >
-              {isSubmitting && <Spinner />}
               {isSubmitting ? (
                 <>
                   <Spinner /> Publishing...

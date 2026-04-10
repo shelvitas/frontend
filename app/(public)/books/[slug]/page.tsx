@@ -13,7 +13,7 @@ import { ReviewCard } from "@/components/book/review-card";
 import { WriteReviewModal } from "@/components/book/write-review-modal";
 import { serverFetch } from "@/lib/server-fetch";
 import type { BookPageData } from "@/lib/types";
-import { RemoteImage } from "@/components/ui/remote-image";
+
 
 async function getBookPage(idOrSlug: string) {
   // The API accepts both slug and UUID — slugs are preferred for SEO
@@ -276,51 +276,6 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
           </div>
         )}
 
-        {/* ── Authors ── */}
-        {book.authors.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              About the Author{book.authors.length > 1 ? "s" : ""}
-            </h2>
-            <div className="mt-3 space-y-4">
-              {book.authors.map((author) => (
-                <div key={author.id} className="flex items-start gap-3">
-                  {author.photoUrl ? (
-                    <RemoteImage
-                      src={author.photoUrl}
-                      alt={author.name}
-                      width={48}
-                      height={48}
-                      className="h-12 w-12 rounded-full"
-                    />
-                  ) : (
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-sm font-semibold">
-                      {author.name.charAt(0)}
-                    </div>
-                  )}
-                  <div>
-                    <Link
-                      href={`/authors/${author.slug ?? author.id}`}
-                      className="font-medium hover:text-shelvitas-green"
-                    >
-                      {author.name}
-                    </Link>
-                    <p className="text-xs text-muted-foreground">
-                      {author.bookCount} book{author.bookCount !== 1 ? "s" : ""}
-                    </p>
-                    {author.bio && (
-                      <p className="mt-1 text-xs text-foreground/70">
-                        {author.bio.length > 200
-                          ? `${author.bio.slice(0, 200)}...`
-                          : author.bio}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
         {/* ── Write Review CTA ── */}
         <div className="mt-8 rounded-sm border border-dashed border-secondary p-4 text-center">
           <p className="text-sm font-medium">Share your thoughts</p>

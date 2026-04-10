@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { PageLoader } from "@/components/ui/page-loader";
 
 type Book = {
   id: string;
@@ -37,9 +38,7 @@ const TestingPage = () => {
         <div className="mt-8 space-y-4">
           <h2 className="text-2xl font-semibold">Books</h2>
 
-          {isLoading && (
-            <p className="text-muted-foreground">Loading books...</p>
-          )}
+          {isLoading && <PageLoader />}
           {error && <p className="text-red-500">Error loading books.</p>}
 
           {books && books.length > 0 && (
