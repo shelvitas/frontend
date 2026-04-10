@@ -43,7 +43,7 @@ interface ProfileData {
   followerCount: number;
   followingCount: number;
   booksReadCount: number;
-  favouriteBooks: { id: string; title: string; coverUrl: string | null }[];
+  favouriteBooks: { id: string; slug?: string; title: string; coverUrl: string | null }[];
   isFollowing: boolean | null;
   isOwnProfile: boolean;
 }
