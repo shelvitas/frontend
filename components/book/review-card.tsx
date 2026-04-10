@@ -79,7 +79,6 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
     }
   };
 
-
   const mountedRef = useRef(true);
   useEffect(
     () => () => {
