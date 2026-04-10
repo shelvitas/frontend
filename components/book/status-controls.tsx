@@ -87,7 +87,9 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
     setStatus,
     clear,
   } = useBookStatus(bookId);
-  const [loadingStatus, setLoadingStatus] = useState<ReadingStatus | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState<ReadingStatus | null>(
+    null,
+  );
   const [open, setOpen] = useState(false);
   const [dnfOpen, setDnfOpen] = useState(false);
   const [dnfReason, setDnfReason] = useState<string>("not_for_me");
@@ -261,7 +263,7 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
 
       {/* DNF Modal */}
       <Dialog open={dnfOpen} onOpenChange={setDnfOpen}>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-shelvitas-red">
               <BookX className="h-4 w-4" />
@@ -274,20 +276,25 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
               <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Why did you stop?
               </p>
-              <div className="space-y-1.5">
+              {/* eslint-disable jsx-a11y/label-has-associated-control */}
+              <div className="space-y-2.5">
                 {dnfReasons.map((r) => (
-                  <button
+                  <label
                     key={r.value}
-                    type="button"
-                    onClick={() => setDnfReason(r.value)}
-                    className={`flex w-full cursor-pointer items-center rounded-sm px-3 py-2 text-xs transition-colors ${
-                      dnfReason === r.value
-                        ? "bg-shelvitas-red/10 font-medium text-shelvitas-red"
-                        : "text-foreground/70 hover:bg-secondary/30"
-                    }`}
+                    className="flex cursor-pointer items-center gap-3 text-sm"
                   >
-                    {r.label}
-                  </button>
+                    <input
+                      type="radio"
+                      name="dnf-reason"
+                      value={r.value}
+                      checked={dnfReason === r.value}
+                      onChange={() => setDnfReason(r.value)}
+                      className="h-4 w-4 accent-shelvitas-red"
+                    />
+                    <span className={dnfReason === r.value ? "font-medium text-shelvitas-red" : "text-foreground/70"}>
+                      {r.label}
+                    </span>
+                  </label>
                 ))}
               </div>
             </div>
