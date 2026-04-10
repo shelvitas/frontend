@@ -224,9 +224,12 @@ const NotificationBell = () => {
 
   // Guard state updates after unmount
   const mountedRef = useRef(true);
-  useEffect(() => {
-    return () => { mountedRef.current = false; };
-  }, []);
+  useEffect(
+    () => () => {
+      mountedRef.current = false;
+    },
+    [],
+  );
 
   const fetchNotifications = useCallback(async () => {
     if (!mountedRef.current) return;
