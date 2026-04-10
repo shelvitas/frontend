@@ -192,9 +192,15 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
               <WantToReadButton bookId={book.id} />
             </div>
 
-            {/* Status controls */}
-            <div className="mt-3">
+            {/* Status controls + Write Review */}
+            <div className="mt-3 flex items-center gap-3">
               <StatusControls bookId={book.id} />
+              <WriteReviewModal
+                bookId={book.id}
+                bookSlug={book.slug}
+                bookTitle={book.title}
+                bookCoverUrl={book.coverUrl}
+              />
             </div>
           </div>
         </div>
@@ -276,21 +282,6 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
           </div>
         )}
 
-        {/* ── Write Review CTA ── */}
-        <div className="mt-8 rounded-sm border border-dashed border-secondary p-4 text-center">
-          <p className="text-sm font-medium">Share your thoughts</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Write a review to help other readers discover this book.
-          </p>
-          <div className="mt-3">
-            <WriteReviewModal
-              bookId={book.id}
-              bookSlug={book.slug}
-              bookTitle={book.title}
-              bookCoverUrl={book.coverUrl}
-            />
-          </div>
-        </div>
       </main>
 
       <Footer />
