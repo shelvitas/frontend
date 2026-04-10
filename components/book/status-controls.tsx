@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { BookMarked, BookOpen, BookCheck, BookX, ChevronDown, X } from "lucide-react";
+import {
+  BookMarked,
+  BookOpen,
+  BookCheck,
+  BookX,
+  ChevronDown,
+  X,
+} from "lucide-react";
 
 import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/components/ui/toaster";
@@ -65,7 +72,9 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
     setStatus,
     clear,
   } = useBookStatus(bookId);
-  const [loadingStatus, setLoadingStatus] = useState<ReadingStatus | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState<ReadingStatus | null>(
+    null,
+  );
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -129,7 +138,9 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
     }
   };
 
-  const active = activeStatus ? statusConfig[activeStatus as ReadingStatus] : null;
+  const active = activeStatus
+    ? statusConfig[activeStatus as ReadingStatus]
+    : null;
   const ActiveIcon = active?.icon;
   const isLoading = !!loadingStatus;
 
@@ -150,15 +161,25 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
         {!isLoading && ActiveIcon && <ActiveIcon className="h-3.5 w-3.5" />}
         {!isLoading && !ActiveIcon && <BookMarked className="h-3.5 w-3.5" />}
         {active ? active.label : "Set status"}
-        <ChevronDown className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`}
+        />
 
         {/* Remove button */}
         {active && !isLoading && (
           <span
             role="button"
             tabIndex={0}
-            onClick={(e) => { e.stopPropagation(); handleRemove(); }}
-            onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); handleRemove(); } }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemove();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.stopPropagation();
+                handleRemove();
+              }
+            }}
             className="ml-1 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
           >
             <X className="h-3 w-3" />
@@ -179,13 +200,19 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
                 type="button"
                 onClick={() => handleSelect(status)}
                 className={`flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-xs transition-colors hover:bg-secondary/30 ${
-                  isActive ? `font-semibold ${config.color}` : "text-foreground/80"
+                  isActive
+                    ? `font-semibold ${config.color}`
+                    : "text-foreground/80"
                 }`}
               >
-                <Icon className={`h-3.5 w-3.5 ${isActive ? config.color : "text-muted-foreground"}`} />
+                <Icon
+                  className={`h-3.5 w-3.5 ${isActive ? config.color : "text-muted-foreground"}`}
+                />
                 {config.label}
                 {isActive && (
-                  <span className="ml-auto text-[9px] text-muted-foreground">current</span>
+                  <span className="ml-auto text-[9px] text-muted-foreground">
+                    current
+                  </span>
                 )}
               </button>
             );
