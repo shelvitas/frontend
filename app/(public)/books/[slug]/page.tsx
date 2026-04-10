@@ -14,7 +14,6 @@ import { WriteReviewModal } from "@/components/book/write-review-modal";
 import { serverFetch } from "@/lib/server-fetch";
 import type { BookPageData } from "@/lib/types";
 
-
 async function getBookPage(idOrSlug: string) {
   // The API accepts both slug and UUID — slugs are preferred for SEO
   return serverFetch<BookPageData>(`/v1/books/${idOrSlug}`);
@@ -269,7 +268,7 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Top Reviews
             </h2>
-            <div className="mt-3 space-y-3">
+            <div className="mt-3 divide-y divide-secondary/40">
               {book.topReviews.map((review) => (
                 <ReviewCard key={review.id} review={review} />
               ))}
