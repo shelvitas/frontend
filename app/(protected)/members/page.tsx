@@ -79,7 +79,7 @@ const MembersPage = () => {
           {otherMembers.map((member) => (
             <div
               key={member.id}
-              className="flex items-center gap-4 rounded-sm border border-secondary p-4"
+              className="flex items-center gap-4 rounded-sm p-4"
             >
               {/* Avatar */}
               <Link href={`/${member.username}`} className="shrink-0">

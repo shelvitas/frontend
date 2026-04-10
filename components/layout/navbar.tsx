@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -222,18 +222,25 @@ const NotificationBell = () => {
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
+  // Guard state updates after unmount
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
+
   const fetchNotifications = useCallback(async () => {
+    if (!mountedRef.current) return;
     setLoading(true);
     try {
       const data = await api.get<{
         notifications: Notification[];
         nextCursor: string | null;
       }>("/v1/notifications?limit=20");
-      setNotifications(data.notifications);
+      if (mountedRef.current) setNotifications(data.notifications);
     } catch {
       // silent
     } finally {
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
     }
   }, []);
 
