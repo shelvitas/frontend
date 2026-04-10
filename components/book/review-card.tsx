@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Star,
@@ -8,22 +8,22 @@ import {
   MessageCircle,
   AlertTriangle,
   Bookmark,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
-import type { BookReview } from "@/lib/types";
+import type { BookReview, CommentData } from "@/lib/types";
 import { RemoteImage } from "@/components/ui/remote-image";
 import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/components/ui/toaster";
+import { CommentThread } from "@/components/review/comment-thread";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 
-export const ReviewCard = ({
-  review,
-  bookSlug,
-}: {
-  review: BookReview;
-  bookSlug?: string;
-}) => {
+const SERVER_API_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+
+export const ReviewCard = ({ review }: { review: BookReview }) => {
   const session = useAuthStore((s) => s.session);
   const { toast } = useToast();
   const [likes, setLikes] = useState(review.likesCount);
@@ -31,6 +31,10 @@ export const ReviewCard = ({
   const [likeLoading, setLikeLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<CommentData[]>([]);
+  const [commentsLoading, setCommentsLoading] = useState(false);
+  const [showSpoiler, setShowSpoiler] = useState(false);
 
   const handleLike = async () => {
     if (!session) {
@@ -77,6 +81,23 @@ export const ReviewCard = ({
     }
   };
 
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+
+  // Fetch comments when opened
+  useEffect(() => {
+    if (!showComments || comments.length > 0) return;
+    setCommentsLoading(true);
+    fetch(`${SERVER_API_URL}/v1/reviews/${review.id}/comments?limit=50`, {
+      cache: "no-store",
+    })
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((json) => setComments((json.data as CommentData[]) ?? []))
+      .catch(() => {})
+      .finally(() => setCommentsLoading(false));
+  }, [showComments, comments.length, review.id]);
+
   return (
     <div className="py-4">
       {/* Reviewer info */}
@@ -121,18 +142,27 @@ export const ReviewCard = ({
         )}
       </div>
 
-      {/* Body */}
-      {review.containsSpoilers ? (
-        <div className="mt-3 flex items-center gap-2 rounded-sm bg-secondary/50 p-3 text-xs text-muted-foreground">
+      {/* Body — full text */}
+      {review.containsSpoilers && !showSpoiler ? (
+        <button
+          type="button"
+          onClick={() => setShowSpoiler(true)}
+          className="mt-3 flex cursor-pointer items-center gap-2 rounded-sm bg-secondary/50 p-3 text-xs text-muted-foreground hover:bg-secondary/70"
+        >
           <AlertTriangle className="h-4 w-4 text-shelvitas-orange" />
-          This review contains spoilers.
-        </div>
+          This review contains spoilers. Click to reveal.
+        </button>
       ) : (
-        <p className="mt-2 text-sm leading-relaxed text-foreground/80">
-          {review.body.length > 300
-            ? `${review.body.slice(0, 300)}...`
-            : review.body}
-        </p>
+        <div className="mt-2 text-sm leading-relaxed text-foreground/80">
+          {review.body.split("\n").map((paragraph, i) => (
+            <p
+              key={`${review.id}-p-${String(i)}`}
+              className={i > 0 ? "mt-2" : ""}
+            >
+              {paragraph}
+            </p>
+          ))}
+        </div>
       )}
 
       {/* Actions */}
@@ -157,17 +187,23 @@ export const ReviewCard = ({
           {likes}
         </button>
 
-        <Link
-          href={
-            review.reviewer.username && bookSlug
-              ? `/${review.reviewer.username}/book/${bookSlug}`
-              : `/reviews/${review.id}`
-          }
-          className="flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+        <button
+          type="button"
+          onClick={toggleComments}
+          className={`flex cursor-pointer items-center gap-1 text-xs transition-colors ${
+            showComments
+              ? "text-shelvitas-green"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
         >
           <MessageCircle className="h-3.5 w-3.5" />
           {review.commentsCount}
-        </Link>
+          {showComments ? (
+            <ChevronUp className="h-3 w-3" />
+          ) : (
+            <ChevronDown className="h-3 w-3" />
+          )}
+        </button>
 
         <button
           type="button"
@@ -188,6 +224,20 @@ export const ReviewCard = ({
           )}
         </button>
       </div>
+
+      {/* Inline comment thread */}
+      {showComments && (
+        <div className="mt-4 ml-2 border-l border-secondary/40 pl-4">
+          {commentsLoading ? (
+            <div className="flex items-center gap-2 py-4 text-xs text-muted-foreground">
+              <Spinner className="h-3.5 w-3.5" />
+              Loading comments...
+            </div>
+          ) : (
+            <CommentThread reviewId={review.id} comments={comments} />
+          )}
+        </div>
+      )}
     </div>
   );
 };

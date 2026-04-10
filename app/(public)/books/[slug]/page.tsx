@@ -262,19 +262,15 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
           </div>
         </div>
 
-        {/* ── Top Reviews ── */}
+        {/* ── Reviews ── */}
         {book.topReviews.length > 0 && (
           <div className="mt-8">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Top Reviews
+              Reviews
             </h2>
             <div className="mt-3 divide-y divide-secondary/40">
               {book.topReviews.map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  review={review}
-                  bookSlug={book.slug}
-                />
+                <ReviewCard key={review.id} review={review} />
               ))}
             </div>
           </div>

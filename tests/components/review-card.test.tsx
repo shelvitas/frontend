@@ -47,17 +47,17 @@ describe("ReviewCard", () => {
     render(<ReviewCard review={{ ...baseReview, containsSpoilers: true }} />);
 
     expect(
-      screen.getByText("This review contains spoilers."),
+      screen.getByText(/spoilers/i),
     ).toBeInTheDocument();
     expect(
       screen.queryByText("This was an incredible book. Highly recommend!"),
     ).not.toBeInTheDocument();
   });
 
-  it("should truncate long reviews", () => {
+  it("should show full review text without truncation", () => {
     const longBody = "A".repeat(400);
     render(<ReviewCard review={{ ...baseReview, body: longBody }} />);
 
-    expect(screen.getByText(/\.\.\.$/)).toBeInTheDocument();
+    expect(screen.getByText("A".repeat(400))).toBeInTheDocument();
   });
 });
