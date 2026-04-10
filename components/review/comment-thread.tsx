@@ -219,7 +219,9 @@ const CommentNode = ({
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      <ArrowBigUp className={`h-4 w-4 ${userVote === "up" ? "fill-shelvitas-green" : ""}`} />
+                      <ArrowBigUp
+                        className={`h-4 w-4 ${userVote === "up" ? "fill-shelvitas-green" : ""}`}
+                      />
                     </button>
                     <span
                       className={`min-w-[1rem] text-center text-[10px] font-bold ${
@@ -239,7 +241,9 @@ const CommentNode = ({
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      <ArrowBigDown className={`h-4 w-4 ${userVote === "down" ? "fill-shelvitas-red" : ""}`} />
+                      <ArrowBigDown
+                        className={`h-4 w-4 ${userVote === "down" ? "fill-shelvitas-red" : ""}`}
+                      />
                     </button>
                   </div>
                   <button

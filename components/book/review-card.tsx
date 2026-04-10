@@ -203,7 +203,9 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <ArrowBigUp className={`h-5 w-5 ${userVote === "up" ? "fill-shelvitas-green" : ""}`} />
+              <ArrowBigUp
+                className={`h-5 w-5 ${userVote === "up" ? "fill-shelvitas-green" : ""}`}
+              />
             </button>
             <span
               className={`min-w-[1.25rem] text-center text-xs font-bold ${
@@ -224,7 +226,9 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <ArrowBigDown className={`h-5 w-5 ${userVote === "down" ? "fill-shelvitas-red" : ""}`} />
+              <ArrowBigDown
+                className={`h-5 w-5 ${userVote === "down" ? "fill-shelvitas-red" : ""}`}
+              />
             </button>
           </div>
 
