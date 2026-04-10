@@ -51,7 +51,9 @@ export const ReviewsList = ({
           className="mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm bg-secondary/30 py-2.5 text-xs text-muted-foreground transition-colors hover:bg-secondary/50 hover:text-foreground"
         >
           {loading && <Spinner className="h-3.5 w-3.5" />}
-          {loading ? "Loading..." : `Show more reviews (${totalCount - reviews.length} remaining)`}
+          {loading
+            ? "Loading..."
+            : `Show more reviews (${totalCount - reviews.length} remaining)`}
         </button>
       )}
     </div>

@@ -59,7 +59,10 @@ const CommentNode = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCommentVote = async (direction: "up" | "down") => {
-    if (!session) { window.location.href = "/sign-in"; return; }
+    if (!session) {
+      window.location.href = "/sign-in";
+      return;
+    }
     const prevVote = userVote;
     const prevScore = commentScore;
     if (userVote === direction) {
@@ -216,13 +219,15 @@ const CommentNode = ({
                     >
                       <ChevronUp className="h-3.5 w-3.5" />
                     </button>
-                    <span className={`text-[10px] font-bold ${
-                      userVote === "up" && "text-shelvitas-green"
-                    } ${
-                      userVote === "down" && "text-shelvitas-red"
-                    } ${
-                      !userVote && "text-muted-foreground"
-                    }`}>{commentScore}</span>
+                    <span
+                      className={`text-[10px] font-bold ${
+                        userVote === "up" && "text-shelvitas-green"
+                      } ${userVote === "down" && "text-shelvitas-red"} ${
+                        !userVote && "text-muted-foreground"
+                      }`}
+                    >
+                      {commentScore}
+                    </span>
                     <button
                       type="button"
                       onClick={() => handleCommentVote("down")}

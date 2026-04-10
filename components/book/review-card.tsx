@@ -113,8 +113,7 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
     })
       .then((res) => (res.ok ? res.json() : { data: [] }))
       .then((json) => {
-        if (mountedRef.current)
-          setComments((json.data as CommentData[]) ?? []);
+        if (mountedRef.current) setComments((json.data as CommentData[]) ?? []);
       })
       .catch(() => {})
       .finally(() => {
