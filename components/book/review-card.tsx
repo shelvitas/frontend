@@ -227,7 +227,7 @@ export const ReviewCard = ({ review }: { review: BookReview }) => {
 
       {/* Inline comment thread */}
       {showComments && (
-        <div className="mt-4 ml-2 border-l border-secondary/40 pl-4">
+        <div className="ml-2 mt-4 border-l border-secondary/40 pl-4">
           {commentsLoading ? (
             <div className="flex items-center gap-2 py-4 text-xs text-muted-foreground">
               <Spinner className="h-3.5 w-3.5" />

@@ -46,9 +46,7 @@ describe("ReviewCard", () => {
   it("should show spoiler warning instead of body", () => {
     render(<ReviewCard review={{ ...baseReview, containsSpoilers: true }} />);
 
-    expect(
-      screen.getByText(/spoilers/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/spoilers/i)).toBeInTheDocument();
     expect(
       screen.queryByText("This was an incredible book. Highly recommend!"),
     ).not.toBeInTheDocument();
