@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { BookMarked, BookOpen, BookCheck, BookX } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { BookMarked, BookOpen, BookCheck, BookX, ChevronDown, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Tooltip } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useBookStatus } from "@/lib/hooks/use-book-status";
@@ -16,35 +14,47 @@ type ReadingStatus =
   | "read"
   | "did_not_finish";
 
-interface StatusControlsProps {
-  bookId: string;
-}
-
 const statusConfig = {
   want_to_read: {
     label: "Want to Read",
     icon: BookMarked,
     color: "text-shelvitas-blue",
+    bg: "bg-shelvitas-blue/10",
+    border: "border-shelvitas-blue/30",
   },
   currently_reading: {
     label: "Reading",
     icon: BookOpen,
     color: "text-shelvitas-yellow",
+    bg: "bg-shelvitas-yellow/10",
+    border: "border-shelvitas-yellow/30",
   },
-  read: { label: "Read", icon: BookCheck, color: "text-shelvitas-green" },
+  read: {
+    label: "Read",
+    icon: BookCheck,
+    color: "text-shelvitas-green",
+    bg: "bg-shelvitas-green/10",
+    border: "border-shelvitas-green/30",
+  },
   did_not_finish: {
     label: "DNF",
     icon: BookX,
     color: "text-shelvitas-red",
+    bg: "bg-shelvitas-red/10",
+    border: "border-shelvitas-red/30",
   },
 } as const;
 
-// want_to_read is handled by WantToReadButton — no duplicate here
-const statuses: ReadingStatus[] = [
+const allStatuses: ReadingStatus[] = [
+  "want_to_read",
   "currently_reading",
   "read",
   "did_not_finish",
 ];
+
+interface StatusControlsProps {
+  bookId: string;
+}
 
 export const StatusControls = ({ bookId }: StatusControlsProps) => {
   const { toast } = useToast();
@@ -55,60 +65,44 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
     setStatus,
     clear,
   } = useBookStatus(bookId);
-  const [loadingStatus, setLoadingStatus] = useState<ReadingStatus | null>(
-    null,
-  );
+  const [loadingStatus, setLoadingStatus] = useState<ReadingStatus | null>(null);
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
-  if (!isAuthenticated) {
-    return null; // WantToReadButton handles the unauthenticated CTA
-  }
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    if (open) document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
 
-  // Skeleton while hydrating
+  if (!isAuthenticated) return null;
+
   if (!isHydrated) {
     return (
-      <div className="flex gap-2">
-        {statuses.map((s) => (
-          <Button
-            key={s}
-            variant="outline"
-            size="sm"
-            className="flex-1 text-xs opacity-50"
-            disabled
-          >
-            <Spinner className="h-3.5 w-3.5" />
-          </Button>
-        ))}
-      </div>
+      <div className="h-9 w-40 animate-pulse rounded-sm bg-secondary/50" />
     );
   }
 
-  const handleStatusChange = async (status: ReadingStatus) => {
+  const handleSelect = async (status: ReadingStatus) => {
+    setOpen(false);
     if (loadingStatus) return;
 
     const prev = activeStatus;
-    const isToggleOff = status === activeStatus;
-
-    if (isToggleOff) {
-      clear();
-    } else {
-      setStatus(status);
-    }
+    setStatus(status);
     setLoadingStatus(status);
 
     try {
-      if (isToggleOff) {
-        await api.delete(`/v1/books/${bookId}/status`);
-        toast("Status removed");
-      } else if (status === "did_not_finish") {
+      if (status === "did_not_finish") {
         await api.post(`/v1/books/${bookId}/dnf`, { reason: "not_for_me" });
         toast("Marked as Did Not Finish");
       } else {
         await api.post(`/v1/books/${bookId}/status`, { status });
-        const labels: Record<string, string> = {
-          currently_reading: "Marked as Reading",
-          read: "Marked as Read",
-        };
-        toast(labels[status] ?? "Status updated");
+        toast(`Marked as ${statusConfig[status].label}`);
       }
     } catch {
       if (prev) setStatus(prev);
@@ -119,40 +113,85 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
     }
   };
 
-  return (
-    <div className="flex gap-2">
-      {statuses.map((status) => {
-        const config = statusConfig[status];
-        const Icon = config.icon;
-        const isActive = activeStatus === status;
-        const isThisLoading = loadingStatus === status;
+  const handleRemove = async () => {
+    if (loadingStatus) return;
+    const prev = activeStatus;
+    clear();
+    setLoadingStatus(prev as ReadingStatus);
+    try {
+      await api.delete(`/v1/books/${bookId}/status`);
+      toast("Status removed");
+    } catch {
+      if (prev) setStatus(prev);
+      toast("Failed to remove status", "error");
+    } finally {
+      setLoadingStatus(null);
+    }
+  };
 
-        return (
-          <Tooltip
-            key={status}
-            content={
-              isActive ? `Remove ${config.label}` : `Mark as ${config.label}`
-            }
+  const active = activeStatus ? statusConfig[activeStatus as ReadingStatus] : null;
+  const ActiveIcon = active?.icon;
+  const isLoading = !!loadingStatus;
+
+  return (
+    <div ref={ref} className="relative inline-block">
+      {/* Trigger */}
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        disabled={isLoading}
+        className={`flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-2 text-xs font-medium transition-all ${
+          active
+            ? `${active.bg} ${active.border} ${active.color}`
+            : "border-secondary bg-secondary/30 text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        {isLoading && <Spinner className="h-3.5 w-3.5" />}
+        {!isLoading && ActiveIcon && <ActiveIcon className="h-3.5 w-3.5" />}
+        {!isLoading && !ActiveIcon && <BookMarked className="h-3.5 w-3.5" />}
+        {active ? active.label : "Set status"}
+        <ChevronDown className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`} />
+
+        {/* Remove button */}
+        {active && !isLoading && (
+          <span
+            role="button"
+            tabIndex={0}
+            onClick={(e) => { e.stopPropagation(); handleRemove(); }}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); handleRemove(); } }}
+            className="ml-1 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
           >
-            <Button
-              variant={isActive ? "default" : "outline"}
-              size="sm"
-              className={`flex-1 gap-1.5 text-xs transition-all ${
-                isActive ? `${config.color} border-secondary bg-secondary` : ""
-              }`}
-              onClick={() => handleStatusChange(status)}
-              disabled={!!loadingStatus}
-            >
-              {isThisLoading ? (
-                <Spinner className="h-3.5 w-3.5" />
-              ) : (
-                <Icon className="h-3.5 w-3.5" />
-              )}
-              {config.label}
-            </Button>
-          </Tooltip>
-        );
-      })}
+            <X className="h-3 w-3" />
+          </span>
+        )}
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <div className="absolute left-0 top-full z-50 mt-1 w-44 rounded-sm border border-secondary bg-background py-1 shadow-lg">
+          {allStatuses.map((status) => {
+            const config = statusConfig[status];
+            const Icon = config.icon;
+            const isActive = activeStatus === status;
+            return (
+              <button
+                key={status}
+                type="button"
+                onClick={() => handleSelect(status)}
+                className={`flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-xs transition-colors hover:bg-secondary/30 ${
+                  isActive ? `font-semibold ${config.color}` : "text-foreground/80"
+                }`}
+              >
+                <Icon className={`h-3.5 w-3.5 ${isActive ? config.color : "text-muted-foreground"}`} />
+                {config.label}
+                {isActive && (
+                  <span className="ml-auto text-[9px] text-muted-foreground">current</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
