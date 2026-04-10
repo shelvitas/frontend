@@ -68,6 +68,9 @@ export interface BookReview {
   isDnf: boolean;
   likesCount: number;
   commentsCount: number;
+  score: number;
+  upvotesCount: number;
+  downvotesCount: number;
   createdAt: string;
   reviewer: {
     username: string;
@@ -185,6 +188,9 @@ export interface CommentData {
   body: string;
   containsSpoilers: boolean;
   isDeleted: boolean;
+  score: number;
+  upvotesCount: number;
+  downvotesCount: number;
   createdAt: string;
   updatedAt: string;
   author: {

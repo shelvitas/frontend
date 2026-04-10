@@ -9,7 +9,7 @@ import { Footer } from "@/components/layout/footer";
 import { RatingHistogram } from "@/components/book/rating-histogram";
 import { StatusControls } from "@/components/book/status-controls";
 import { WantToReadButton } from "@/components/book/want-to-read-button";
-import { ReviewCard } from "@/components/book/review-card";
+import { ReviewsList } from "@/components/book/reviews-list";
 import { WriteReviewModal } from "@/components/book/write-review-modal";
 import { serverFetch } from "@/lib/server-fetch";
 import type { BookPageData } from "@/lib/types";
@@ -268,10 +268,12 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Reviews
             </h2>
-            <div className="mt-3 divide-y divide-secondary/40">
-              {book.topReviews.map((review) => (
-                <ReviewCard key={review.id} review={review} />
-              ))}
+            <div className="mt-3">
+              <ReviewsList
+                bookId={book.id}
+                initialReviews={book.topReviews}
+                totalCount={book.reviewsCount}
+              />
             </div>
           </div>
         )}

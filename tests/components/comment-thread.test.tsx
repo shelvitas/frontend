@@ -35,6 +35,9 @@ const baseComment: CommentData = {
   body: "This is a great review!",
   containsSpoilers: false,
   isDeleted: false,
+  score: 0,
+  upvotesCount: 0,
+  downvotesCount: 0,
   createdAt: "2024-01-15T00:00:00.000Z",
   updatedAt: "2024-01-15T00:00:00.000Z",
   author: {
@@ -77,6 +80,9 @@ describe("CommentThread", () => {
           body: "I agree!",
           containsSpoilers: false,
           isDeleted: false,
+          score: 0,
+          upvotesCount: 0,
+          downvotesCount: 0,
           createdAt: "2024-01-16T00:00:00.000Z",
           updatedAt: "2024-01-16T00:00:00.000Z",
           author: {

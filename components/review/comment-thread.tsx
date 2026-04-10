@@ -7,7 +7,6 @@ import {
   MessageCircle,
   ChevronDown,
   ChevronUp,
-  ThumbsUp,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -54,9 +53,32 @@ const CommentNode = ({
   const profile = useAuthStore((s) => s.profile);
   const [collapsed, setCollapsed] = useState(false);
   const [showSpoiler, setShowSpoiler] = useState(false);
-  const [liked, setLiked] = useState(false);
+  const [commentScore, setCommentScore] = useState(comment.score ?? 0);
+  const [userVote, setUserVote] = useState<"up" | "down" | null>(null);
   const [replyBody, setReplyBody] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCommentVote = async (direction: "up" | "down") => {
+    if (!session) { window.location.href = "/sign-in"; return; }
+    const prevVote = userVote;
+    const prevScore = commentScore;
+    if (userVote === direction) {
+      setUserVote(null);
+      setCommentScore(commentScore + (direction === "up" ? -1 : 1));
+    } else if (userVote === null) {
+      setUserVote(direction);
+      setCommentScore(commentScore + (direction === "up" ? 1 : -1));
+    } else {
+      setUserVote(direction);
+      setCommentScore(commentScore + (direction === "up" ? 2 : -2));
+    }
+    try {
+      await api.post(`/v1/comments/${comment.id}/vote`, { direction });
+    } catch {
+      setUserVote(prevVote);
+      setCommentScore(prevScore);
+    }
+  };
 
   const hasReplies = (comment.replies?.length ?? 0) > 0;
   const replyCount = comment.replies?.length ?? 0;
@@ -182,19 +204,37 @@ const CommentNode = ({
               {/* Actions */}
               {!comment.isDeleted && (
                 <div className="mt-1.5 flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setLiked(!liked)}
-                    className={`flex cursor-pointer items-center gap-1 text-[10px] transition-colors ${
-                      liked
-                        ? "text-shelvitas-green"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <ThumbsUp
-                      className={`h-3 w-3 ${liked ? "fill-shelvitas-green" : ""}`}
-                    />
-                  </button>
+                  <div className="flex items-center gap-0.5">
+                    <button
+                      type="button"
+                      onClick={() => handleCommentVote("up")}
+                      className={`cursor-pointer rounded-sm p-0.5 text-[10px] transition-colors ${
+                        userVote === "up"
+                          ? "text-shelvitas-green"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <ChevronUp className="h-3.5 w-3.5" />
+                    </button>
+                    <span className={`text-[10px] font-bold ${
+                      userVote === "up" && "text-shelvitas-green"
+                    } ${
+                      userVote === "down" && "text-shelvitas-red"
+                    } ${
+                      !userVote && "text-muted-foreground"
+                    }`}>{commentScore}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCommentVote("down")}
+                      className={`cursor-pointer rounded-sm p-0.5 text-[10px] transition-colors ${
+                        userVote === "down"
+                          ? "text-shelvitas-red"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                   <button
                     type="button"
                     onClick={handleReply}

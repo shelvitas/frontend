@@ -12,6 +12,9 @@ const baseReview: BookReview = {
   isDnf: false,
   likesCount: 12,
   commentsCount: 3,
+  score: 10,
+  upvotesCount: 12,
+  downvotesCount: 2,
   createdAt: "2024-01-15",
   reviewer: {
     username: "bookworm",
@@ -30,10 +33,10 @@ describe("ReviewCard", () => {
     ).toBeInTheDocument();
   });
 
-  it("should render like and comment counts", () => {
+  it("should render score and comment counts", () => {
     render(<ReviewCard review={baseReview} />);
 
-    expect(screen.getByText("12")).toBeInTheDocument();
+    expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
   });
 
