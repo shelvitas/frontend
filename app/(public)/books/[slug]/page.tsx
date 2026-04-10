@@ -188,7 +188,6 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
               )}
               {book.isbn13 && <span>ISBN {book.isbn13}</span>}
             </div>
-
           </div>
         </div>
 
