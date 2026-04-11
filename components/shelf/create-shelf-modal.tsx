@@ -107,7 +107,7 @@ export const CreateShelfModal = ({
           </div>
         </DialogHeader>
 
-        <div className="space-y-4 border-t border-secondary/40 pt-4">
+        <div className="space-y-4">
           <div>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label
@@ -152,29 +152,29 @@ export const CreateShelfModal = ({
           </div>
 
           {error && <p className="text-sm text-red-400">{error}</p>}
+        </div>
 
-          <div className="flex gap-2 pt-2">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="flex-1 gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
-              onClick={handleCreate}
-              disabled={isSubmitting || !title.trim()}
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner /> Creating...
-                </>
-              ) : (
-                "Create shelf"
-              )}
-            </Button>
-          </div>
+        <div className="-mx-6 -mb-6 flex gap-2 border-t border-secondary px-6 py-4">
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="flex-1 gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+            onClick={handleCreate}
+            disabled={isSubmitting || !title.trim()}
+          >
+            {isSubmitting ? (
+              <>
+                <Spinner /> Creating...
+              </>
+            ) : (
+              "Create shelf"
+            )}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -157,29 +157,29 @@ export const WriteReviewModal = ({
           />
 
           {error && <p className="text-sm text-red-400">{error}</p>}
+        </div>
 
-          <div className="flex gap-2 pt-2">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="flex-1 gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !body.trim()}
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner /> Publishing...
-                </>
-              ) : (
-                "Publish review"
-              )}
-            </Button>
-          </div>
+        <div className="-mx-6 -mb-6 flex gap-2 border-t border-secondary px-6 py-4">
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="flex-1 gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+            onClick={handleSubmit}
+            disabled={isSubmitting || !body.trim()}
+          >
+            {isSubmitting ? (
+              <>
+                <Spinner /> Publishing...
+              </>
+            ) : (
+              "Publish review"
+            )}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

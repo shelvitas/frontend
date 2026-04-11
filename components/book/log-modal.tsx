@@ -395,27 +395,27 @@ export const LogModal = ({
 
           {/* Error */}
           {error && <p className="text-sm text-red-500">{error}</p>}
+        </div>
 
-          {/* Actions */}
-          <div className="flex gap-2 pt-2">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="flex-1 gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
-              onClick={handleSave}
-              disabled={isLoading}
-            >
-              {isLoading && <Spinner />}
-              {isLoading && "Saving..."}
-              {!isLoading && isEdit && "Save Changes"}
-              {!isLoading && !isEdit && "Log Book"}
-            </Button>
-          </div>
+        {/* Actions */}
+        <div className="-mx-6 -mb-6 flex gap-2 border-t border-secondary px-6 py-4">
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="flex-1 gap-2 bg-shelvitas-green font-semibold text-background hover:bg-shelvitas-green/90"
+            onClick={handleSave}
+            disabled={isLoading}
+          >
+            {isLoading && <Spinner />}
+            {isLoading && "Saving..."}
+            {!isLoading && isEdit && "Save Changes"}
+            {!isLoading && !isEdit && "Log Book"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

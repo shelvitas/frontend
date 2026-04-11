@@ -265,8 +265,8 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
       <Dialog open={dnfOpen} onOpenChange={setDnfOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-shelvitas-red">
-              <BookX className="h-4 w-4" />
+            <DialogTitle className="flex items-center gap-2 text-foreground">
+              <BookX className="h-4 w-4 text-shelvitas-red" />
               Did Not Finish
             </DialogTitle>
           </DialogHeader>
@@ -291,7 +291,13 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
                       onChange={() => setDnfReason(r.value)}
                       className="h-4 w-4 accent-shelvitas-red"
                     />
-                    <span className={dnfReason === r.value ? "font-medium text-shelvitas-red" : "text-foreground/70"}>
+                    <span
+                      className={
+                        dnfReason === r.value
+                          ? "font-medium text-foreground"
+                          : "text-foreground/70"
+                      }
+                    >
                       {r.label}
                     </span>
                   </label>
@@ -312,28 +318,28 @@ export const StatusControls = ({ bookId }: StatusControlsProps) => {
                 className="w-full rounded-sm border border-secondary bg-secondary/30 px-3 py-1.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
               />
             </div>
+          </div>
 
-            <div className="flex gap-2 pt-1">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1"
-                onClick={() => setDnfOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                className="flex-1 gap-1.5 bg-shelvitas-red text-background hover:bg-shelvitas-red/90"
-                onClick={handleDnfSubmit}
-                disabled={!!loadingStatus}
-              >
-                {loadingStatus === "did_not_finish" && (
-                  <Spinner className="h-3 w-3" />
-                )}
-                Mark as DNF
-              </Button>
-            </div>
+          <div className="-mx-6 -mb-6 flex gap-2 border-t border-secondary px-6 py-4">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={() => setDnfOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              className="flex-1 gap-1.5 bg-shelvitas-red text-background hover:bg-shelvitas-red/90"
+              onClick={handleDnfSubmit}
+              disabled={!!loadingStatus}
+            >
+              {loadingStatus === "did_not_finish" && (
+                <Spinner className="h-3 w-3" />
+              )}
+              Mark as DNF
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
